@@ -1,0 +1,22 @@
+{
+  "name": "easysql/sdk",
+  "description": "EasySQL API PHP SDK — Ask questions in natural language to your MySQL, MariaDB or PostgreSQL databases.",
+  "type": "library",
+  "license": "MIT",
+  "version": "0.1.0",
+  "require": {
+    "php": ">=8.2",
+    "guzzlehttp/guzzle": "^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Clearsoft\\EasySQL\\SDK\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "EasySQL",
+      "homepage": "https://easysql.net"
+    }
+  ]
+}
