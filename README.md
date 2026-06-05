@@ -19,50 +19,74 @@ composer require easysql/sdk
 
 ## Usage
 
-### Basic client
+### Named API methods (recommended)
+
+The SDK provides a generated `Client` with typed methods for every endpoint:
 
 ```php
 <?php
 
 require 'vendor/autoload.php';
 
-use Clearsoft\EasySQL\SDK\EasySQLClient;
+use Clearsoft\EasySQL\SDK\Client;
 
-$client = new EasySQLClient([
-    'base_url'    => 'https://api.easysql.net',
+$client = new Client([
+    'base_url'     => 'https://api.easysql.net',
     'access_token' => 'your-token-here',
 ]);
 
-$response = $client->getHttpClient()->post('/v1/auth/login', [
-    'json' => [
-        'email'    => 'user@example.com',
-        'password' => 'my-password',
+// Auth
+$tokens = $client->login(['email' => 'user@example.com', 'password' => 'secret']);
+$user   = $client->me();
+
+// Connectors
+$connectors = $client->listConnectors();
+$connector  = $client->getConnector('conn_abc123');
+$client->createConnector([
+    'type' => 'mysql',
+    'name' => 'Production DB',
+    'config' => [
+        'host'     => 'localhost',
+        'port'     => 3306,
+        'user'     => 'root',
+        'password' => 'secret',
+        'database' => 'myapp',
     ],
 ]);
 
-echo $response->getBody();
+// Queries
+$result = $client->createQuery([
+    'connector_id' => 'conn_abc123',
+    'question'     => 'How many users signed up last week?',
+]);
+
+$history = $client->listQueries(['page' => 1, 'per_page' => 10]);
+$detail  = $client->getQuery('qry_xyz');
 ```
 
-### Automatic token refresh
+### Token management (EasySQLClient)
 
-The client automatically retries failed requests on `401 Unauthorized` by calling the
-`/v1/auth/refresh` endpoint with the stored refresh token. No extra code needed.
+For automatic token refresh and persistent storage, use the `EasySQLClient` wrapper:
 
 ```php
+use Clearsoft\EasySQL\SDK\EasySQLClient;
+
 $client = new EasySQLClient([
     'base_url'      => 'https://api.easysql.net',
     'access_token'  => $accessToken,
     'refresh_token' => $refreshToken,
 ]);
+
+// The client automatically refreshes tokens on 401 responses.
+// Use getHttpClient() for raw Guzzle requests or the Client for named methods.
+$response = $client->getHttpClient()->get('/v1/auth/me');
 ```
 
 ### Persistent token store
 
-Implement `TokenStoreInterface` to persist tokens between requests (session, database, cache, etc.):
+Implement `TokenStoreInterface` to persist tokens between requests:
 
 ```php
-<?php
-
 use Clearsoft\EasySQL\SDK\TokenStoreInterface;
 
 class SessionTokenStore implements TokenStoreInterface
@@ -85,33 +109,43 @@ class SessionTokenStore implements TokenStoreInterface
         unset($_SESSION['easysql_tokens']);
     }
 }
-```
 
-Then attach it to the client:
-
-```php
-$client = new EasySQLClient(['base_url' => 'https://api.easysql.net']);
 $client->setTokenStore(new SessionTokenStore());
-
-// After a successful login:
-$client->setTokens($accessToken, $refreshToken);
-
-// Tokens are now automatically persisted and refreshed.
 ```
 
-### Manual token management
+## API Reference
 
-```php
-$client->setTokens($newAccessToken, $newRefreshToken);
-$client->clearTokens(); // e.g., on logout
-```
+See [docs/API.md](docs/API.md) for the full list of endpoints.
 
 ## Development
 
 ```bash
+# Install dependencies
 composer install
-composer dump-autoload
+
+# Regenerate from spec
+make generate
+
+# Run tests
+make test
+
+# Full build (generate + lint + test)
+make build
 ```
+
+### Code generation
+
+```
+make generate
+```
+
+Reads the OpenAPI spec from `EASYSQL_API_URL` (defaults to localhost) and regenerates:
+
+| Output | Description |
+|---|---|
+| `src/Client.php` | API client with named methods |
+| `src/Models/` | Request/response DTOs |
+| `docs/API.md` | Markdown API reference |
 
 ## License
 
