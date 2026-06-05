@@ -73,6 +73,39 @@ class Client
     // ── Generated API methods ────────────────────────────────
 
     /**
+     * Create Api Key.
+     * @param array $body
+     * @return array
+     */
+    public function createApiKey(array $body): array
+    {
+        $response = $this->request('post', '/v1/api-keys', [
+            'json' => $body,
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Delete Api Key.
+     * @param string $key_id
+     * @return void
+     */
+    public function deleteApiKey(string $key_id): void
+    {
+        $response = $this->request('delete', '/v1/api-keys/' . $key_id);
+    }
+
+    /**
+     * List Api Keys.
+     * @return array
+     */
+    public function listApiKeys(): array
+    {
+        $response = $this->request('get', '/v1/api-keys');
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
      * Change Password.
      * @param array $body
      * @return array
