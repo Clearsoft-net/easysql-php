@@ -207,6 +207,22 @@ GET /v1/connectors/{connector_id}
 
 ---
 
+### `getConnectorSchema()` 🔒
+
+Get Connector Schema.
+
+```
+GET /v1/connectors/{connector_id}/schema
+```
+
+**Parameters:**
+
+- `connector_id` — `string (uuid)` (required, path)
+
+**Returns:** `ConnectorSchemaResponse`
+
+---
+
 ### `listConnectors()` 🔒
 
 List Connectors.

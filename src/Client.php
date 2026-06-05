@@ -224,6 +224,17 @@ class Client
     }
 
     /**
+     * Get Connector Schema.
+     * @param string $connector_id
+     * @return array
+     */
+    public function getConnectorSchema(string $connector_id): array
+    {
+        $response = $this->request('get', '/v1/connectors/' . $connector_id . '/schema');
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
      * List Connectors.
      * @return array
      */
