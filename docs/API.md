@@ -4,12 +4,58 @@
 
 ## Endpoints
 
+- [Api-keys](#api-keys)
 - [Auth](#auth)
 - [Billing](#billing)
 - [Connectors](#connectors)
 - [Dashboard](#dashboard)
 - [Default](#default)
 - [Queries](#queries)
+
+## Api-keys
+
+### `createApiKey()` 🔒
+
+Create Api Key.
+
+```
+POST /v1/api-keys
+```
+
+**Parameters:**
+
+- `body` — `ApiKeyCreate`
+
+**Returns:** `ApiKeyCreated`
+
+---
+
+### `deleteApiKey()` 🔒
+
+Delete Api Key.
+
+```
+DELETE /v1/api-keys/{key_id}
+```
+
+**Parameters:**
+
+- `key_id` — `string (uuid)` (required, path)
+
+**Returns:** `204 No Content`
+
+---
+
+### `listApiKeys()` 🔒
+
+List Api Keys.
+
+```
+GET /v1/api-keys
+```
+
+
+---
 
 ## Auth
 
