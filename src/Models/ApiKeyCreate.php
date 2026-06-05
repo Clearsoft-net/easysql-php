@@ -2,11 +2,9 @@
 
 namespace Clearsoft\EasySQL\SDK\Models;
 
-class TableSchema
+class ApiKeyCreate
 {
     public string $name;
-    public string $columns;
-    public ?string $rows_approx;
 
     /**
      * @param array $data Raw API response data.
@@ -15,8 +13,6 @@ class TableSchema
     {
         $instance = new self();
         $instance->name = (string) ($data['name'] ?? '');
-        $instance->columns = (string) ($data['columns'] ?? []);
-        $instance->rows_approx = (string) ($data['rows_approx'] ?? '');
         return $instance;
     }
 }
