@@ -1,0 +1,53 @@
+name: Generate SDK
+
+on:
+  repository_dispatch:
+    types: [spec_updated]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Generate SDK
+        run: make generate
+        env:
+          EASYSQL_API_URL: ${{ vars.EASYSQL_API_URL || 'https://api.easysql.net' }}
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --exit-code; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: regenerate SDK from latest spec"
+          title: "chore: SDK regeneration"
+          body: |
+            Auto-generated from the latest OpenAPI specification.
+
+            Triggered by `repository_dispatch` from [easysql-api](https://github.com/Clearsoft-net/easysql-api).
+          branch: auto/sdk-regeneration
+          delete-branch: true
