@@ -205,6 +205,23 @@ POST /v1/billing/portal
 
 ## Connectors
 
+### `autocomplete()` 🔒
+
+Autocomplete.
+
+```
+POST /v1/connectors/{connector_id}/autocomplete
+```
+
+**Parameters:**
+
+- `body` — `AutocompleteRequest`
+- `connector_id` — `string (uuid)` (required, path)
+
+**Returns:** `AutocompleteResponse`
+
+---
+
 ### `createConnector()` 🔒
 
 Create Connector.
@@ -266,6 +283,22 @@ GET /v1/connectors/{connector_id}/schema
 - `connector_id` — `string (uuid)` (required, path)
 
 **Returns:** `ConnectorSchemaResponse`
+
+---
+
+### `getSuggestions()` 🔒
+
+Get Suggestions.
+
+```
+GET /v1/connectors/{connector_id}/suggestions
+```
+
+**Parameters:**
+
+- `connector_id` — `string (uuid)` (required, path)
+
+**Returns:** `SuggestionsResponse`
 
 ---
 
