@@ -223,6 +223,20 @@ class Client
     }
 
     /**
+     * Autocomplete.
+     * @param string $connector_id
+     * @param array $body
+     * @return array
+     */
+    public function autocomplete(array $body, string $connector_id): array
+    {
+        $response = $this->request('post', '/v1/connectors/' . $connector_id . '/autocomplete', [
+            'json' => $body,
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
      * Create Connector.
      * @param array $body
      * @return array
@@ -264,6 +278,17 @@ class Client
     public function getConnectorSchema(string $connector_id): array
     {
         $response = $this->request('get', '/v1/connectors/' . $connector_id . '/schema');
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Get Suggestions.
+     * @param string $connector_id
+     * @return array
+     */
+    public function getSuggestions(string $connector_id): array
+    {
+        $response = $this->request('get', '/v1/connectors/' . $connector_id . '/suggestions');
         return json_decode((string) $response->getBody(), true);
     }
 
