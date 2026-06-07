@@ -3,7 +3,7 @@
   "description": "EasySQL API PHP SDK — Ask questions in natural language to your MySQL, MariaDB or PostgreSQL databases.",
   "type": "library",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "require": {
     "php": ">=8.2",
     "guzzlehttp/guzzle": "^7.0",

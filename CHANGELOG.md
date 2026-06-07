@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/Clearsoft-net/easysql-sdk-php/compare/v1.0.0...v1.1.0) (2026-06-07)
+
+
+### Features
+
+* **sdk:** support custom HTTP client injection and throw ApiException on HTTP errors ([24c4547](https://github.com/Clearsoft-net/easysql-sdk-php/commit/24c45476296f4aadba86ddd537d5b901689ac5bd))
+
 # 1.0.0 (2026-06-07)
 
 
