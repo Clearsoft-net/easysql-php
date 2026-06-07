@@ -2,12 +2,10 @@
 
 namespace Clearsoft\EasySQL\SDK\Models;
 
-class PlanResponse
+class ActivePlan
 {
     public string $id;
     public string $name;
-    public int $price;
-    public int $max_connections;
     public int $max_queries_daily;
     public int $max_queries_weekly;
     public int $max_queries_monthly;
@@ -20,8 +18,6 @@ class PlanResponse
         $instance = new self();
         $instance->id = (string) ($data['id'] ?? '');
         $instance->name = (string) ($data['name'] ?? '');
-        $instance->price = (int) ($data['price'] ?? 0);
-        $instance->max_connections = (int) ($data['max_connections'] ?? 0);
         $instance->max_queries_daily = (int) ($data['max_queries_daily'] ?? 0);
         $instance->max_queries_weekly = (int) ($data['max_queries_weekly'] ?? 0);
         $instance->max_queries_monthly = (int) ($data['max_queries_monthly'] ?? 0);
