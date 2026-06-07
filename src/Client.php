@@ -381,6 +381,41 @@ class Client
     }
 
     /**
+     * Delete Feedback.
+     * @param string $query_id
+     * @return void
+     */
+    public function deleteFeedback(string $query_id): void
+    {
+        $response = $this->request('delete', '/v1/feedbacks/' . $query_id);
+    }
+
+    /**
+     * Get Feedback.
+     * @param string $query_id
+     * @return array
+     */
+    public function getFeedback(string $query_id): array
+    {
+        $response = $this->request('get', '/v1/feedbacks/' . $query_id);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Upsert Feedback.
+     * @param string $query_id
+     * @param array $body
+     * @return array
+     */
+    public function upsertFeedback(array $body, string $query_id): array
+    {
+        $response = $this->request('put', '/v1/feedbacks/' . $query_id, [
+            'json' => $body,
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
      * Create Query.
      * @param array $body
      * @return array
