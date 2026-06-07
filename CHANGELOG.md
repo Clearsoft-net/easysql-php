@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/Clearsoft-net/easysql-sdk-php/compare/v1.3.0...v1.4.0) (2026-06-07)
+
+
+### Features
+
+* auto-approve and auto-merge SDK regeneration PRs ([bc6c09e](https://github.com/Clearsoft-net/easysql-sdk-php/commit/bc6c09efa198134060b8a7f7d95b9efbb3c12f02))
+
 # [1.3.0](https://github.com/Clearsoft-net/easysql-sdk-php/compare/v1.2.0...v1.3.0) (2026-06-07)
 
 
