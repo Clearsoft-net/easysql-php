@@ -40,6 +40,7 @@ jobs:
           fi
 
       - name: Create Pull Request
+        id: pr
         if: steps.changes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
@@ -53,4 +54,18 @@ jobs:
 
             *Note: Merging this PR will trigger a new Minor version release. Change the PR title to `fix(sdk): ...` before merging if this only contains bug fixes, or to `chore: ...` if you do not want to trigger a release.*
           branch: auto/sdk-regeneration
-          delete-branch: true
+          delete-branch: false
+
+      - name: Approve Pull Request
+        if: steps.pr.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr review ${{ steps.pr.outputs.pull-request-number }} --approve || echo "Approve skipped — GITHUB_TOKEN cannot approve its own PR"
+
+      - name: Enable Auto-merge
+        if: steps.pr.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge ${{ steps.pr.outputs.pull-request-number }} --squash --auto --delete-branch
