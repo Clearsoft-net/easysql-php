@@ -111,7 +111,7 @@ Me.
 GET /v1/auth/me
 ```
 
-**Returns:** `UserResponse`
+**Returns:** `UserMeResponse`
 
 ---
 
@@ -181,7 +181,7 @@ POST /v1/billing/checkout
 
 ---
 
-### `getPlan()` 🔒
+### `getPlan()`
 
 Get Plan.
 
