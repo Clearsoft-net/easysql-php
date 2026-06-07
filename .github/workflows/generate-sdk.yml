@@ -44,11 +44,13 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: regenerate SDK from latest spec"
-          title: "chore: SDK regeneration"
+          commit-message: "feat(sdk): regenerate SDK from latest spec"
+          title: "feat(sdk): regenerate SDK from latest spec"
           body: |
             Auto-generated from the latest OpenAPI specification.
 
             Triggered by `repository_dispatch` from [easysql-api](https://github.com/Clearsoft-net/easysql-api).
+
+            *Note: Merging this PR will trigger a new Minor version release. Change the PR title to `fix(sdk): ...` before merging if this only contains bug fixes, or to `chore: ...` if you do not want to trigger a release.*
           branch: auto/sdk-regeneration
           delete-branch: true
