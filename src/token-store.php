@@ -43,14 +43,18 @@ class EasySQLClient
     private ?string $refreshToken = null;
     private ?TokenStoreInterface $tokenStore = null;
     private string $baseUrl;
+    private $customHandler = null;
 
     private const MAX_RETRIES = 1;
 
     public function __construct(array $config = [])
     {
         $this->baseUrl = rtrim($config['base_url'] ?? 'https://api.easysql.net', '/');
+        if (isset($config['handler'])) {
+            $this->customHandler = $config['handler'];
+        }
 
-        $stack = HandlerStack::create();
+        $stack = HandlerStack::create($this->customHandler);
 
         // ── Layer 1: Attach Bearer token to every request ──
         $stack->push(Middleware::mapRequest(function (RequestInterface $request) {
@@ -154,7 +158,11 @@ class EasySQLClient
 
     private function refreshAccessToken(): void
     {
-        $tempClient = new Client(['base_uri' => $this->baseUrl, 'http_errors' => false]);
+        $clientConfig = ['base_uri' => $this->baseUrl, 'http_errors' => false];
+        if ($this->customHandler) {
+            $clientConfig['handler'] = $this->customHandler;
+        }
+        $tempClient = new Client($clientConfig);
         $response = $tempClient->post('/v1/auth/refresh', [
             'json' => ['refresh_token' => $this->refreshToken],
         ]);
