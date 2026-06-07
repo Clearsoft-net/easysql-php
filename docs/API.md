@@ -10,6 +10,7 @@
 - [Connectors](#connectors)
 - [Dashboard](#dashboard)
 - [Default](#default)
+- [Feedbacks](#feedbacks)
 - [Queries](#queries)
 
 ## Api-keys
@@ -396,6 +397,57 @@ Health.
 GET /health
 ```
 
+
+---
+
+## Feedbacks
+
+### `deleteFeedback()` 🔒
+
+Delete Feedback.
+
+```
+DELETE /v1/feedbacks/{query_id}
+```
+
+**Parameters:**
+
+- `query_id` — `string (uuid)` (required, path)
+
+**Returns:** `204 No Content`
+
+---
+
+### `getFeedback()` 🔒
+
+Get Feedback.
+
+```
+GET /v1/feedbacks/{query_id}
+```
+
+**Parameters:**
+
+- `query_id` — `string (uuid)` (required, path)
+
+**Returns:** `FeedbackResponse`
+
+---
+
+### `upsertFeedback()` 🔒
+
+Upsert Feedback.
+
+```
+PUT /v1/feedbacks/{query_id}
+```
+
+**Parameters:**
+
+- `body` — `FeedbackCreate`
+- `query_id` — `string (uuid)` (required, path)
+
+**Returns:** `FeedbackResponse`
 
 ---
 
