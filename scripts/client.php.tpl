@@ -13,6 +13,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
+use Clearsoft\EasySQL\SDK\Exceptions\ApiException;
 
 class Client
 {
@@ -20,21 +21,25 @@ class Client
 
     public function __construct(array $config = [])
     {
-        $baseUrl = rtrim($config['base_url'] ?? 'https://api.easysql.net', '/');
+        if (isset($config['http_client']) && $config['http_client'] instanceof GuzzleClient) {
+            $this->http = $config['http_client'];
+        } else {
+            $baseUrl = rtrim($config['base_url'] ?? 'https://api.easysql.net', '/');
 
-        $this->http = new GuzzleClient([
-            'base_uri' => $baseUrl,
-            'timeout'  => $config['timeout'] ?? 30.0,
-            'http_errors' => false,
-            'headers' => [
-                'Accept'       => 'application/json',
-                'Content-Type' => 'application/json',
-            ],
-        ]);
+            $this->http = new GuzzleClient([
+                'base_uri' => $baseUrl,
+                'timeout'  => $config['timeout'] ?? 30.0,
+                'http_errors' => false,
+                'headers' => [
+                    'Accept'       => 'application/json',
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
 
-        // If access token provided, attach Bearer header
-        if (!empty($config['access_token'])) {
-            $this->setAccessToken($config['access_token']);
+            // If access token provided, attach Bearer header
+            if (!empty($config['access_token'])) {
+                $this->setAccessToken($config['access_token']);
+            }
         }
     }
 
@@ -67,7 +72,12 @@ class Client
 
     private function request(string $method, string $path, array $options = []): ResponseInterface
     {
-        return $this->http->request($method, $path, $options);
+        $response = $this->http->request($method, $path, $options);
+        $statusCode = $response->getStatusCode();
+        if ($statusCode >= 400) {
+            throw ApiException::fromResponse($response);
+        }
+        return $response;
     }
 
     // ── Generated API methods ────────────────────────────────
