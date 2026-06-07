@@ -10,6 +10,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Clearsoft\EasySQL\SDK\Client;
+use Clearsoft\EasySQL\SDK\Exceptions\ApiException;
 
 class ClientTest extends TestCase
 {
@@ -174,8 +175,40 @@ class ClientTest extends TestCase
             ])),
         ]);
 
-        $result = $client->login(['email' => 'bad', 'password' => 'x']);
+        $this->expectException(ApiException::class);
+        $this->expectExceptionCode(422);
 
-        $this->assertArrayHasKey('detail', $result);
+        try {
+            $client->login(['email' => 'bad', 'password' => 'x']);
+        } catch (ApiException $e) {
+            $this->assertSame(422, $e->getStatusCode());
+            $details = $e->getErrorDetails();
+            $this->assertArrayHasKey('detail', $details);
+            $this->assertSame('Invalid email', $details['detail'][0]['msg']);
+            throw $e;
+        }
+    }
+
+    public function testCustomHttpClientInjection(): void
+    {
+        $mock = new MockHandler([
+            new Response(200, [], json_encode(['access_token' => 'custom123'])),
+        ]);
+        $handlerStack = HandlerStack::create($mock);
+        $customGuzzle = new GuzzleClient(['handler' => $handlerStack]);
+
+        $client = new Client([
+            'http_client' => $customGuzzle,
+        ]);
+
+        $reflection = new \ReflectionClass($client);
+        $property = $reflection->getProperty('http');
+        $property->setAccessible(true);
+        $injectedGuzzle = $property->getValue($client);
+
+        $this->assertSame($customGuzzle, $injectedGuzzle);
+
+        $result = $client->login(['email' => 'test@example.com', 'password' => 'secret']);
+        $this->assertSame('custom123', $result['access_token']);
     }
 }
