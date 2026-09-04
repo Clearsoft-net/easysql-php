@@ -10,19 +10,37 @@
     "ext-json": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "^11.0"
+    "phpunit/phpunit": "^11.0",
+    "orchestra/testbench": "^9.0",
+    "illuminate/support": "^11.0",
+    "illuminate/contracts": "^11.0"
+  },
+  "suggest": {
+    "illuminate/support": "Required to use the Laravel Service Provider and Facade (^11.0)"
   },
   "autoload": {
     "files": [
       "src/token-store.php"
     ],
     "psr-4": {
-      "Clearsoft\\EasySQL\\SDK\\": "src/"
+      "Clearsoft\\EasySQL\\SDK\\": "src/",
+      "Clearsoft\\EasySql\\Laravel\\": "src/Laravel/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Clearsoft\\EasySQL\\SDK\\Tests\\": "tests/"
+      "Clearsoft\\EasySQL\\SDK\\Tests\\": "tests/",
+      "Clearsoft\\EasySql\\Laravel\\Tests\\": "tests/Laravel/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Clearsoft\\EasySql\\Laravel\\EasySqlServiceProvider"
+      ],
+      "aliases": {
+        "EasySQL": "Clearsoft\\EasySql\\Laravel\\Facades\\EasySQL"
+      }
     }
   },
   "authors": [
