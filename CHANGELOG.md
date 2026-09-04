@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/Clearsoft-net/easysql-php/compare/v1.4.0...v1.5.0) (2026-09-04)
+
+
+### Bug Fixes
+
+* **deps:** lock composer platform to php 8.2 for CI compatibility ([eb39018](https://github.com/Clearsoft-net/easysql-php/commit/eb390189e53222c59f0396a342906b6bd4a2dcf9))
+
+
+### Features
+
+* **laravel:** integrate Laravel service provider, facade and package auto-discovery ([0f4fc20](https://github.com/Clearsoft-net/easysql-php/commit/0f4fc20abcea745cbb5cf690498a94150a951205))
+
 # [1.4.0](https://github.com/Clearsoft-net/easysql-sdk-php/compare/v1.3.0...v1.4.0) (2026-06-07)
 
 
