@@ -66,5 +66,10 @@
         "EasySQL": "Clearsoft\\EasySql\\Laravel\\Facades\\EasySQL"
       }
     }
+  },
+  "config": {
+    "platform": {
+      "php": "8.2.0"
+    }
   }
 }
