@@ -1,9 +1,33 @@
 {
-  "name": "easysql/sdk",
-  "description": "EasySQL API PHP SDK — Ask questions in natural language to your MySQL, MariaDB or PostgreSQL databases.",
+  "name": "clearsoft/easysql-sdk",
+  "description": "EasySQL API PHP & Laravel SDK — Ask questions in natural language to your MySQL, MariaDB or PostgreSQL databases.",
   "type": "library",
   "license": "MIT",
   "version": "1.4.0",
+  "homepage": "https://easysql.net",
+  "keywords": [
+    "easysql",
+    "clearsoft",
+    "sql",
+    "ai",
+    "llm",
+    "database",
+    "api",
+    "sdk",
+    "laravel",
+    "php"
+  ],
+  "support": {
+    "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+    "source": "https://github.com/Clearsoft-net/easysql-php"
+  },
+  "authors": [
+    {
+      "name": "Clearsoft",
+      "email": "contact@clearsoft.net",
+      "homepage": "https://clearsoft.net"
+    }
+  ],
   "require": {
     "php": ">=8.2",
     "guzzlehttp/guzzle": "^7.0",
@@ -42,11 +66,5 @@
         "EasySQL": "Clearsoft\\EasySql\\Laravel\\Facades\\EasySQL"
       }
     }
-  },
-  "authors": [
-    {
-      "name": "EasySQL",
-      "homepage": "https://easysql.net"
-    }
-  ]
+  }
 }
