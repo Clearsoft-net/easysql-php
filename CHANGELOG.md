@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/Clearsoft-net/easysql-php/compare/v1.5.0...v1.6.0) (2026-09-07)
+
+
+### Features
+
+* **sdk:** regenerate SDK from latest spec ([#7](https://github.com/Clearsoft-net/easysql-php/issues/7)) ([cbfaa71](https://github.com/Clearsoft-net/easysql-php/commit/cbfaa71457eda537de64ce4bea1d4b4d7e0cf47c))
+
 # [1.5.0](https://github.com/Clearsoft-net/easysql-php/compare/v1.4.0...v1.5.0) (2026-09-04)
 
 
