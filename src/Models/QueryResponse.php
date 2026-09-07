@@ -6,11 +6,13 @@ class QueryResponse
 {
     public string $id;
     public string $question;
-    public string $sql_generated;
-    public string $answer;
-    public string $chart_config;
-    public string $error;
+    public ?string $sql_generated;
+    public ?string $answer;
+    public ?string $chart_config;
+    public ?string $error;
     public ?string $result_data;
+    public bool $needs_local_execution;
+    public string $status;
     public string $created_at;
 
     /**
@@ -25,7 +27,9 @@ class QueryResponse
         $instance->answer = (string) ($data['answer'] ?? '');
         $instance->chart_config = (string) ($data['chart_config'] ?? '');
         $instance->error = (string) ($data['error'] ?? '');
-        $instance->result_data = (string) ($data['result_data'] ?? '');
+        $instance->result_data = (string) ($data['result_data'] ?? []);
+        $instance->needs_local_execution = (bool) ($data['needs_local_execution'] ?? false);
+        $instance->status = (string) ($data['status'] ?? '');
         $instance->created_at = (string) ($data['created_at'] ?? '');
         return $instance;
     }

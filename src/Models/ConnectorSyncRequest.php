@@ -2,10 +2,9 @@
 
 namespace Clearsoft\EasySQL\SDK\Models;
 
-class ConnectorUpdate
+class ConnectorSyncRequest
 {
-    public ?string $name;
-    public ?string $schema;
+    public string $schema;
 
     /**
      * @param array $data Raw API response data.
@@ -13,7 +12,6 @@ class ConnectorUpdate
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->name = (string) ($data['name'] ?? '');
         $instance->schema = (string) ($data['schema'] ?? []);
         return $instance;
     }

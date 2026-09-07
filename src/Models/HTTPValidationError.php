@@ -4,7 +4,7 @@ namespace Clearsoft\EasySQL\SDK\Models;
 
 class HTTPValidationError
 {
-    public ?string $detail;
+    public string $detail;
 
     /**
      * @param array $data Raw API response data.

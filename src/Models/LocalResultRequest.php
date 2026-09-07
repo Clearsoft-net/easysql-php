@@ -2,10 +2,9 @@
 
 namespace Clearsoft\EasySQL\SDK\Models;
 
-class ConnectorUpdate
+class LocalResultRequest
 {
-    public ?string $name;
-    public ?string $schema;
+    public string $result_data;
 
     /**
      * @param array $data Raw API response data.
@@ -13,8 +12,7 @@ class ConnectorUpdate
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->name = (string) ($data['name'] ?? '');
-        $instance->schema = (string) ($data['schema'] ?? []);
+        $instance->result_data = (string) ($data['result_data'] ?? []);
         return $instance;
     }
 }

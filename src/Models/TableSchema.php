@@ -6,7 +6,7 @@ class TableSchema
 {
     public string $name;
     public string $columns;
-    public ?string $rows_approx;
+    public ?int $rows_approx;
 
     /**
      * @param array $data Raw API response data.
@@ -16,7 +16,7 @@ class TableSchema
         $instance = new self();
         $instance->name = (string) ($data['name'] ?? '');
         $instance->columns = (string) ($data['columns'] ?? []);
-        $instance->rows_approx = (string) ($data['rows_approx'] ?? '');
+        $instance->rows_approx = (int) ($data['rows_approx'] ?? 0);
         return $instance;
     }
 }

@@ -8,6 +8,8 @@ class UserResponse
     public string $email;
     public string $name;
     public string $locale;
+    public bool $email_verified;
+    public ?string $email_verified_at;
     public string $created_at;
 
     /**
@@ -20,6 +22,8 @@ class UserResponse
         $instance->email = (string) ($data['email'] ?? '');
         $instance->name = (string) ($data['name'] ?? '');
         $instance->locale = (string) ($data['locale'] ?? '');
+        $instance->email_verified = (bool) ($data['email_verified'] ?? false);
+        $instance->email_verified_at = (string) ($data['email_verified_at'] ?? '');
         $instance->created_at = (string) ($data['created_at'] ?? '');
         return $instance;
     }
