@@ -6,7 +6,7 @@ class ConnectorCreate
 {
     public string $type;
     public string $name;
-    public string $config;
+    public ?string $schema;
 
     /**
      * @param array $data Raw API response data.
@@ -16,7 +16,7 @@ class ConnectorCreate
         $instance = new self();
         $instance->type = (string) ($data['type'] ?? '');
         $instance->name = (string) ($data['name'] ?? '');
-        $instance->config = (string) ($data['config'] ?? '');
+        $instance->schema = (string) ($data['schema'] ?? []);
         return $instance;
     }
 }

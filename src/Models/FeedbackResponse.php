@@ -7,7 +7,7 @@ class FeedbackResponse
     public string $id;
     public string $query_id;
     public bool $positive;
-    public string $comment;
+    public ?string $comment;
     public string $created_at;
     public string $updated_at;
 

@@ -9,15 +9,16 @@
 - [Billing](#billing)
 - [Connectors](#connectors)
 - [Dashboard](#dashboard)
-- [Default](#default)
 - [Feedbacks](#feedbacks)
+- [Health](#health)
+- [Internal](#internal)
 - [Queries](#queries)
 
 ## Api-keys
 
-### `createApiKey()` 🔒
+### `createApiKey()`
 
-Create Api Key.
+Create API key (returns full key once).
 
 ```
 POST /v1/api-keys
@@ -31,9 +32,9 @@ POST /v1/api-keys
 
 ---
 
-### `deleteApiKey()` 🔒
+### `deleteApiKey()`
 
-Delete Api Key.
+Revoke API key (soft delete).
 
 ```
 DELETE /v1/api-keys/{key_id}
@@ -47,9 +48,9 @@ DELETE /v1/api-keys/{key_id}
 
 ---
 
-### `listApiKeys()` 🔒
+### `listApiKeys()`
 
-List Api Keys.
+List API keys (without secret).
 
 ```
 GET /v1/api-keys
@@ -60,9 +61,9 @@ GET /v1/api-keys
 
 ## Auth
 
-### `changePassword()` 🔒
+### `changePassword()`
 
-Change Password.
+Change password.
 
 ```
 POST /v1/auth/change-password
@@ -75,9 +76,9 @@ POST /v1/auth/change-password
 
 ---
 
-### `deleteMe()` 🔒
+### `deleteMe()`
 
-Delete Me.
+Delete current user (hard delete).
 
 ```
 DELETE /v1/auth/me
@@ -87,9 +88,23 @@ DELETE /v1/auth/me
 
 ---
 
+### `forgotPassword()`
+
+Trigger password reset email (HMAC-signed token, 1h expiry). Always 200; silent if email unknown..
+
+```
+POST /v1/auth/forgot-password
+```
+
+**Parameters:**
+
+
+
+---
+
 ### `login()`
 
-Login.
+Login (returns access + refresh tokens).
 
 ```
 POST /v1/auth/login
@@ -103,9 +118,9 @@ POST /v1/auth/login
 
 ---
 
-### `me()` 🔒
+### `me()`
 
-Me.
+Get current user (with active plan).
 
 ```
 GET /v1/auth/me
@@ -117,7 +132,7 @@ GET /v1/auth/me
 
 ### `refresh()`
 
-Refresh.
+Refresh tokens.
 
 ```
 POST /v1/auth/refresh
@@ -133,7 +148,7 @@ POST /v1/auth/refresh
 
 ### `register()`
 
-Register.
+Register new user.
 
 ```
 POST /v1/auth/register
@@ -147,9 +162,37 @@ POST /v1/auth/register
 
 ---
 
-### `updateMe()` 🔒
+### `resendVerification()`
 
-Update Me.
+Resend verification email (always 200; silent if email unknown).
+
+```
+POST /v1/auth/resend-verification
+```
+
+**Parameters:**
+
+
+
+---
+
+### `resetPassword()`
+
+Apply new password via HMAC-signed token.
+
+```
+POST /v1/auth/reset-password
+```
+
+**Parameters:**
+
+
+
+---
+
+### `updateMe()`
+
+Update current user (name, locale).
 
 ```
 PATCH /v1/auth/me
@@ -163,11 +206,25 @@ PATCH /v1/auth/me
 
 ---
 
+### `verifyEmail()`
+
+Verify email via HMAC-signed token (24h expiry).
+
+```
+POST /v1/auth/verify-email
+```
+
+**Parameters:**
+
+
+
+---
+
 ## Billing
 
-### `checkout()` 🔒
+### `checkout()`
 
-Checkout.
+Create Stripe Checkout session.
 
 ```
 POST /v1/billing/checkout
@@ -183,7 +240,7 @@ POST /v1/billing/checkout
 
 ### `getPlan()`
 
-Get Plan.
+List plans (Free/Starter/Pro/Business).
 
 ```
 GET /v1/billing/plan
@@ -192,9 +249,9 @@ GET /v1/billing/plan
 
 ---
 
-### `portal()` 🔒
+### `portal()`
 
-Portal.
+Create Stripe Customer Portal session.
 
 ```
 POST /v1/billing/portal
@@ -204,11 +261,25 @@ POST /v1/billing/portal
 
 ---
 
+### `webhook()`
+
+Stripe webhook (verify HMAC SHA-256).
+
+```
+POST /v1/billing/webhook
+```
+
+**Parameters:**
+
+
+
+---
+
 ## Connectors
 
-### `autocomplete()` 🔒
+### `autocomplete()`
 
-Autocomplete.
+LLM autocomplete for partial question.
 
 ```
 POST /v1/connectors/{connector_id}/autocomplete
@@ -217,15 +288,14 @@ POST /v1/connectors/{connector_id}/autocomplete
 **Parameters:**
 
 - `body` — `AutocompleteRequest`
-- `connector_id` — `string (uuid)` (required, path)
 
-**Returns:** `AutocompleteResponse`
+**Returns:** `SuggestionsResponse`
 
 ---
 
-### `createConnector()` 🔒
+### `createConnector()`
 
-Create Connector.
+Create schema-only connector.
 
 ```
 POST /v1/connectors
@@ -239,73 +309,57 @@ POST /v1/connectors
 
 ---
 
-### `deleteConnector()` 🔒
+### `deleteConnector()`
 
-Delete Connector.
+Delete connector.
 
 ```
 DELETE /v1/connectors/{connector_id}
 ```
 
-**Parameters:**
-
-- `connector_id` — `string (uuid)` (required, path)
-
 **Returns:** `204 No Content`
 
 ---
 
-### `getConnector()` 🔒
+### `getConnector()`
 
-Get Connector.
+Get connector.
 
 ```
 GET /v1/connectors/{connector_id}
 ```
 
-**Parameters:**
-
-- `connector_id` — `string (uuid)` (required, path)
-
 **Returns:** `ConnectorResponse`
 
 ---
 
-### `getConnectorSchema()` 🔒
+### `getConnectorSchema()`
 
-Get Connector Schema.
+Get cached schema.
 
 ```
 GET /v1/connectors/{connector_id}/schema
 ```
 
-**Parameters:**
-
-- `connector_id` — `string (uuid)` (required, path)
-
 **Returns:** `ConnectorSchemaResponse`
 
 ---
 
-### `getSuggestions()` 🔒
+### `getSuggestions()`
 
-Get Suggestions.
+LLM-generated Portuguese business questions.
 
 ```
 GET /v1/connectors/{connector_id}/suggestions
 ```
 
-**Parameters:**
-
-- `connector_id` — `string (uuid)` (required, path)
-
 **Returns:** `SuggestionsResponse`
 
 ---
 
-### `listConnectors()` 🔒
+### `listConnectors()`
 
-List Connectors.
+List connectors.
 
 ```
 GET /v1/connectors
@@ -314,9 +368,9 @@ GET /v1/connectors
 
 ---
 
-### `syncConnector()` 🔒
+### `syncConnector()`
 
-Sync Connector.
+Push schema from client (refresh).
 
 ```
 POST /v1/connectors/{connector_id}/sync
@@ -324,30 +378,14 @@ POST /v1/connectors/{connector_id}/sync
 
 **Parameters:**
 
-- `connector_id` — `string (uuid)` (required, path)
+- `body` — `ConnectorSyncRequest`
 
 
 ---
 
-### `testConnector()` 🔒
+### `updateConnector()`
 
-Test Connector.
-
-```
-POST /v1/connectors/test
-```
-
-**Parameters:**
-
-- `body` — `ConnectorTestRequest`
-
-**Returns:** `ConnectorTestResponse`
-
----
-
-### `updateConnector()` 🔒
-
-Update Connector.
+Update connector.
 
 ```
 PATCH /v1/connectors/{connector_id}
@@ -356,7 +394,6 @@ PATCH /v1/connectors/{connector_id}
 **Parameters:**
 
 - `body` — `ConnectorUpdate`
-- `connector_id` — `string (uuid)` (required, path)
 
 **Returns:** `ConnectorResponse`
 
@@ -364,9 +401,9 @@ PATCH /v1/connectors/{connector_id}
 
 ## Dashboard
 
-### `dashboardStats()` 🔒
+### `dashboardStats()`
 
-Dashboard Stats.
+Dashboard stats (connectors, queries, top usage).
 
 ```
 GET /v1/dashboard/stats
@@ -376,11 +413,53 @@ GET /v1/dashboard/stats
 
 ---
 
-## Default
+## Feedbacks
+
+### `deleteFeedback()`
+
+Delete feedback for a query.
+
+```
+DELETE /v1/feedbacks/{query_id}
+```
+
+**Returns:** `204 No Content`
+
+---
+
+### `getFeedback()`
+
+Get feedback for a query.
+
+```
+GET /v1/feedbacks/{query_id}
+```
+
+**Returns:** `FeedbackResponse`
+
+---
+
+### `upsertFeedback()`
+
+Upsert feedback for a query.
+
+```
+PUT /v1/feedbacks/{query_id}
+```
+
+**Parameters:**
+
+- `body` — `FeedbackCreate`
+
+**Returns:** `FeedbackResponse`
+
+---
+
+## Health
 
 ### `health()`
 
-Health V1.
+Health check (versioned).
 
 ```
 GET /v1/health
@@ -391,7 +470,7 @@ GET /v1/health
 
 ### `healthHealth()`
 
-Health.
+Health check (legacy).
 
 ```
 GET /health
@@ -400,62 +479,62 @@ GET /health
 
 ---
 
-## Feedbacks
+## Internal
 
-### `deleteFeedback()` 🔒
+### `previewInternalEmail()`
 
-Delete Feedback.
+Return rendered HTML for an email template. Dev-only (404 in production)..
 
 ```
-DELETE /v1/feedbacks/{query_id}
+GET /v1/internal/email/preview
 ```
 
 **Parameters:**
 
-- `query_id` — `string (uuid)` (required, path)
+- `template` — `string` (required, query)
+- `name` — `string` (optional, query)
+- `to` — `string` (optional, query)
+- `token` — `string` (optional, query)
 
-**Returns:** `204 No Content`
 
 ---
 
-### `getFeedback()` 🔒
+### `testInternalEmail()`
 
-Get Feedback.
-
-```
-GET /v1/feedbacks/{query_id}
-```
-
-**Parameters:**
-
-- `query_id` — `string (uuid)` (required, path)
-
-**Returns:** `FeedbackResponse`
-
----
-
-### `upsertFeedback()` 🔒
-
-Upsert Feedback.
+Render or send an email template via Resend. Dev-only (404 in production)..
 
 ```
-PUT /v1/feedbacks/{query_id}
+POST /v1/internal/email/test
 ```
 
 **Parameters:**
 
-- `body` — `FeedbackCreate`
-- `query_id` — `string (uuid)` (required, path)
+- `preview` — `string` (optional, query)
 
-**Returns:** `FeedbackResponse`
 
 ---
 
 ## Queries
 
-### `createQuery()` 🔒
+### `answerQuery()`
 
-Create Query.
+WP plugin submits locally-executed result (API key only).
+
+```
+POST /v1/queries/{query_id}/answer
+```
+
+**Parameters:**
+
+- `body` — `LocalResultRequest`
+
+**Returns:** `QueryResponse`
+
+---
+
+### `createQuery()`
+
+Ask question (generate SQL only — client executes).
 
 ```
 POST /v1/queries
@@ -469,25 +548,21 @@ POST /v1/queries
 
 ---
 
-### `getQuery()` 🔒
+### `getQuery()`
 
-Get Query.
+Get query detail (poll this to wait for status=ready).
 
 ```
 GET /v1/queries/{query_id}
 ```
 
-**Parameters:**
-
-- `query_id` — `string (uuid)` (required, path)
-
 **Returns:** `QueryResponse`
 
 ---
 
-### `listQueries()` 🔒
+### `listQueries()`
 
-List Queries.
+Paginated query history.
 
 ```
 GET /v1/queries
@@ -499,6 +574,17 @@ GET /v1/queries
 - `per_page` — `integer` (optional, query)
 
 **Returns:** `PaginatedQueries`
+
+---
+
+### `streamQuery()`
+
+SSE stream — emits QueryResponse every 500ms until ready/failed or 60s timeout.
+
+```
+GET /v1/queries/{query_id}/stream
+```
+
 
 ---
 

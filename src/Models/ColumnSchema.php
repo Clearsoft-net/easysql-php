@@ -6,7 +6,7 @@ class ColumnSchema
 {
     public string $name;
     public string $type;
-    public ?bool $nullable;
+    public bool $nullable;
     public ?bool $primary_key;
     public ?string $default;
     public ?string $foreign_key;

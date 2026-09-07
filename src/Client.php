@@ -83,7 +83,7 @@ class Client
     // ── Generated API methods ────────────────────────────────
 
     /**
-     * Create Api Key.
+     * Create API key (returns full key once).
      * @param array $body
      * @return array
      */
@@ -96,7 +96,7 @@ class Client
     }
 
     /**
-     * Delete Api Key.
+     * Revoke API key (soft delete).
      * @param string $key_id
      * @return void
      */
@@ -106,7 +106,7 @@ class Client
     }
 
     /**
-     * List Api Keys.
+     * List API keys (without secret).
      * @return array
      */
     public function listApiKeys(): array
@@ -116,7 +116,7 @@ class Client
     }
 
     /**
-     * Change Password.
+     * Change password.
      * @param array $body
      * @return array
      */
@@ -129,7 +129,7 @@ class Client
     }
 
     /**
-     * Delete Me.
+     * Delete current user (hard delete).
      * @return void
      */
     public function deleteMe(): void
@@ -138,7 +138,19 @@ class Client
     }
 
     /**
-     * Login.
+     * Trigger password reset email (HMAC-signed token, 1h expiry). Always 200; silent if email unknown..
+     * @return array
+     */
+    public function forgotPassword(array $body): array
+    {
+        $response = $this->request('post', '/v1/auth/forgot-password', [
+            'json' => $body,
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Login (returns access + refresh tokens).
      * @param array $body
      * @return array
      */
@@ -151,7 +163,7 @@ class Client
     }
 
     /**
-     * Me.
+     * Get current user (with active plan).
      * @return array
      */
     public function me(): array
@@ -161,7 +173,7 @@ class Client
     }
 
     /**
-     * Refresh.
+     * Refresh tokens.
      * @param array $body
      * @return array
      */
@@ -174,7 +186,7 @@ class Client
     }
 
     /**
-     * Register.
+     * Register new user.
      * @param array $body
      * @return array
      */
@@ -187,7 +199,31 @@ class Client
     }
 
     /**
-     * Update Me.
+     * Resend verification email (always 200; silent if email unknown).
+     * @return array
+     */
+    public function resendVerification(array $body): array
+    {
+        $response = $this->request('post', '/v1/auth/resend-verification', [
+            'json' => $body,
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Apply new password via HMAC-signed token.
+     * @return array
+     */
+    public function resetPassword(array $body): array
+    {
+        $response = $this->request('post', '/v1/auth/reset-password', [
+            'json' => $body,
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Update current user (name, locale).
      * @param array $body
      * @return array
      */
@@ -200,7 +236,19 @@ class Client
     }
 
     /**
-     * Checkout.
+     * Verify email via HMAC-signed token (24h expiry).
+     * @return array
+     */
+    public function verifyEmail(array $body): array
+    {
+        $response = $this->request('post', '/v1/auth/verify-email', [
+            'json' => $body,
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Create Stripe Checkout session.
      * @param string $price_id
      * @return array
      */
@@ -213,7 +261,7 @@ class Client
     }
 
     /**
-     * Get Plan.
+     * List plans (Free/Starter/Pro/Business).
      * @return array
      */
     public function getPlan(): array
@@ -223,7 +271,7 @@ class Client
     }
 
     /**
-     * Portal.
+     * Create Stripe Customer Portal session.
      * @return array
      */
     public function portal(): array
@@ -233,21 +281,32 @@ class Client
     }
 
     /**
-     * Autocomplete.
-     * @param string $connector_id
-     * @param array $body
+     * Stripe webhook (verify HMAC SHA-256).
      * @return array
      */
-    public function autocomplete(array $body, string $connector_id): array
+    public function webhook(array $body): array
     {
-        $response = $this->request('post', '/v1/connectors/' . $connector_id . '/autocomplete', [
+        $response = $this->request('post', '/v1/billing/webhook', [
             'json' => $body,
         ]);
         return json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Create Connector.
+     * LLM autocomplete for partial question.
+     * @param array $body
+     * @return array
+     */
+    public function autocomplete(array $body): array
+    {
+        $response = $this->request('post', '/v1/connectors/' . '{connector_id}' . '/autocomplete', [
+            'json' => $body,
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Create schema-only connector.
      * @param array $body
      * @return array
      */
@@ -260,50 +319,46 @@ class Client
     }
 
     /**
-     * Delete Connector.
-     * @param string $connector_id
+     * Delete connector.
      * @return void
      */
-    public function deleteConnector(string $connector_id): void
+    public function deleteConnector(): void
     {
-        $response = $this->request('delete', '/v1/connectors/' . $connector_id);
+        $response = $this->request('delete', '/v1/connectors/' . '{connector_id}');
     }
 
     /**
-     * Get Connector.
-     * @param string $connector_id
+     * Get connector.
      * @return array
      */
-    public function getConnector(string $connector_id): array
+    public function getConnector(): array
     {
-        $response = $this->request('get', '/v1/connectors/' . $connector_id);
+        $response = $this->request('get', '/v1/connectors/' . '{connector_id}');
         return json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Get Connector Schema.
-     * @param string $connector_id
+     * Get cached schema.
      * @return array
      */
-    public function getConnectorSchema(string $connector_id): array
+    public function getConnectorSchema(): array
     {
-        $response = $this->request('get', '/v1/connectors/' . $connector_id . '/schema');
+        $response = $this->request('get', '/v1/connectors/' . '{connector_id}' . '/schema');
         return json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Get Suggestions.
-     * @param string $connector_id
+     * LLM-generated Portuguese business questions.
      * @return array
      */
-    public function getSuggestions(string $connector_id): array
+    public function getSuggestions(): array
     {
-        $response = $this->request('get', '/v1/connectors/' . $connector_id . '/suggestions');
+        $response = $this->request('get', '/v1/connectors/' . '{connector_id}' . '/suggestions');
         return json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * List Connectors.
+     * List connectors.
      * @return array
      */
     public function listConnectors(): array
@@ -313,45 +368,33 @@ class Client
     }
 
     /**
-     * Sync Connector.
-     * @param string $connector_id
-     * @return array
-     */
-    public function syncConnector(string $connector_id): array
-    {
-        $response = $this->request('post', '/v1/connectors/' . $connector_id . '/sync');
-        return json_decode((string) $response->getBody(), true);
-    }
-
-    /**
-     * Test Connector.
+     * Push schema from client (refresh).
      * @param array $body
      * @return array
      */
-    public function testConnector(array $body): array
+    public function syncConnector(array $body): array
     {
-        $response = $this->request('post', '/v1/connectors/test', [
+        $response = $this->request('post', '/v1/connectors/' . '{connector_id}' . '/sync', [
             'json' => $body,
         ]);
         return json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Update Connector.
-     * @param string $connector_id
+     * Update connector.
      * @param array $body
      * @return array
      */
-    public function updateConnector(array $body, string $connector_id): array
+    public function updateConnector(array $body): array
     {
-        $response = $this->request('patch', '/v1/connectors/' . $connector_id, [
+        $response = $this->request('patch', '/v1/connectors/' . '{connector_id}', [
             'json' => $body,
         ]);
         return json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Dashboard Stats.
+     * Dashboard stats (connectors, queries, top usage).
      * @return array
      */
     public function dashboardStats(): array
@@ -361,7 +404,39 @@ class Client
     }
 
     /**
-     * Health V1.
+     * Delete feedback for a query.
+     * @return void
+     */
+    public function deleteFeedback(): void
+    {
+        $response = $this->request('delete', '/v1/feedbacks/' . '{query_id}');
+    }
+
+    /**
+     * Get feedback for a query.
+     * @return array
+     */
+    public function getFeedback(): array
+    {
+        $response = $this->request('get', '/v1/feedbacks/' . '{query_id}');
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Upsert feedback for a query.
+     * @param array $body
+     * @return array
+     */
+    public function upsertFeedback(array $body): array
+    {
+        $response = $this->request('put', '/v1/feedbacks/' . '{query_id}', [
+            'json' => $body,
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Health check (versioned).
      * @return array
      */
     public function health(): array
@@ -371,7 +446,7 @@ class Client
     }
 
     /**
-     * Health.
+     * Health check (legacy).
      * @return array
      */
     public function healthHealth(): array
@@ -381,42 +456,50 @@ class Client
     }
 
     /**
-     * Delete Feedback.
-     * @param string $query_id
-     * @return void
-     */
-    public function deleteFeedback(string $query_id): void
-    {
-        $response = $this->request('delete', '/v1/feedbacks/' . $query_id);
-    }
-
-    /**
-     * Get Feedback.
-     * @param string $query_id
+     * Return rendered HTML for an email template. Dev-only (404 in production)..
+     * @param string $template
+     * @param string|null $name
+     * @param string|null $to
+     * @param string|null $token
      * @return array
      */
-    public function getFeedback(string $query_id): array
+    public function previewInternalEmail(array $query = []): array
     {
-        $response = $this->request('get', '/v1/feedbacks/' . $query_id);
+        $response = $this->request('get', '/v1/internal/email/preview', [
+            'query' => $query,
+        ]);
         return json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Upsert Feedback.
-     * @param string $query_id
+     * Render or send an email template via Resend. Dev-only (404 in production)..
+     * @param string|null $preview
+     * @return array
+     */
+    public function testInternalEmail(array $body, string $preview = ''): array
+    {
+        $response = $this->request('post', '/v1/internal/email/test', [
+            'json' => $body,
+            'query' => ['preview' => $preview],
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * WP plugin submits locally-executed result (API key only).
      * @param array $body
      * @return array
      */
-    public function upsertFeedback(array $body, string $query_id): array
+    public function answerQuery(array $body): array
     {
-        $response = $this->request('put', '/v1/feedbacks/' . $query_id, [
+        $response = $this->request('post', '/v1/queries/' . '{query_id}' . '/answer', [
             'json' => $body,
         ]);
         return json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Create Query.
+     * Ask question (generate SQL only — client executes).
      * @param array $body
      * @return array
      */
@@ -429,18 +512,17 @@ class Client
     }
 
     /**
-     * Get Query.
-     * @param string $query_id
+     * Get query detail (poll this to wait for status=ready).
      * @return array
      */
-    public function getQuery(string $query_id): array
+    public function getQuery(): array
     {
-        $response = $this->request('get', '/v1/queries/' . $query_id);
+        $response = $this->request('get', '/v1/queries/' . '{query_id}');
         return json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * List Queries.
+     * Paginated query history.
      * @param int|null $page
      * @param int|null $per_page
      * @return array
@@ -450,6 +532,16 @@ class Client
         $response = $this->request('get', '/v1/queries', [
             'query' => $query,
         ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * SSE stream — emits QueryResponse every 500ms until ready/failed or 60s timeout.
+     * @return array
+     */
+    public function streamQuery(): array
+    {
+        $response = $this->request('get', '/v1/queries/' . '{query_id}' . '/stream');
         return json_decode((string) $response->getBody(), true);
     }
 }

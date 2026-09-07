@@ -7,9 +7,10 @@ class QueryHistoryItem
     public string $id;
     public string $connector_id;
     public string $question;
-    public string $sql_generated;
-    public string $answer;
-    public string $error;
+    public ?string $sql_generated;
+    public ?string $answer;
+    public ?string $error;
+    public string $status;
     public string $created_at;
 
     /**
@@ -24,6 +25,7 @@ class QueryHistoryItem
         $instance->sql_generated = (string) ($data['sql_generated'] ?? '');
         $instance->answer = (string) ($data['answer'] ?? '');
         $instance->error = (string) ($data['error'] ?? '');
+        $instance->status = (string) ($data['status'] ?? '');
         $instance->created_at = (string) ($data['created_at'] ?? '');
         return $instance;
     }
