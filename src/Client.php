@@ -194,6 +194,16 @@ class Client
     }
 
     /**
+     * Current usage vs plan limits (daily/weekly/monthly).
+     * @return array
+     */
+    public function getUsage(): array
+    {
+        $response = $this->request('get', '/v1/billing/usage');
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
      * Create Stripe Customer Portal session.
      * @return array
      */
