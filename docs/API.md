@@ -12,6 +12,7 @@
 - [Feedbacks](#feedbacks)
 - [Health](#health)
 - [Internal](#internal)
+- [Oidc](#oidc)
 - [Queries](#queries)
 
 ## Api-keys
@@ -61,21 +62,6 @@ GET /v1/api-keys
 
 ## Auth
 
-### `changePassword()`
-
-Change password.
-
-```
-POST /v1/auth/change-password
-```
-
-**Parameters:**
-
-- `body` — `ChangePasswordRequest`
-
-
----
-
 ### `deleteMe()`
 
 Delete current user (hard delete).
@@ -88,39 +74,21 @@ DELETE /v1/auth/me
 
 ---
 
-### `forgotPassword()`
+### `logout()`
 
-Trigger password reset email (HMAC-signed token, 1h expiry). Always 200; silent if email unknown..
-
-```
-POST /v1/auth/forgot-password
-```
-
-**Parameters:**
-
-
-
----
-
-### `login()`
-
-Login (returns access + refresh tokens).
+RP-initiated OIDC logout — returns URL to redirect the browser to Authentik end_session_endpoint.
 
 ```
-POST /v1/auth/login
+POST /v1/auth/logout
 ```
 
-**Parameters:**
-
-- `body` — `UserLogin`
-
-**Returns:** `TokenResponse`
+**Returns:** `OidcLogoutResponse`
 
 ---
 
 ### `me()`
 
-Get current user (with active plan).
+Get current user (claims from OIDC ID token + DB state).
 
 ```
 GET /v1/auth/me
@@ -132,7 +100,7 @@ GET /v1/auth/me
 
 ### `refresh()`
 
-Refresh tokens.
+Rotate our access+refresh JWT pair.
 
 ```
 POST /v1/auth/refresh
@@ -146,53 +114,9 @@ POST /v1/auth/refresh
 
 ---
 
-### `register()`
-
-Register new user.
-
-```
-POST /v1/auth/register
-```
-
-**Parameters:**
-
-- `body` — `UserCreate`
-
-**Returns:** `UserResponse`
-
----
-
-### `resendVerification()`
-
-Resend verification email (always 200; silent if email unknown).
-
-```
-POST /v1/auth/resend-verification
-```
-
-**Parameters:**
-
-
-
----
-
-### `resetPassword()`
-
-Apply new password via HMAC-signed token.
-
-```
-POST /v1/auth/reset-password
-```
-
-**Parameters:**
-
-
-
----
-
 ### `updateMe()`
 
-Update current user (name, locale).
+Update current user locale (name/email come from OIDC ID token).
 
 ```
 PATCH /v1/auth/me
@@ -202,21 +126,7 @@ PATCH /v1/auth/me
 
 - `body` — `UserUpdate`
 
-**Returns:** `UserResponse`
-
----
-
-### `verifyEmail()`
-
-Verify email via HMAC-signed token (24h expiry).
-
-```
-POST /v1/auth/verify-email
-```
-
-**Parameters:**
-
-
+**Returns:** `UserMeResponse`
 
 ---
 
@@ -510,6 +420,51 @@ POST /v1/internal/email/test
 **Parameters:**
 
 - `preview` — `string` (optional, query)
+
+
+---
+
+## Oidc
+
+### `oidcCallback()`
+
+OIDC redirect_uri — exchanges code for tokens, provisions user, sets cookie, redirects to /auth/complete.
+
+```
+GET /v1/auth/oidc/callback
+```
+
+**Parameters:**
+
+- `code` — `string` (required, query)
+- `state` — `string` (required, query)
+
+
+---
+
+### `oidcComplete()`
+
+Frontend calls this on /auth/complete to read the one-shot cookie and get tokens.
+
+```
+POST /v1/auth/oidc/complete
+```
+
+**Parameters:**
+
+- `body` — `OidcCompleteRequest`
+
+**Returns:** `OidcCompleteResponse`
+
+---
+
+### `oidcStart()`
+
+Begin OIDC Authorization Code + PKCE flow (302 to Authentik).
+
+```
+GET /v1/auth/oidc/start
+```
 
 
 ---

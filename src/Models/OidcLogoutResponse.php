@@ -2,9 +2,9 @@
 
 namespace Clearsoft\EasySQL\SDK\Models;
 
-class UserUpdate
+class OidcLogoutResponse
 {
-    public ?string $locale;
+    public string $end_session_url;
 
     /**
      * @param array $data Raw API response data.
@@ -12,7 +12,7 @@ class UserUpdate
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->locale = (string) ($data['locale'] ?? '');
+        $instance->end_session_url = (string) ($data['end_session_url'] ?? '');
         return $instance;
     }
 }
