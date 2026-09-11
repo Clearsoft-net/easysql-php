@@ -116,19 +116,6 @@ class Client
     }
 
     /**
-     * Change password.
-     * @param array $body
-     * @return array
-     */
-    public function changePassword(array $body): array
-    {
-        $response = $this->request('post', '/v1/auth/change-password', [
-            'json' => $body,
-        ]);
-        return json_decode((string) $response->getBody(), true);
-    }
-
-    /**
      * Delete current user (hard delete).
      * @return void
      */
@@ -138,32 +125,17 @@ class Client
     }
 
     /**
-     * Trigger password reset email (HMAC-signed token, 1h expiry). Always 200; silent if email unknown..
+     * RP-initiated OIDC logout — returns URL to redirect the browser to Authentik end_session_endpoint.
      * @return array
      */
-    public function forgotPassword(array $body): array
+    public function logout(): array
     {
-        $response = $this->request('post', '/v1/auth/forgot-password', [
-            'json' => $body,
-        ]);
+        $response = $this->request('post', '/v1/auth/logout');
         return json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Login (returns access + refresh tokens).
-     * @param array $body
-     * @return array
-     */
-    public function login(array $body): array
-    {
-        $response = $this->request('post', '/v1/auth/login', [
-            'json' => $body,
-        ]);
-        return json_decode((string) $response->getBody(), true);
-    }
-
-    /**
-     * Get current user (with active plan).
+     * Get current user (claims from OIDC ID token + DB state).
      * @return array
      */
     public function me(): array
@@ -173,7 +145,7 @@ class Client
     }
 
     /**
-     * Refresh tokens.
+     * Rotate our access+refresh JWT pair.
      * @param array $body
      * @return array
      */
@@ -186,62 +158,13 @@ class Client
     }
 
     /**
-     * Register new user.
-     * @param array $body
-     * @return array
-     */
-    public function register(array $body): array
-    {
-        $response = $this->request('post', '/v1/auth/register', [
-            'json' => $body,
-        ]);
-        return json_decode((string) $response->getBody(), true);
-    }
-
-    /**
-     * Resend verification email (always 200; silent if email unknown).
-     * @return array
-     */
-    public function resendVerification(array $body): array
-    {
-        $response = $this->request('post', '/v1/auth/resend-verification', [
-            'json' => $body,
-        ]);
-        return json_decode((string) $response->getBody(), true);
-    }
-
-    /**
-     * Apply new password via HMAC-signed token.
-     * @return array
-     */
-    public function resetPassword(array $body): array
-    {
-        $response = $this->request('post', '/v1/auth/reset-password', [
-            'json' => $body,
-        ]);
-        return json_decode((string) $response->getBody(), true);
-    }
-
-    /**
-     * Update current user (name, locale).
+     * Update current user locale (name/email come from OIDC ID token).
      * @param array $body
      * @return array
      */
     public function updateMe(array $body): array
     {
         $response = $this->request('patch', '/v1/auth/me', [
-            'json' => $body,
-        ]);
-        return json_decode((string) $response->getBody(), true);
-    }
-
-    /**
-     * Verify email via HMAC-signed token (24h expiry).
-     * @return array
-     */
-    public function verifyEmail(array $body): array
-    {
-        $response = $this->request('post', '/v1/auth/verify-email', [
             'json' => $body,
         ]);
         return json_decode((string) $response->getBody(), true);
@@ -482,6 +405,43 @@ class Client
             'json' => $body,
             'query' => ['preview' => $preview],
         ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * OIDC redirect_uri — exchanges code for tokens, provisions user, sets cookie, redirects to /auth/complete.
+     * @param string $code
+     * @param string $state
+     * @return array
+     */
+    public function oidcCallback(array $query = []): array
+    {
+        $response = $this->request('get', '/v1/auth/oidc/callback', [
+            'query' => $query,
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Frontend calls this on /auth/complete to read the one-shot cookie and get tokens.
+     * @param array $body
+     * @return array
+     */
+    public function oidcComplete(array $body): array
+    {
+        $response = $this->request('post', '/v1/auth/oidc/complete', [
+            'json' => $body,
+        ]);
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Begin OIDC Authorization Code + PKCE flow (302 to Authentik).
+     * @return array
+     */
+    public function oidcStart(): array
+    {
+        $response = $this->request('get', '/v1/auth/oidc/start');
         return json_decode((string) $response->getBody(), true);
     }
 

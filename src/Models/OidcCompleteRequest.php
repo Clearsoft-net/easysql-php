@@ -2,9 +2,9 @@
 
 namespace Clearsoft\EasySQL\SDK\Models;
 
-class UserUpdate
+class OidcCompleteRequest
 {
-    public ?string $locale;
+    public string $state;
 
     /**
      * @param array $data Raw API response data.
@@ -12,7 +12,7 @@ class UserUpdate
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->locale = (string) ($data['locale'] ?? '');
+        $instance->state = (string) ($data['state'] ?? '');
         return $instance;
     }
 }
