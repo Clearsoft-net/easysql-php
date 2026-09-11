@@ -159,6 +159,18 @@ GET /v1/billing/plan
 
 ---
 
+### `getUsage()`
+
+Current usage vs plan limits (daily/weekly/monthly).
+
+```
+GET /v1/billing/usage
+```
+
+**Returns:** `UsageResponse`
+
+---
+
 ### `portal()`
 
 Create Stripe Customer Portal session.
