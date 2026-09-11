@@ -34,7 +34,7 @@ class ClientTest extends TestCase
 
     // ── Simple body-only methods ──────────────────────────────
 
-    public function testLogin(): void
+    public function testRefresh(): void
     {
         $client = $this->createClient([
             new Response(200, [], json_encode([
@@ -44,32 +44,23 @@ class ClientTest extends TestCase
             ])),
         ]);
 
-        $result = $client->login(['email' => 'test@example.com', 'password' => 'secret']);
+        $result = $client->refresh(['refresh_token' => 'old-token']);
 
         $this->assertSame('abc123', $result['access_token']);
         $this->assertSame('ref456', $result['refresh_token']);
     }
 
-    public function testRegister(): void
+    public function testLogout(): void
     {
         $client = $this->createClient([
-            new Response(201, [], json_encode([
-                'id' => 'usr_1',
-                'email' => 'new@example.com',
-                'name' => 'New User',
-                'locale' => 'en',
-                'created_at' => '2025-01-01T00:00:00Z',
+            new Response(200, [], json_encode([
+                'end_session_url' => 'https://auth.easysql.net/end-session',
             ])),
         ]);
 
-        $result = $client->register([
-            'email' => 'new@example.com',
-            'name' => 'New User',
-            'password' => 'secret123',
-        ]);
+        $result = $client->logout();
 
-        $this->assertSame('usr_1', $result['id']);
-        $this->assertSame('new@example.com', $result['email']);
+        $this->assertSame('https://auth.easysql.net/end-session', $result['end_session_url']);
     }
 
     // ── No-param methods ──────────────────────────────────────
@@ -171,7 +162,7 @@ class ClientTest extends TestCase
     {
         $client = $this->createClient([
             new Response(422, [], json_encode([
-                'detail' => [['msg' => 'Invalid email']],
+                'detail' => [['msg' => 'Invalid request']],
             ])),
         ]);
 
@@ -179,12 +170,12 @@ class ClientTest extends TestCase
         $this->expectExceptionCode(422);
 
         try {
-            $client->login(['email' => 'bad', 'password' => 'x']);
+            $client->refresh(['refresh_token' => '']);
         } catch (ApiException $e) {
             $this->assertSame(422, $e->getStatusCode());
             $details = $e->getErrorDetails();
             $this->assertArrayHasKey('detail', $details);
-            $this->assertSame('Invalid email', $details['detail'][0]['msg']);
+            $this->assertSame('Invalid request', $details['detail'][0]['msg']);
             throw $e;
         }
     }
@@ -192,7 +183,7 @@ class ClientTest extends TestCase
     public function testCustomHttpClientInjection(): void
     {
         $mock = new MockHandler([
-            new Response(200, [], json_encode(['access_token' => 'custom123'])),
+            new Response(200, [], json_encode(['access_token' => 'custom123', 'refresh_token' => 'ref789'])),
         ]);
         $handlerStack = HandlerStack::create($mock);
         $customGuzzle = new GuzzleClient(['handler' => $handlerStack]);
@@ -208,7 +199,7 @@ class ClientTest extends TestCase
 
         $this->assertSame($customGuzzle, $injectedGuzzle);
 
-        $result = $client->login(['email' => 'test@example.com', 'password' => 'secret']);
+        $result = $client->refresh(['refresh_token' => 'old-token']);
         $this->assertSame('custom123', $result['access_token']);
     }
 }
