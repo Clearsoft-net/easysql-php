@@ -1,3 +1,16 @@
+# [1.7.0](https://github.com/Clearsoft-net/easysql-php/compare/v1.6.0...v1.7.0) (2026-09-11)
+
+
+### Bug Fixes
+
+* **tests:** update tests for OIDC auth ([53056a5](https://github.com/Clearsoft-net/easysql-php/commit/53056a5d70ff65ccdfff9870591b35f6f2ed44c6))
+
+
+### Features
+
+* **sdk:** regenerate SDK from latest spec ([#8](https://github.com/Clearsoft-net/easysql-php/issues/8)) ([347c966](https://github.com/Clearsoft-net/easysql-php/commit/347c9667f995e3bd292f20835d63d49a52692bdc))
+* **sdk:** regenerate SDK from latest spec ([#9](https://github.com/Clearsoft-net/easysql-php/issues/9)) ([ef4161f](https://github.com/Clearsoft-net/easysql-php/commit/ef4161f08494478defe3e8faa723617a6882b7f7))
+
 # [1.6.0](https://github.com/Clearsoft-net/easysql-php/compare/v1.5.0...v1.6.0) (2026-09-07)
 
 
