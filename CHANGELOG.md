@@ -1,3 +1,22 @@
+# [2.0.0](https://github.com/Clearsoft-net/easysql-php/compare/v1.7.0...v2.0.0) (2026-09-16)
+
+
+* feat!: restructure SDK into a multipackage Composer repository ([3c36c45](https://github.com/Clearsoft-net/easysql-php/commit/3c36c45d97435f8dc2f3b3cca23d2f5a06ceee7c))
+
+
+### BREAKING CHANGES
+
+* the single clearsoft/easysql-sdk package was split and
+namespaces changed:
+  Clearsoft\EasySQL\SDK\Client            -> Clearsoft\EasySQL\Client\Client
+  Clearsoft\EasySQL\SDK\Models\*          -> Clearsoft\EasySQL\Client\Models\*
+  Clearsoft\EasySQL\SDK\Exceptions\*      -> Clearsoft\EasySQL\Client\Exceptions\*
+  Clearsoft\EasySQL\SDK\EasySQLClient     -> Clearsoft\EasySQL\Client\Http\EasySQLClient
+  Clearsoft\EasySQL\SDK\TokenStoreInterface -> Clearsoft\EasySQL\Client\Http\TokenStoreInterface
+Connector methods now take their path parameters explicitly
+(getConnector($id), updateConnector($body, $id), syncConnector($body, $id)).
+A migration table is documented in the README.
+
 # [1.7.0](https://github.com/Clearsoft-net/easysql-php/compare/v1.6.0...v1.7.0) (2026-09-11)
 
 

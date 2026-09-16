@@ -3,7 +3,7 @@
   "description": "EasySQL MySQL connector package — local schema introspection and SELECT execution for MySQL/MariaDB.",
   "type": "library",
   "license": "MIT",
-  "version": "1.7.0",
+  "version": "2.0.0",
   "homepage": "https://easysql.net",
   "keywords": [
     "easysql",
