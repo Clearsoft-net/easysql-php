@@ -3,3 +3,4 @@ vendor/
 .phpunit.cache/
 .phpstan.cache/
 .opencode/
+.phpactor.json
