@@ -1,0 +1,40 @@
+{
+  "name": "clearsoft/easysql-common",
+  "description": "Shared code for the EasySQL PHP SDK packages (SQL safety validation, credential sanitization).",
+  "type": "library",
+  "license": "MIT",
+  "version": "1.7.0",
+  "homepage": "https://easysql.net",
+  "keywords": [
+    "easysql",
+    "clearsoft",
+    "common",
+    "sql",
+    "sdk",
+    "php"
+  ],
+  "support": {
+    "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+    "source": "https://github.com/Clearsoft-net/easysql-php"
+  },
+  "authors": [
+    {
+      "name": "Clearsoft",
+      "email": "contact@clearsoft.net",
+      "homepage": "https://clearsoft.net"
+    }
+  ],
+  "require": {
+    "php": ">=8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Clearsoft\\EasySQL\\Common\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Clearsoft\\EasySQL\\Common\\Tests\\": "tests/"
+    }
+  }
+}

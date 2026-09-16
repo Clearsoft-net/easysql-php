@@ -5,8 +5,26 @@
          colors="true"
          cacheDirectory=".phpunit.cache">
     <testsuites>
-        <testsuite name="EasySQL SDK">
-            <directory>tests</directory>
+        <testsuite name="client">
+            <directory>packages/client/tests</directory>
+        </testsuite>
+        <testsuite name="connectors-mysql">
+            <directory>packages/connectors/mysql/tests</directory>
+        </testsuite>
+        <testsuite name="connectors-postgres">
+            <directory>packages/connectors/postgres/tests</directory>
+        </testsuite>
+        <testsuite name="common">
+            <directory>packages/common/tests</directory>
+        </testsuite>
+        <testsuite name="connectors-sqlite">
+            <directory>packages/connectors/sqlite/tests</directory>
+        </testsuite>
+        <testsuite name="schema-generation">
+            <directory>packages/schema-generation/tests</directory>
+        </testsuite>
+        <testsuite name="laravel">
+            <directory>packages/laravel/tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

@@ -1,0 +1,44 @@
+{
+  "name": "clearsoft/easysql-connectors-sqlite",
+  "description": "EasySQL SQLite connector package — local schema introspection and SELECT execution for SQLite files.",
+  "type": "library",
+  "license": "MIT",
+  "version": "1.7.0",
+  "homepage": "https://easysql.net",
+  "keywords": [
+    "easysql",
+    "clearsoft",
+    "connector",
+    "sqlite",
+    "database",
+    "sdk",
+    "php"
+  ],
+  "support": {
+    "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+    "source": "https://github.com/Clearsoft-net/easysql-php"
+  },
+  "authors": [
+    {
+      "name": "Clearsoft",
+      "email": "contact@clearsoft.net",
+      "homepage": "https://clearsoft.net"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "clearsoft/easysql-common": "^1.7",
+    "ext-pdo": "*",
+    "ext-pdo_sqlite": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Clearsoft\\EasySQL\\Connectors\\SQLite\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Clearsoft\\EasySQL\\Connectors\\SQLite\\Tests\\": "tests/"
+    }
+  }
+}

@@ -4,7 +4,7 @@
  * Documentation generation — produces docs/API.md grouped by category.
  */
 
-namespace Clearsoft\EasySQL\SDK\Scripts;
+namespace Clearsoft\EasySQL\Scripts;
 
 /**
  * Generate a markdown API reference from the extracted methods.

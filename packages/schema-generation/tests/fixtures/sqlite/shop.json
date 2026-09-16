@@ -1,0 +1,188 @@
+{
+  "input": {
+    "tables": [
+      {
+        "name": "order_items",
+        "columns": [
+          {
+            "name": "order_id",
+            "type": "INTEGER",
+            "nullable": false,
+            "primary_key": true,
+            "default": null,
+            "foreign_key": { "table": "orders", "column": "id" }
+          },
+          {
+            "name": "product_id",
+            "type": "INTEGER",
+            "nullable": false,
+            "primary_key": true,
+            "default": null,
+            "foreign_key": { "table": "products", "column": "id" }
+          },
+          {
+            "name": "quantity",
+            "type": "INTEGER",
+            "nullable": false,
+            "primary_key": false,
+            "default": "1",
+            "foreign_key": null
+          }
+        ],
+        "rows_approx": 5000
+      },
+      {
+        "name": "products",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "nullable": false,
+            "primary_key": true,
+            "default": null,
+            "foreign_key": null
+          },
+          {
+            "name": "sku",
+            "type": "TEXT",
+            "nullable": false,
+            "primary_key": false,
+            "default": null,
+            "foreign_key": null
+          },
+          {
+            "name": "price",
+            "type": "REAL",
+            "nullable": true,
+            "primary_key": false,
+            "default": null,
+            "foreign_key": null
+          },
+          {
+            "name": "metadata",
+            "type": "",
+            "nullable": true,
+            "primary_key": false,
+            "default": null,
+            "foreign_key": null
+          }
+        ],
+        "rows_approx": 120
+      },
+      {
+        "name": "orders",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "nullable": false,
+            "primary_key": true,
+            "default": null,
+            "foreign_key": null
+          },
+          {
+            "name": "placed_at",
+            "type": "DATETIME",
+            "nullable": true,
+            "primary_key": false,
+            "default": "CURRENT_TIMESTAMP",
+            "foreign_key": null
+          }
+        ],
+        "rows_approx": 900
+      }
+    ]
+  },
+  "expected": [
+    {
+      "name": "order_items",
+      "columns": [
+        {
+          "name": "order_id",
+          "type": "integer",
+          "nullable": false,
+          "primary_key": true,
+          "default": null,
+          "foreign_key": { "table": "orders", "column": "id" }
+        },
+        {
+          "name": "product_id",
+          "type": "integer",
+          "nullable": false,
+          "primary_key": true,
+          "default": null,
+          "foreign_key": { "table": "products", "column": "id" }
+        },
+        {
+          "name": "quantity",
+          "type": "integer",
+          "nullable": false,
+          "primary_key": false,
+          "default": "1",
+          "foreign_key": null
+        }
+      ],
+      "rows_approx": 5000
+    },
+    {
+      "name": "orders",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "nullable": false,
+          "primary_key": true,
+          "default": null,
+          "foreign_key": null
+        },
+        {
+          "name": "placed_at",
+          "type": "datetime",
+          "nullable": true,
+          "primary_key": false,
+          "default": "CURRENT_TIMESTAMP",
+          "foreign_key": null
+        }
+      ],
+      "rows_approx": 900
+    },
+    {
+      "name": "products",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "nullable": false,
+          "primary_key": true,
+          "default": null,
+          "foreign_key": null
+        },
+        {
+          "name": "sku",
+          "type": "text",
+          "nullable": false,
+          "primary_key": false,
+          "default": null,
+          "foreign_key": null
+        },
+        {
+          "name": "price",
+          "type": "real",
+          "nullable": true,
+          "primary_key": false,
+          "default": null,
+          "foreign_key": null
+        },
+        {
+          "name": "metadata",
+          "type": "blob",
+          "nullable": true,
+          "primary_key": false,
+          "default": null,
+          "foreign_key": null
+        }
+      ],
+      "rows_approx": 120
+    }
+  ]
+}
