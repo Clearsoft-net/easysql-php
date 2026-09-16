@@ -15,7 +15,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "php -r '$json = json_decode(file_get_contents(\"composer.json\"), true); $json[\"version\"] = \"${nextRelease.version}\"; $str = json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); $str = preg_replace_callback(\"/^ +/m\", fn($m) => str_repeat(\" \", strlen($m[0]) / 2), $str); file_put_contents(\"composer.json\", $str . PHP_EOL);'"
+        "prepareCmd": "php scripts/update-version.php ${nextRelease.version}"
       }
     ],
     [
@@ -23,6 +23,8 @@
       {
         "assets": [
           "composer.json",
+          "packages/*/composer.json",
+          "packages/*/*/composer.json",
           "CHANGELOG.md"
         ],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"

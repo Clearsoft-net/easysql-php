@@ -1,0 +1,45 @@
+{
+  "name": "clearsoft/easysql-connectors-mysql",
+  "description": "EasySQL MySQL connector package — local schema introspection and SELECT execution for MySQL/MariaDB.",
+  "type": "library",
+  "license": "MIT",
+  "version": "1.7.0",
+  "homepage": "https://easysql.net",
+  "keywords": [
+    "easysql",
+    "clearsoft",
+    "connector",
+    "mysql",
+    "mariadb",
+    "database",
+    "sdk",
+    "php"
+  ],
+  "support": {
+    "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+    "source": "https://github.com/Clearsoft-net/easysql-php"
+  },
+  "authors": [
+    {
+      "name": "Clearsoft",
+      "email": "contact@clearsoft.net",
+      "homepage": "https://clearsoft.net"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "clearsoft/easysql-common": "^1.7",
+    "ext-pdo": "*",
+    "ext-pdo_mysql": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Clearsoft\\EasySQL\\Connectors\\MySQL\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Clearsoft\\EasySQL\\Connectors\\MySQL\\Tests\\": "tests/"
+    }
+  }
+}

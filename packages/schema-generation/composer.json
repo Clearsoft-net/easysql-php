@@ -1,0 +1,39 @@
+{
+  "name": "clearsoft/easysql-schema-generation",
+  "description": "EasySQL schema generation package — transforms raw connector introspection output into the schema payload the API consumes.",
+  "type": "library",
+  "license": "MIT",
+  "version": "1.7.0",
+  "homepage": "https://easysql.net",
+  "keywords": [
+    "easysql",
+    "clearsoft",
+    "schema",
+    "sdk",
+    "php"
+  ],
+  "support": {
+    "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+    "source": "https://github.com/Clearsoft-net/easysql-php"
+  },
+  "authors": [
+    {
+      "name": "Clearsoft",
+      "email": "contact@clearsoft.net",
+      "homepage": "https://clearsoft.net"
+    }
+  ],
+  "require": {
+    "php": ">=8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Clearsoft\\EasySQL\\SchemaGeneration\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Clearsoft\\EasySQL\\SchemaGeneration\\Tests\\": "tests/"
+    }
+  }
+}

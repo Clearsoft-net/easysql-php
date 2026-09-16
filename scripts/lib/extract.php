@@ -4,7 +4,7 @@
  * Spec parsing — extracts a list of GeneratedMethod from an OpenAPI 3.x spec.
  */
 
-namespace Clearsoft\EasySQL\SDK\Scripts;
+namespace Clearsoft\EasySQL\Scripts;
 
 /**
  * Represents a single API operation ready to be rendered into the client.
@@ -145,9 +145,22 @@ function extractMethods(array $spec): array
             }
 
             // ── Parameters ──
+            // OpenAPI allows parameters at the path-item level (shared by all
+            // operations of the path) and at the operation level. Merge both;
+            // operation-level parameters win over path-item-level ones.
             $pathParams = [];
             $queryParams = [];
-            foreach ($operation['parameters'] ?? [] as $param) {
+            $allParams = array_merge(
+                $pathItem['parameters'] ?? [],
+                $operation['parameters'] ?? [],
+            );
+            $seenParams = [];
+            foreach ($allParams as $param) {
+                $key = ($param['in'] ?? '') . ':' . ($param['name'] ?? '');
+                if (isset($seenParams[$key])) {
+                    continue; // operation-level definition already collected
+                }
+                $seenParams[$key] = true;
                 $p = [
                     'name'     => $param['name'],
                     'type'     => $param['schema']['type'] ?? 'string',

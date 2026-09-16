@@ -24,21 +24,44 @@
 
 ---
 
-Ask questions in natural language to your MySQL, MariaDB, or PostgreSQL databases directly from your PHP applications and Laravel projects.
+Ask questions in natural language to your MySQL, MariaDB, or SQLite databases directly from your PHP applications and Laravel projects.
+
+## Packages
+
+This is a multipackage repository. All packages are versioned and released together.
+
+| Package | Composer name | Description |
+|---|---|---|
+| [`packages/client`](packages/client) | `clearsoft/easysql-client` | 🤖 Generated API client (from the OpenAPI spec) + token-refresh runtime |
+| [`packages/connectors/mysql`](packages/connectors/mysql) | `clearsoft/easysql-connectors-mysql` | Local MySQL/MariaDB introspection + SELECT execution |
+| [`packages/connectors/postgres`](packages/connectors/postgres) | `clearsoft/easysql-connectors-postgres` | Local PostgreSQL introspection + SELECT execution |
+| [`packages/connectors/sqlite`](packages/connectors/sqlite) | `clearsoft/easysql-connectors-sqlite` | Local SQLite introspection + SELECT execution |
+| [`packages/common`](packages/common) | `clearsoft/easysql-common` | Shared code (SQL safety validation, credential sanitization) |
+| [`packages/schema-generation`](packages/schema-generation) | `clearsoft/easysql-schema-generation` | Raw introspection → API schema payload (deterministic, no I/O) |
+| [`packages/laravel`](packages/laravel) | `clearsoft/easysql-laravel` | Laravel service provider, manager and facade |
 
 ## Requirements
 
 - **PHP** >= 8.2
 - **ext-json**
-- **guzzlehttp/guzzle** ^7.0
-- *(Optional)* **Laravel** ^11.0 (for Service Provider and Facade)
+- **guzzlehttp/guzzle** ^7.0 (client package)
+- **ext-pdo_mysql** (mysql connector), **ext-pdo_pgsql** (postgres connector), **ext-pdo_sqlite** (sqlite connector)
+- *(Optional)* **Laravel** ^11.0 || ^12.0 (for Service Provider and Facade)
 
 ## Installation
 
 ```bash
+# Client + schema generation (the meta-package; connectors and Laravel are opt-in)
 composer require clearsoft/easysql-sdk
-```
 
+# Or pick individual packages:
+composer require clearsoft/easysql-client
+composer require clearsoft/easysql-connectors-mysql
+composer require clearsoft/easysql-connectors-postgres
+composer require clearsoft/easysql-connectors-sqlite
+composer require clearsoft/easysql-schema-generation
+composer require clearsoft/easysql-laravel
+```
 ---
 
 ## Laravel Integration
@@ -105,7 +128,7 @@ Use the generated `Client` with typed methods for all endpoints:
 
 require 'vendor/autoload.php';
 
-use Clearsoft\EasySQL\SDK\Client;
+use Clearsoft\EasySQL\Api\Client;
 
 $client = new Client([
     'base_url'     => 'https://api.easysql.net',
@@ -113,23 +136,14 @@ $client = new Client([
 ]);
 
 // Authentication
-$tokens = $client->login([
-    'email'    => 'user@example.com',
-    'password' => 'secret',
-]);
+$tokens = $client->refresh(['refresh_token' => $refreshToken]);
 $user = $client->me();
 
 // Managing Database Connectors
 $client->createConnector([
     'name'   => 'Production MySQL',
     'type'   => 'mysql',
-    'config' => [
-        'host'     => 'db.example.com',
-        'port'     => 3306,
-        'database' => 'myapp',
-        'user'     => 'readonly',
-        'password' => 'secret',
-    ],
+    'schema' => $schemaPayload, // from the schema-generation package
 ]);
 
 $connectors = $client->listConnectors();
@@ -144,13 +158,28 @@ print_r($query['sql']);
 print_r($query['result']);
 ```
 
-### Automatic Token Refresh (EasySQLClient)
+### Automatic Token Refresh
 
-For automatic token refresh on 401 Unauthorized responses and persistent token storage:
+The typed `Client` supports a token store and refreshes the access token automatically (once)
+on a 401, persisting the new tokens:
 
 ```php
-use Clearsoft\EasySQL\SDK\EasySQLClient;
-use Clearsoft\EasySQL\SDK\TokenStoreInterface;
+use Clearsoft\EasySQL\Client\Client;
+use Clearsoft\EasySQL\Client\Http\TokenStoreInterface;
+
+$client = new Client([
+    'base_url'      => 'https://api.easysql.net',
+    'access_token'  => $accessToken,
+    'refresh_token' => $refreshToken,
+]);
+$client->setTokenStore(new SessionTokenStore()); // implements TokenStoreInterface
+```
+
+For raw Guzzle access, `EasySQLClient` wraps the same token manager:
+
+```php
+use Clearsoft\EasySQL\Client\Http\EasySQLClient;
+use Clearsoft\EasySQL\Client\Http\TokenStoreInterface;
 
 $client = new EasySQLClient([
     'base_url'      => 'https://api.easysql.net',
@@ -183,20 +212,100 @@ class SessionTokenStore implements TokenStoreInterface
 $client->setTokenStore(new SessionTokenStore());
 ```
 
+### Typed DTOs
+
+The generated `packages/client/src/Models` classes hydrate an API response array into a typed object:
+
+```php
+use Clearsoft\EasySQL\Client\Models\TokenResponse;
+
+$tokens = TokenResponse::fromArray($client->refresh(['refresh_token' => $refreshToken]));
+echo $tokens->access_token;
+```
+
+### Local Connectors + Schema Generation
+
+Introspect a local database and push only the schema to the API — credentials never leave the machine:
+
+```php
+use Clearsoft\EasySQL\Connectors\MySQL\ConnectionConfig;
+use Clearsoft\EasySQL\Connectors\MySQL\Connector as MySQLConnector;
+use Clearsoft\EasySQL\SchemaGeneration\SchemaGenerator;
+
+$connector = new MySQLConnector(new ConnectionConfig(
+    host: '127.0.0.1',
+    user: 'readonly',
+    password: 'secret',
+    database: 'myapp',
+));
+$connector->connect();
+
+try {
+    $raw = $connector->introspect();
+    $payload = (new SchemaGenerator())->generate($raw);
+
+    // Execute a generated SELECT locally
+    $result = $connector->execute('SELECT * FROM users LIMIT 10');
+} finally {
+    $connector->close();
+}
+
+// Push the schema to the API
+$client->syncConnector(['schema' => $payload], 'conn_abc123');
+```
+
 ---
 
 ## API Overview
 
 | Module | Available Methods |
 |---|---|
-| **Auth** | `register`, `login`, `refresh`, `me`, `deleteMe`, `updateMe`, `changePassword` |
-| **Queries** | `createQuery`, `listQueries`, `getQuery` |
-| **Connectors** | `listConnectors`, `createConnector`, `testConnector`, `getConnector`, `updateConnector`, `deleteConnector`, `syncConnector` |
+| **Auth** | `refresh`, `logout`, `me`, `deleteMe`, `updateMe` |
+| **Queries** | `createQuery`, `listQueries`, `getQuery`, `answerQuery` |
+| **Connectors** | `listConnectors`, `createConnector`, `getConnector`, `getConnectorSchema`, `getSuggestions`, `updateConnector`, `deleteConnector`, `syncConnector` |
 | **Billing** | `getPlan`, `checkout`, `portal` |
 | **Dashboard** | `dashboardStats` |
 | **Health** | `health`, `healthHealth` |
 
-See [docs/API.md](docs/API.md) for full endpoint reference and parameters.
+See [packages/client/docs/API.md](packages/client/docs/API.md) for full endpoint reference and parameters.
+
+---
+
+## Migration from the single-package layout (v1.x)
+
+Version 1.x shipped a single package `clearsoft/easysql-sdk` with namespace `Clearsoft\EasySQL\SDK`.
+The multipackage layout keeps that package as a meta-package (same name, same version line), so
+`composer require clearsoft/easysql-sdk` keeps working — but the namespaces changed:
+
+| Before (v1.x) | After |
+|---|---|
+| `Clearsoft\EasySQL\SDK\Client` | `Clearsoft\EasySQL\Api\Client` |
+| `Clearsoft\EasySQL\SDK\Models\*` | `Clearsoft\EasySQL\Api\Models\*` |
+| `Clearsoft\EasySQL\SDK\Exceptions\ApiException` | `Clearsoft\EasySQL\Api\Exceptions\ApiException` |
+| `Clearsoft\EasySQL\SDK\EasySQLClient` | `Clearsoft\EasySQL\Api\Http\EasySQLClient` |
+| `Clearsoft\EasySQL\SDK\TokenStoreInterface` | `Clearsoft\EasySQL\Api\Http\TokenStoreInterface` |
+| `Clearsoft\EasySql\Laravel\*` | unchanged (now in `clearsoft/easysql-laravel`) |
+
+Connector methods now take their path parameters explicitly (this also fixes a v1.x bug where
+`getConnector('conn_1')` silently ignored the id and requested a literal `{connector_id}` URL):
+
+```php
+$client->getConnector('conn_abc123');              // was: getConnector() — broken URL
+$client->updateConnector(['name' => 'X'], 'conn_abc123');
+$client->syncConnector(['schema' => $payload], 'conn_abc123');
+```
+
+---
+
+## Samples
+
+Runnable examples for every package live in [`samples/`](samples) — from a basic
+client call and token refresh to MySQL/PostgreSQL/SQLite introspection + sync and
+the Laravel integration. See the [samples README](samples/README.md).
+
+```bash
+php samples/09-schema-generation.php   # no credentials needed
+```
 
 ---
 
@@ -206,11 +315,18 @@ Contributions are welcome! Please read our **[Contributing Guidelines](https://g
 
 ```bash
 make install                          # install composer dependencies
-make lint                             # check PHP syntax
-make test                             # run PHPUnit test suite
-make generate                         # regenerate Client & Models from OpenAPI spec
-make build                            # full build (generate + lint + test)
+make lint                             # check PHP syntax in every package
+make analyse                          # PHPStan static analysis
+make test                             # run PHPUnit test suite (all packages)
+make generate                         # regenerate packages/client from OpenAPI spec
+make check                            # verify packages/client was not hand-edited
+make db-up                            # start local MySQL for integration tests
+make test-integration                 # tests including MySQL integration (needs db-up)
+make db-down                          # stop and remove the MySQL container
+make build                            # full build (generate + lint + analyse + test)
 ```
+
+Composer scripts mirror the common ones: `composer test`, `composer analyse`, `composer generate`.
 
 ---
 

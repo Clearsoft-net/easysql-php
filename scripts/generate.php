@@ -11,9 +11,9 @@
  *     Default: http://localhost:8000/openapi.json
  *
  * Reads the OpenAPI spec and generates:
- *   - src/Client.php        (named API methods)
- *   - src/Models/*.php       (request/response DTOs)
- *   - docs/API.md            (markdown reference)
+ *   - packages/client/src/Client.php   (named API methods)
+ *   - packages/client/src/Models/*.php (request/response DTOs)
+ *   - packages/client/docs/API.md      (markdown reference)
  */
 
 declare(strict_types=1);
@@ -40,12 +40,12 @@ require_once __DIR__ . "/lib/extract.php";
 require_once __DIR__ . "/lib/build.php";
 require_once __DIR__ . "/lib/docs.php";
 
-use function Clearsoft\EasySQL\SDK\Scripts\downloadSpec;
-use function Clearsoft\EasySQL\SDK\Scripts\extractMethods;
-use function Clearsoft\EasySQL\SDK\Scripts\buildInterface;
-use function Clearsoft\EasySQL\SDK\Scripts\buildImpl;
-use function Clearsoft\EasySQL\SDK\Scripts\generateModels;
-use function Clearsoft\EasySQL\SDK\Scripts\generateDocs;
+use function Clearsoft\EasySQL\Scripts\downloadSpec;
+use function Clearsoft\EasySQL\Scripts\extractMethods;
+use function Clearsoft\EasySQL\Scripts\buildInterface;
+use function Clearsoft\EasySQL\Scripts\buildImpl;
+use function Clearsoft\EasySQL\Scripts\generateModels;
+use function Clearsoft\EasySQL\Scripts\generateDocs;
 
 // ── CLI argument parsing ─────────────────────────────────────
 
@@ -90,24 +90,26 @@ $implementation = buildImpl($methods);
 
 $code = str_replace("{{IMPLEMENTATION}}", $implementation, $template);
 
-$clientPath = $rootDir . "/src/Client.php";
+$apiPackageDir = $rootDir . "/packages/client";
+
+$clientPath = $apiPackageDir . "/src/Client.php";
 file_put_contents($clientPath, $code);
-fwrite(STDERR, "✅ Generated src/Client.php\n");
+fwrite(STDERR, "✅ Generated packages/client/src/Client.php\n");
 
 // ── Generate Models ──────────────────────────────────────────
 
-$modelsDir = $rootDir . "/src/Models";
+$modelsDir = $apiPackageDir . "/src/Models";
 $modelNames = generateModels($spec, $modelsDir);
 fwrite(
     STDERR,
-    "✅ Generated " . count($modelNames) . " models in src/Models/\n",
+    "✅ Generated " . count($modelNames) . " models in packages/client/src/Models/\n",
 );
 
 // ── Generate docs ────────────────────────────────────────────
 
-$docsPath = $rootDir . "/docs/API.md";
+$docsPath = $apiPackageDir . "/docs/API.md";
 generateDocs($methods, $docsPath);
-fwrite(STDERR, "✅ Generated docs/API.md\n");
+fwrite(STDERR, "✅ Generated packages/client/docs/API.md\n");
 
 // ── Summary ──────────────────────────────────────────────────
 

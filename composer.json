@@ -1,6 +1,6 @@
 {
   "name": "clearsoft/easysql-sdk",
-  "description": "EasySQL API PHP & Laravel SDK — Ask questions in natural language to your MySQL, MariaDB or PostgreSQL databases.",
+  "description": "EasySQL PHP SDK — multipackage repository (client, connectors, schema generation, Laravel integration).",
   "type": "library",
   "license": "MIT",
   "version": "1.7.0",
@@ -30,42 +30,56 @@
   ],
   "require": {
     "php": ">=8.2",
-    "guzzlehttp/guzzle": "^7.0",
-    "ext-json": "*"
+    "clearsoft/easysql-client": "^1.7",
+    "clearsoft/easysql-schema-generation": "^1.7"
+  },
+  "suggest": {
+    "clearsoft/easysql-laravel": "Laravel service provider, manager and facade (^1.7)",
+    "clearsoft/easysql-connectors-mysql": "Local MySQL/MariaDB introspection and execution (^1.7)",
+    "clearsoft/easysql-connectors-postgres": "Local PostgreSQL introspection and execution (^1.7)",
+    "clearsoft/easysql-connectors-sqlite": "Local SQLite introspection and execution (^1.7)"
   },
   "require-dev": {
     "phpunit/phpunit": "^11.0",
-    "orchestra/testbench": "^9.0",
-    "illuminate/support": "^11.0",
-    "illuminate/contracts": "^11.0"
+    "orchestra/testbench": "^10.0",
+    "illuminate/support": "^12.0",
+    "illuminate/contracts": "^12.0",
+    "clearsoft/easysql-laravel": "^1.7",
+    "clearsoft/easysql-connectors-mysql": "^1.7",
+    "clearsoft/easysql-connectors-postgres": "^1.7",
+    "clearsoft/easysql-connectors-sqlite": "^1.7",
+    "phpstan/phpstan": "^2.0"
   },
-  "suggest": {
-    "illuminate/support": "Required to use the Laravel Service Provider and Facade (^11.0)"
-  },
-  "autoload": {
-    "files": [
-      "src/token-store.php"
-    ],
-    "psr-4": {
-      "Clearsoft\\EasySQL\\SDK\\": "src/",
-      "Clearsoft\\EasySql\\Laravel\\": "src/Laravel/"
+  "repositories": [
+    {
+      "type": "path",
+      "url": "packages/*"
+    },
+    {
+      "type": "path",
+      "url": "packages/*/*"
     }
-  },
+  ],
   "autoload-dev": {
     "psr-4": {
-      "Clearsoft\\EasySQL\\SDK\\Tests\\": "tests/",
-      "Clearsoft\\EasySql\\Laravel\\Tests\\": "tests/Laravel/"
+      "Clearsoft\\EasySQL\\Client\\Tests\\": "packages/client/tests/",
+      "Clearsoft\\EasySql\\Laravel\\Tests\\": "packages/laravel/tests/",
+      "Clearsoft\\EasySQL\\Connectors\\MySQL\\Tests\\": "packages/connectors/mysql/tests/",
+      "Clearsoft\\EasySQL\\Connectors\\Postgres\\Tests\\": "packages/connectors/postgres/tests/",
+      "Clearsoft\\EasySQL\\Connectors\\SQLite\\Tests\\": "packages/connectors/sqlite/tests/",
+      "Clearsoft\\EasySQL\\Common\\Tests\\": "packages/common/tests/",
+      "Clearsoft\\EasySQL\\SchemaGeneration\\Tests\\": "packages/schema-generation/tests/"
     }
   },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Clearsoft\\EasySql\\Laravel\\EasySqlServiceProvider"
-      ],
-      "aliases": {
-        "EasySQL": "Clearsoft\\EasySql\\Laravel\\Facades\\EasySQL"
-      }
-    }
+  "scripts": {
+    "analyse": "phpstan analyse --no-progress --memory-limit=1G",
+    "test": "phpunit",
+    "build": [
+      "@generate",
+      "@test",
+      "@analyse"
+    ],
+    "generate": "php scripts/generate.php"
   },
   "config": {
     "platform": {

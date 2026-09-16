@@ -1,0 +1,59 @@
+{
+  "name": "clearsoft/easysql-laravel",
+  "description": "Laravel integration for the EasySQL PHP SDK — service provider, manager and facade.",
+  "type": "library",
+  "license": "MIT",
+  "version": "1.7.0",
+  "homepage": "https://easysql.net",
+  "keywords": [
+    "easysql",
+    "clearsoft",
+    "sdk",
+    "laravel",
+    "php"
+  ],
+  "support": {
+    "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+    "source": "https://github.com/Clearsoft-net/easysql-php"
+  },
+  "authors": [
+    {
+      "name": "Clearsoft",
+      "email": "contact@clearsoft.net",
+      "homepage": "https://clearsoft.net"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "clearsoft/easysql-client": "^1.7",
+    "illuminate/support": "^11.0 || ^12.0",
+    "illuminate/contracts": "^11.0 || ^12.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.0",
+    "orchestra/testbench": "^9.0 || ^10.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Clearsoft\\EasySql\\Laravel\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Clearsoft\\EasySql\\Laravel\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Clearsoft\\EasySql\\Laravel\\EasySqlServiceProvider"
+      ],
+      "aliases": {
+        "EasySQL": "Clearsoft\\EasySql\\Laravel\\Facades\\EasySQL"
+      }
+    }
+  },
+  "suggest": {
+    "illuminate/support": "Required to use the Laravel Service Provider and Facade (^11.0)"
+  }
+}

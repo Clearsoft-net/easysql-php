@@ -1,0 +1,144 @@
+{
+  "input": {
+    "tables": [
+      {
+        "name": "orders",
+        "columns": [
+          {
+            "name": "id",
+            "type": "int",
+            "nullable": false,
+            "primary_key": true,
+            "default": null,
+            "foreign_key": null
+          },
+          {
+            "name": "customer_id",
+            "type": "int",
+            "nullable": false,
+            "primary_key": false,
+            "default": null,
+            "foreign_key": { "table": "customers", "column": "id" }
+          },
+          {
+            "name": "total",
+            "type": "decimal",
+            "nullable": true,
+            "primary_key": false,
+            "default": "0.00",
+            "foreign_key": null
+          },
+          {
+            "name": "created_at",
+            "type": "timestamp",
+            "nullable": true,
+            "primary_key": false,
+            "default": "CURRENT_TIMESTAMP",
+            "foreign_key": null
+          }
+        ],
+        "rows_approx": 1523
+      },
+      {
+        "name": "customers",
+        "columns": [
+          {
+            "name": "id",
+            "type": "int",
+            "nullable": false,
+            "primary_key": true,
+            "default": null,
+            "foreign_key": null
+          },
+          {
+            "name": "email",
+            "type": "varchar",
+            "nullable": false,
+            "primary_key": false,
+            "default": null,
+            "foreign_key": null
+          },
+          {
+            "name": "name",
+            "type": "varchar",
+            "nullable": true,
+            "primary_key": false,
+            "default": null,
+            "foreign_key": null
+          }
+        ],
+        "rows_approx": 210
+      }
+    ]
+  },
+  "expected": [
+    {
+      "name": "customers",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "primary_key": true,
+          "default": null,
+          "foreign_key": null
+        },
+        {
+          "name": "email",
+          "type": "varchar",
+          "nullable": false,
+          "primary_key": false,
+          "default": null,
+          "foreign_key": null
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "nullable": true,
+          "primary_key": false,
+          "default": null,
+          "foreign_key": null
+        }
+      ],
+      "rows_approx": 210
+    },
+    {
+      "name": "orders",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "nullable": false,
+          "primary_key": true,
+          "default": null,
+          "foreign_key": null
+        },
+        {
+          "name": "customer_id",
+          "type": "int",
+          "nullable": false,
+          "primary_key": false,
+          "default": null,
+          "foreign_key": { "table": "customers", "column": "id" }
+        },
+        {
+          "name": "total",
+          "type": "decimal",
+          "nullable": true,
+          "primary_key": false,
+          "default": "0.00",
+          "foreign_key": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true,
+          "primary_key": false,
+          "default": "CURRENT_TIMESTAMP",
+          "foreign_key": null
+        }
+      ],
+      "rows_approx": 1523
+    }
+  ]
+}
