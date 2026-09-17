@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/Clearsoft-net/easysql-php/compare/v2.0.0...v2.1.0) (2026-09-17)
+
+
+### Features
+
+* enable Packagist publishing via split mirrors ([d6a55fc](https://github.com/Clearsoft-net/easysql-php/commit/d6a55fc3c8768ae9166703ebaaa8d1fb1e5ac60b))
+
 # [2.0.0](https://github.com/Clearsoft-net/easysql-php/compare/v1.7.0...v2.0.0) (2026-09-16)
 
 
