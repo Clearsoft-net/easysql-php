@@ -1,0 +1,99 @@
+name: Split packages
+
+# Mirrors each packages/* directory into its own read-only repository so
+# Packagist can serve the individual packages (Packagist reads a repo's ROOT
+# composer.json — it cannot publish a subdirectory of the monorepo directly).
+#
+# - Every push of a `v*` tag updates the split repos' main branch AND forwards
+#   the tag → Packagist auto-updates via its GitHub webhook.
+# - Manual runs (workflow_dispatch) sync main only, without tagging.
+#
+# One-time setup (already done):
+# 1. Mirror repos exist: Clearsoft-net/easysql-php-{client,common,laravel,
+#    schema-generation,connectors-mysql,connectors-postgres,connectors-sqlite}.
+# 2. Each mirror is submitted on Packagist with auto-update enabled.
+#
+# NOTE: no `paths:` filter — a `paths` filter also gates tag pushes, which
+# would skip publishing when a release tag's commit doesn't touch packages/.
+# The split action is cheap and idempotent, so running on every tag is safe.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  split:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - { directory: "packages/client", repo: "easysql-php-client" }
+          - { directory: "packages/common", repo: "easysql-php-common" }
+          - { directory: "packages/laravel", repo: "easysql-php-laravel" }
+          - { directory: "packages/schema-generation", repo: "easysql-php-schema-generation" }
+          - { directory: "packages/connectors/mysql", repo: "easysql-php-connectors-mysql" }
+          - { directory: "packages/connectors/postgres", repo: "easysql-php-connectors-postgres" }
+          - { directory: "packages/connectors/sqlite", repo: "easysql-php-connectors-sqlite" }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # The published composer.json must not carry a hardcoded "version"
+      # (Packagist derives the version from the git tag) nor path
+      # repositories (they don't exist for consumers). The monorepo files on
+      # disk are left untouched — only the split artifact is cleaned.
+      - name: Clean distribution composer.json
+        run: |
+          php -r '
+            $f = "${{ matrix.package.directory }}/composer.json";
+            $j = json_decode(file_get_contents($f), true);
+            unset($j["version"]);
+            if (isset($j["repositories"])) {
+              $j["repositories"] = array_values(array_filter(
+                $j["repositories"],
+                fn ($r) => ($r["type"] ?? "") !== "path"
+              ));
+              if ($j["repositories"] === []) {
+                unset($j["repositories"]);
+              }
+            }
+            file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL);
+          '
+          git diff --stat -- ${{ matrix.package.directory }}/composer.json || true
+
+      # Sync the subdirectory to the split repo's main branch.
+      - name: Split (branch)
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        uses: danharrin/monorepo-split-github-action@v2.3.0
+        with:
+          package_directory: ${{ matrix.package.directory }}
+          repository_organization: Clearsoft-net
+          repository_name: ${{ matrix.package.repo }}
+          branch: main
+          user_name: Clearsoft Bot
+          user_email: support@clearsoft.net
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Forward the version tag → Packagist publishes the stable release.
+      - name: Split (tag)
+        if: "startsWith(github.ref, 'refs/tags/')"
+        uses: danharrin/monorepo-split-github-action@v2.3.0
+        with:
+          tag: ${{ github.ref_name }}
+          package_directory: ${{ matrix.package.directory }}
+          repository_organization: Clearsoft-net
+          repository_name: ${{ matrix.package.repo }}
+          branch: main
+          user_name: Clearsoft Bot
+          user_email: support@clearsoft.net
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
