@@ -1,5 +1,5 @@
 {
-  "name": "clearsoft/easysql-schema-generation",
+  "name": "easysql/schema-generation",
   "description": "EasySQL schema generation package — transforms raw connector introspection output into the schema payload the API consumes.",
   "type": "library",
   "license": "MIT",

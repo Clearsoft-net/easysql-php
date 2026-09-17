@@ -1,11 +1,11 @@
-# clearsoft/easysql-connectors-mysql
+# easysql/connectors-mysql
 
 MySQL/MariaDB connector for the EasySQL PHP SDK — local schema introspection and SELECT execution.
 
 ## Installation
 
 ```bash
-composer require clearsoft/easysql-connectors-mysql
+composer require easysql/connectors-mysql
 ```
 
 Requirements: PHP >= 8.2, ext-pdo, ext-pdo_mysql.
@@ -42,7 +42,7 @@ try {
 - **Credentials** are supplied per connection and never written to disk, logged, or kept after `close()`.
   Driver error messages are sanitized before surfacing.
 - **Introspection** reads `information_schema` (user tables only) and produces the raw shape consumed by
-  `clearsoft/easysql-schema-generation`.
+  `easysql/schema-generation`.
 - **Execution** accepts SELECT/WITH/EXPLAIN/SHOW only (client-side safety check mirrors the server);
   uses prepared statements and returns typed rows.
 - **No global state** — several connections can be open at the same time.

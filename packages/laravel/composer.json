@@ -1,5 +1,5 @@
 {
-  "name": "clearsoft/easysql-laravel",
+  "name": "easysql/laravel",
   "description": "Laravel integration for the EasySQL PHP SDK — service provider, manager and facade.",
   "type": "library",
   "license": "MIT",
@@ -25,7 +25,7 @@
   ],
   "require": {
     "php": ">=8.2",
-    "clearsoft/easysql-client": "^1.7",
+    "easysql/client": "^2.0",
     "illuminate/support": "^11.0 || ^12.0",
     "illuminate/contracts": "^11.0 || ^12.0"
   },

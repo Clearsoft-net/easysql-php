@@ -1,5 +1,5 @@
 {
-  "name": "clearsoft/easysql-client",
+  "name": "easysql/client",
   "description": "EasySQL API client package — auto-generated from the OpenAPI spec (client package of the PHP SDK).",
   "type": "library",
   "license": "MIT",

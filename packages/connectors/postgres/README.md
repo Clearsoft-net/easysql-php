@@ -1,11 +1,11 @@
-# clearsoft/easysql-connectors-postgres
+# easysql/connectors-postgres
 
 PostgreSQL connector for the EasySQL PHP SDK — local schema introspection and SELECT execution.
 
 ## Installation
 
 ```bash
-composer require clearsoft/easysql-connectors-postgres
+composer require easysql/connectors-postgres
 ```
 
 Requirements: PHP >= 8.2, ext-pdo, ext-pdo_pgsql.

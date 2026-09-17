@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * Sample 10 — Laravel integration (service provider, manager, facade).
  *
- * Paste this inside a Laravel app after `composer require clearsoft/easysql-laravel`
+ * Paste this inside a Laravel app after `composer require easysql/laravel`
  * and publishing the config:
  *
  *   php artisan vendor:publish --tag=easysql-config

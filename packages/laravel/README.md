@@ -1,14 +1,14 @@
-# clearsoft/easysql-laravel
+# easysql/laravel
 
 Laravel integration for the EasySQL PHP SDK — service provider, connection manager and facade.
 
 ## Installation
 
 ```bash
-composer require clearsoft/easysql-laravel
+composer require easysql/laravel
 ```
 
-Requirements: PHP >= 8.2, Laravel ^11.0, `clearsoft/easysql-client`.
+Requirements: PHP >= 8.2, Laravel ^11.0, `easysql/client`.
 
 Package discovery is automatic (provider + `EasySQL` alias registered via `extra.laravel`).
 

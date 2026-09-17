@@ -30,24 +30,24 @@
   ],
   "require": {
     "php": ">=8.2",
-    "clearsoft/easysql-client": "^1.7",
-    "clearsoft/easysql-schema-generation": "^1.7"
+    "easysql/client": "^2.0",
+    "easysql/schema-generation": "^2.0"
   },
   "suggest": {
-    "clearsoft/easysql-laravel": "Laravel service provider, manager and facade (^1.7)",
-    "clearsoft/easysql-connectors-mysql": "Local MySQL/MariaDB introspection and execution (^1.7)",
-    "clearsoft/easysql-connectors-postgres": "Local PostgreSQL introspection and execution (^1.7)",
-    "clearsoft/easysql-connectors-sqlite": "Local SQLite introspection and execution (^1.7)"
+    "easysql/laravel": "Laravel service provider, manager and facade (^1.7)",
+    "easysql/connectors-mysql": "Local MySQL/MariaDB introspection and execution (^1.7)",
+    "easysql/connectors-postgres": "Local PostgreSQL introspection and execution (^1.7)",
+    "easysql/connectors-sqlite": "Local SQLite introspection and execution (^1.7)"
   },
   "require-dev": {
     "phpunit/phpunit": "^11.0",
     "orchestra/testbench": "^10.0",
     "illuminate/support": "^12.0",
     "illuminate/contracts": "^12.0",
-    "clearsoft/easysql-laravel": "^1.7",
-    "clearsoft/easysql-connectors-mysql": "^1.7",
-    "clearsoft/easysql-connectors-postgres": "^1.7",
-    "clearsoft/easysql-connectors-sqlite": "^1.7",
+    "easysql/laravel": "^2.0",
+    "easysql/connectors-mysql": "^2.0",
+    "easysql/connectors-postgres": "^2.0",
+    "easysql/connectors-sqlite": "^2.0",
     "phpstan/phpstan": "^2.0"
   },
   "repositories": [

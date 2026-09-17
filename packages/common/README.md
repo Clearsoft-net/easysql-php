@@ -1,11 +1,11 @@
-# clearsoft/easysql-common
+# easysql/common
 
 Shared code for the EasySQL PHP SDK packages.
 
 ## Installation
 
 ```bash
-composer require clearsoft/easysql-common
+composer require easysql/common
 ```
 
 Requirements: PHP >= 8.2.
