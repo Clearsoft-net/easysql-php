@@ -96,6 +96,19 @@ class Client
     // ── Generated API methods ────────────────────────────────
 
     /**
+     * User's queries from Cloudflare Analytics Engine (last N days).
+     * @param array $query
+     * @return array
+     */
+    public function listAnalyticsQueries(array $query = []): array
+    {
+        $response = $this->request('get', '/v1/analytics/queries', [
+            'query' => $query,
+        ]);
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
      * Create API key (returns full key once).
      * @param array $body
      * @return array

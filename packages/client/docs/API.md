@@ -4,6 +4,7 @@
 
 ## Endpoints
 
+- [Analytics](#analytics)
 - [Api-keys](#api-keys)
 - [Auth](#auth)
 - [Billing](#billing)
@@ -14,6 +15,25 @@
 - [Internal](#internal)
 - [Oidc](#oidc)
 - [Queries](#queries)
+
+## Analytics
+
+### `listAnalyticsQueries()`
+
+User's queries from Cloudflare Analytics Engine (last N days).
+
+```
+GET /v1/analytics/queries
+```
+
+**Parameters:**
+
+- `limit` — `integer` (optional, query)
+- `days` — `integer` (optional, query)
+
+**Returns:** `AnalyticsQueriesResponse`
+
+---
 
 ## Api-keys
 
