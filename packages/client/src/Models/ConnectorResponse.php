@@ -14,6 +14,7 @@ class ConnectorResponse
     public string $id;
     public string $type;
     public string $name;
+    public string $db_version;
     public string $last_sync_at;
     public string $created_at;
 
@@ -26,6 +27,7 @@ class ConnectorResponse
         $instance->id = (string) ($data['id'] ?? '');
         $instance->type = (string) ($data['type'] ?? '');
         $instance->name = (string) ($data['name'] ?? '');
+        $instance->db_version = (string) ($data['db_version'] ?? '');
         $instance->last_sync_at = (string) ($data['last_sync_at'] ?? '');
         $instance->created_at = (string) ($data['created_at'] ?? '');
         return $instance;

@@ -14,6 +14,7 @@ class ConnectorCreate
     public string $type;
     public string $name;
     public ?string $schema;
+    public ?string $db_version;
 
     /**
      * @param array $data Raw API response data.
@@ -24,6 +25,7 @@ class ConnectorCreate
         $instance->type = (string) ($data['type'] ?? '');
         $instance->name = (string) ($data['name'] ?? '');
         $instance->schema = (string) ($data['schema'] ?? []);
+        $instance->db_version = (string) ($data['db_version'] ?? '');
         return $instance;
     }
 }

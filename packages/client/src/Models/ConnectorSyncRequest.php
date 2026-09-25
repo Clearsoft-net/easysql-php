@@ -12,6 +12,7 @@ namespace Clearsoft\EasySQL\Client\Models;
 class ConnectorSyncRequest
 {
     public string $schema;
+    public ?string $db_version;
 
     /**
      * @param array $data Raw API response data.
@@ -20,6 +21,7 @@ class ConnectorSyncRequest
     {
         $instance = new self();
         $instance->schema = (string) ($data['schema'] ?? []);
+        $instance->db_version = (string) ($data['db_version'] ?? '');
         return $instance;
     }
 }
