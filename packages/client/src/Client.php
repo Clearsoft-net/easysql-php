@@ -406,6 +406,16 @@ class Client
     }
 
     /**
+     * Feature flags for the current user (Cloudflare Flagship).
+     * @return array
+     */
+    public function getFlags(): array
+    {
+        $response = $this->request('get', '/v1/flags');
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
      * Health check (versioned).
      * @return array
      */

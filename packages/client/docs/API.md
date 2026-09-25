@@ -11,6 +11,7 @@
 - [Connectors](#connectors)
 - [Dashboard](#dashboard)
 - [Feedbacks](#feedbacks)
+- [Flags](#flags)
 - [Health](#health)
 - [Internal](#internal)
 - [Oidc](#oidc)
@@ -422,6 +423,20 @@ PUT /v1/feedbacks/{query_id}
 - `query_id` — `string (uuid)` (required, path)
 
 **Returns:** `FeedbackResponse`
+
+---
+
+## Flags
+
+### `getFlags()`
+
+Feature flags for the current user (Cloudflare Flagship).
+
+```
+GET /v1/flags
+```
+
+**Returns:** `FlagsResponse`
 
 ---
 
