@@ -13,6 +13,7 @@ class ConnectorUpdate
 {
     public ?string $name;
     public ?string $schema;
+    public ?string $db_version;
 
     /**
      * @param array $data Raw API response data.
@@ -22,6 +23,7 @@ class ConnectorUpdate
         $instance = new self();
         $instance->name = (string) ($data['name'] ?? '');
         $instance->schema = (string) ($data['schema'] ?? []);
+        $instance->db_version = (string) ($data['db_version'] ?? '');
         return $instance;
     }
 }
