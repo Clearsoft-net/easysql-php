@@ -371,35 +371,13 @@ class Client
     }
 
     /**
-     * Delete feedback for a query.
-     * @param string $query_id
-     * @return void
-     */
-    public function deleteFeedback(string $query_id): void
-    {
-        $response = $this->request('delete', '/v1/feedbacks/' . $query_id);
-    }
-
-    /**
-     * Get feedback for a query.
-     * @param string $query_id
-     * @return array
-     */
-    public function getFeedback(string $query_id): array
-    {
-        $response = $this->request('get', '/v1/feedbacks/' . $query_id);
-        return (array) json_decode((string) $response->getBody(), true);
-    }
-
-    /**
-     * Upsert feedback for a query.
+     * Create feedback (append-only; no read/update/delete).
      * @param array $body
-     * @param string $query_id
      * @return array
      */
-    public function upsertFeedback(array $body, string $query_id): array
+    public function createFeedback(array $body): array
     {
-        $response = $this->request('put', '/v1/feedbacks/' . $query_id, [
+        $response = $this->request('post', '/v1/feedbacks', [
             'json' => $body,
         ]);
         return (array) json_decode((string) $response->getBody(), true);
@@ -524,7 +502,7 @@ class Client
     }
 
     /**
-     * Paginated query history.
+     * Cursor-paginated query history (R2 Data Catalog).
      * @param array $query
      * @return array
      */

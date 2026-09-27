@@ -377,50 +377,17 @@ GET /v1/dashboard/stats
 
 ## Feedbacks
 
-### `deleteFeedback()`
+### `createFeedback()`
 
-Delete feedback for a query.
-
-```
-DELETE /v1/feedbacks/{query_id}
-```
-
-**Parameters:**
-
-- `query_id` — `string (uuid)` (required, path)
-
-**Returns:** `204 No Content`
-
----
-
-### `getFeedback()`
-
-Get feedback for a query.
+Create feedback (append-only; no read/update/delete).
 
 ```
-GET /v1/feedbacks/{query_id}
-```
-
-**Parameters:**
-
-- `query_id` — `string (uuid)` (required, path)
-
-**Returns:** `FeedbackResponse`
-
----
-
-### `upsertFeedback()`
-
-Upsert feedback for a query.
-
-```
-PUT /v1/feedbacks/{query_id}
+POST /v1/feedbacks
 ```
 
 **Parameters:**
 
 - `body` — `FeedbackCreate`
-- `query_id` — `string (uuid)` (required, path)
 
 **Returns:** `FeedbackResponse`
 
@@ -580,7 +547,7 @@ GET /v1/queries/{query_id}
 
 ### `listQueries()`
 
-Paginated query history.
+Cursor-paginated query history (R2 Data Catalog).
 
 ```
 GET /v1/queries
@@ -588,10 +555,10 @@ GET /v1/queries
 
 **Parameters:**
 
-- `page` — `integer` (optional, query)
-- `per_page` — `integer` (optional, query)
+- `limit` — `integer` (optional, query)
+- `cursor` — `string` (optional, query)
 
-**Returns:** `PaginatedQueries`
+**Returns:** `HistoryPage`
 
 ---
 
