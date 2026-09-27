@@ -11,11 +11,9 @@ namespace Clearsoft\EasySQL\Client\Models;
 
 class UsageResponse
 {
-    public string $daily;
-    public string $weekly;
-    public string $monthly;
     public string $plan_id;
     public string $plan_name;
+    public string $windows;
     public string $fetched_at;
 
     /**
@@ -24,11 +22,9 @@ class UsageResponse
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->daily = (string) ($data['daily'] ?? '');
-        $instance->weekly = (string) ($data['weekly'] ?? '');
-        $instance->monthly = (string) ($data['monthly'] ?? '');
         $instance->plan_id = (string) ($data['plan_id'] ?? '');
         $instance->plan_name = (string) ($data['plan_name'] ?? '');
+        $instance->windows = (string) ($data['windows'] ?? []);
         $instance->fetched_at = (string) ($data['fetched_at'] ?? '');
         return $instance;
     }

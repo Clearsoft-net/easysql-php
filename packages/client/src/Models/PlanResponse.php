@@ -14,10 +14,10 @@ class PlanResponse
     public string $id;
     public string $name;
     public int $price;
-    public int $max_connections;
-    public int $max_queries_daily;
-    public int $max_queries_weekly;
-    public int $max_queries_monthly;
+    public int $price_annual;
+    public int $credits_5h;
+    public int $credits_7d;
+    public string $support_tier;
 
     /**
      * @param array $data Raw API response data.
@@ -28,10 +28,10 @@ class PlanResponse
         $instance->id = (string) ($data['id'] ?? '');
         $instance->name = (string) ($data['name'] ?? '');
         $instance->price = (int) ($data['price'] ?? 0);
-        $instance->max_connections = (int) ($data['max_connections'] ?? 0);
-        $instance->max_queries_daily = (int) ($data['max_queries_daily'] ?? 0);
-        $instance->max_queries_weekly = (int) ($data['max_queries_weekly'] ?? 0);
-        $instance->max_queries_monthly = (int) ($data['max_queries_monthly'] ?? 0);
+        $instance->price_annual = (int) ($data['price_annual'] ?? 0);
+        $instance->credits_5h = (int) ($data['credits_5h'] ?? 0);
+        $instance->credits_7d = (int) ($data['credits_7d'] ?? 0);
+        $instance->support_tier = (string) ($data['support_tier'] ?? '');
         return $instance;
     }
 }
