@@ -500,20 +500,6 @@ class Client
     }
 
     /**
-     * WP plugin submits locally-executed result (API key only).
-     * @param array $body
-     * @param string $query_id
-     * @return array
-     */
-    public function answerQuery(array $body, string $query_id): array
-    {
-        $response = $this->request('post', '/v1/queries/' . $query_id . '/answer', [
-            'json' => $body,
-        ]);
-        return (array) json_decode((string) $response->getBody(), true);
-    }
-
-    /**
      * Ask question (generate SQL only — client executes).
      * @param array $body
      * @return array
@@ -527,7 +513,7 @@ class Client
     }
 
     /**
-     * Get query detail (poll this to wait for status=ready).
+     * Get query detail.
      * @param string $query_id
      * @return array
      */
@@ -547,17 +533,6 @@ class Client
         $response = $this->request('get', '/v1/queries', [
             'query' => $query,
         ]);
-        return (array) json_decode((string) $response->getBody(), true);
-    }
-
-    /**
-     * SSE stream — emits QueryResponse every 500ms until ready/failed or 60s timeout.
-     * @param string $query_id
-     * @return array
-     */
-    public function streamQuery(string $query_id): array
-    {
-        $response = $this->request('get', '/v1/queries/' . $query_id . '/stream');
         return (array) json_decode((string) $response->getBody(), true);
     }
 }

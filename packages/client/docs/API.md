@@ -546,23 +546,6 @@ GET /v1/auth/oidc/start
 
 ## Queries
 
-### `answerQuery()`
-
-WP plugin submits locally-executed result (API key only).
-
-```
-POST /v1/queries/{query_id}/answer
-```
-
-**Parameters:**
-
-- `body` — `LocalResultRequest`
-- `query_id` — `string (uuid)` (required, path)
-
-**Returns:** `QueryResponse`
-
----
-
 ### `createQuery()`
 
 Ask question (generate SQL only — client executes).
@@ -581,7 +564,7 @@ POST /v1/queries
 
 ### `getQuery()`
 
-Get query detail (poll this to wait for status=ready).
+Get query detail.
 
 ```
 GET /v1/queries/{query_id}
@@ -609,21 +592,6 @@ GET /v1/queries
 - `per_page` — `integer` (optional, query)
 
 **Returns:** `PaginatedQueries`
-
----
-
-### `streamQuery()`
-
-SSE stream — emits QueryResponse every 500ms until ready/failed or 60s timeout.
-
-```
-GET /v1/queries/{query_id}/stream
-```
-
-**Parameters:**
-
-- `query_id` — `string (uuid)` (required, path)
-
 
 ---
 
