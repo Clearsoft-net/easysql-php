@@ -11,6 +11,7 @@ namespace Clearsoft\EasySQL\Client\Models;
 
 class FeedbackCreate
 {
+    public string $query_id;
     public bool $positive;
     public ?string $comment;
 
@@ -20,6 +21,7 @@ class FeedbackCreate
     public static function fromArray(array $data): self
     {
         $instance = new self();
+        $instance->query_id = (string) ($data['query_id'] ?? '');
         $instance->positive = (bool) ($data['positive'] ?? false);
         $instance->comment = (string) ($data['comment'] ?? '');
         return $instance;

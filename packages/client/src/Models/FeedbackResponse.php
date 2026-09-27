@@ -16,7 +16,6 @@ class FeedbackResponse
     public bool $positive;
     public ?string $comment;
     public string $created_at;
-    public string $updated_at;
 
     /**
      * @param array $data Raw API response data.
@@ -29,7 +28,6 @@ class FeedbackResponse
         $instance->positive = (bool) ($data['positive'] ?? false);
         $instance->comment = (string) ($data['comment'] ?? '');
         $instance->created_at = (string) ($data['created_at'] ?? '');
-        $instance->updated_at = (string) ($data['updated_at'] ?? '');
         return $instance;
     }
 }

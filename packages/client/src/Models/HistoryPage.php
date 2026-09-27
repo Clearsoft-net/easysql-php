@@ -9,13 +9,10 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class PaginatedQueries
+class HistoryPage
 {
     public string $items;
-    public int $total;
-    public int $page;
-    public int $per_page;
-    public int $total_pages;
+    public string $next_cursor;
 
     /**
      * @param array $data Raw API response data.
@@ -24,10 +21,7 @@ class PaginatedQueries
     {
         $instance = new self();
         $instance->items = (string) ($data['items'] ?? []);
-        $instance->total = (int) ($data['total'] ?? 0);
-        $instance->page = (int) ($data['page'] ?? 0);
-        $instance->per_page = (int) ($data['per_page'] ?? 0);
-        $instance->total_pages = (int) ($data['total_pages'] ?? 0);
+        $instance->next_cursor = (string) ($data['next_cursor'] ?? '');
         return $instance;
     }
 }
