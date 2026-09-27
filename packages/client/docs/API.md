@@ -171,7 +171,7 @@ POST /v1/billing/checkout
 
 ### `getPlan()`
 
-List plans (Free/Starter/Pro/Business).
+List plans (Free/Starter/Pro/Max).
 
 ```
 GET /v1/billing/plan
@@ -182,7 +182,7 @@ GET /v1/billing/plan
 
 ### `getUsage()`
 
-Current usage vs plan limits (daily/weekly/monthly).
+Current usage as percentage per window (5h/7d).
 
 ```
 GET /v1/billing/usage
