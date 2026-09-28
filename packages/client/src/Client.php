@@ -414,6 +414,27 @@ class Client
     }
 
     /**
+     * Get one integration by id.
+     * @param string $integration_id
+     * @return array
+     */
+    public function getIntegration(string $integration_id): array
+    {
+        $response = $this->request('get', '/v1/integrations/' . $integration_id);
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * List the integration catalog.
+     * @return array
+     */
+    public function listIntegrations(): array
+    {
+        $response = $this->request('get', '/v1/integrations');
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
      * Return rendered HTML for an email template. Dev-only (404 in production)..
      * @param array $query
      * @return array
