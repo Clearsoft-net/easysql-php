@@ -13,6 +13,7 @@
 - [Feedbacks](#feedbacks)
 - [Flags](#flags)
 - [Health](#health)
+- [Integrations](#integrations)
 - [Internal](#internal)
 - [Oidc](#oidc)
 - [Queries](#queries)
@@ -426,6 +427,35 @@ Health check (legacy).
 
 ```
 GET /health
+```
+
+
+---
+
+## Integrations
+
+### `getIntegration()`
+
+Get one integration by id.
+
+```
+GET /v1/integrations/{integration_id}
+```
+
+**Parameters:**
+
+- `integration_id` — `string` (required, path)
+
+**Returns:** `Integration`
+
+---
+
+### `listIntegrations()`
+
+List the integration catalog.
+
+```
+GET /v1/integrations
 ```
 
 
