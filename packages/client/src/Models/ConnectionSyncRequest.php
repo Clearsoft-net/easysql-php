@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class ConnectorUpdate
+class ConnectionSyncRequest
 {
-    public ?string $name;
-    public ?string $schema;
+    public string $schema;
+    public ?string $db_version;
 
     /**
      * @param array $data Raw API response data.
@@ -20,8 +20,8 @@ class ConnectorUpdate
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->name = (string) ($data['name'] ?? '');
         $instance->schema = (string) ($data['schema'] ?? []);
+        $instance->db_version = (string) ($data['db_version'] ?? '');
         return $instance;
     }
 }

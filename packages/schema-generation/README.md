@@ -1,7 +1,7 @@
 # easysql/schema-generation
 
 Schema generation for the EasySQL PHP SDK — transforms raw connector introspection output into the
-schema payload the API consumes (`POST /v1/connectors`, `POST /v1/connectors/{id}/sync`).
+schema payload the API consumes (`POST /v1/connections`, `POST /v1/connections/{id}/sync`).
 
 ## Installation
 
@@ -17,7 +17,7 @@ Requirements: PHP >= 8.2. No other dependencies — and no I/O of its own.
 use Clearsoft\EasySQL\SchemaGeneration\SchemaGenerator;
 
 $payload = (new SchemaGenerator())->generate($rawFromConnector);
-$client->syncConnector(['schema' => $payload], 'conn_abc123');
+$client->syncConnection(['schema' => $payload], 'conn_abc123');
 ```
 
 Input shape (produced by every connector package):

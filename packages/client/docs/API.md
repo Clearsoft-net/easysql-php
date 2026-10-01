@@ -4,16 +4,38 @@
 
 ## Endpoints
 
+- [Analytics](#analytics)
 - [Api-keys](#api-keys)
 - [Auth](#auth)
 - [Billing](#billing)
-- [Connectors](#connectors)
+- [Connections](#connections)
 - [Dashboard](#dashboard)
 - [Feedbacks](#feedbacks)
+- [Flags](#flags)
 - [Health](#health)
+- [Integrations](#integrations)
 - [Internal](#internal)
 - [Oidc](#oidc)
 - [Queries](#queries)
+
+## Analytics
+
+### `listAnalyticsQueries()`
+
+User's queries from Cloudflare Analytics Engine (last N days).
+
+```
+GET /v1/analytics/queries
+```
+
+**Parameters:**
+
+- `limit` — `integer` (optional, query)
+- `days` — `integer` (optional, query)
+
+**Returns:** `AnalyticsQueriesResponse`
+
+---
 
 ## Api-keys
 
@@ -132,6 +154,18 @@ PATCH /v1/auth/me
 
 ## Billing
 
+### `cancel()`
+
+Schedule subscription cancellation at period end.
+
+```
+POST /v1/billing/cancel
+```
+
+**Returns:** `SubscriptionStateResponse`
+
+---
+
 ### `checkout()`
 
 Create Stripe Checkout session.
@@ -150,7 +184,7 @@ POST /v1/billing/checkout
 
 ### `getPlan()`
 
-List plans (Free/Starter/Pro/Business).
+List plans (Free/Starter/Pro/Max).
 
 ```
 GET /v1/billing/plan
@@ -159,15 +193,43 @@ GET /v1/billing/plan
 
 ---
 
+### `getSubscription()`
+
+Current subscription details (period, amount, card).
+
+```
+GET /v1/billing/subscription
+```
+
+**Returns:** `SubscriptionDetailsResponse`
+
+---
+
 ### `getUsage()`
 
-Current usage vs plan limits (daily/weekly/monthly).
+Current usage as percentage per window (5h/7d).
 
 ```
 GET /v1/billing/usage
 ```
 
 **Returns:** `UsageResponse`
+
+---
+
+### `listInvoices()`
+
+Payment history for the user's Stripe customer.
+
+```
+GET /v1/billing/invoices
+```
+
+**Parameters:**
+
+- `limit` — `integer` (optional, query)
+
+**Returns:** `InvoiceListResponse`
 
 ---
 
@@ -179,7 +241,23 @@ Create Stripe Customer Portal session.
 POST /v1/billing/portal
 ```
 
+**Parameters:**
+
+- `price_id` — `string` (optional, query)
+
 **Returns:** `PortalResponse`
+
+---
+
+### `resume()`
+
+Revert a scheduled cancellation.
+
+```
+POST /v1/billing/resume
+```
+
+**Returns:** `SubscriptionStateResponse`
 
 ---
 
@@ -197,86 +275,86 @@ POST /v1/billing/webhook
 
 ---
 
-## Connectors
+## Connections
 
 ### `autocomplete()`
 
 LLM autocomplete for partial question.
 
 ```
-POST /v1/connectors/{connector_id}/autocomplete
+POST /v1/connections/{connection_id}/autocomplete
 ```
 
 **Parameters:**
 
 - `body` — `AutocompleteRequest`
-- `connector_id` — `string (uuid)` (required, path)
+- `connection_id` — `string (uuid)` (required, path)
 
 **Returns:** `SuggestionsResponse`
 
 ---
 
-### `createConnector()`
+### `createConnection()`
 
-Create schema-only connector.
+Create schema-only connection.
 
 ```
-POST /v1/connectors
+POST /v1/connections
 ```
 
 **Parameters:**
 
-- `body` — `ConnectorCreate`
+- `body` — `ConnectionCreate`
 
-**Returns:** `ConnectorResponse`
+**Returns:** `ConnectionResponse`
 
 ---
 
-### `deleteConnector()`
+### `deleteConnection()`
 
-Delete connector.
+Delete connection.
 
 ```
-DELETE /v1/connectors/{connector_id}
+DELETE /v1/connections/{connection_id}
 ```
 
 **Parameters:**
 
-- `connector_id` — `string (uuid)` (required, path)
+- `connection_id` — `string (uuid)` (required, path)
 
 **Returns:** `204 No Content`
 
 ---
 
-### `getConnector()`
+### `getConnection()`
 
-Get connector.
+Get connection.
 
 ```
-GET /v1/connectors/{connector_id}
+GET /v1/connections/{connection_id}
 ```
 
 **Parameters:**
 
-- `connector_id` — `string (uuid)` (required, path)
+- `connection_id` — `string (uuid)` (required, path)
 
-**Returns:** `ConnectorResponse`
+**Returns:** `ConnectionResponse`
 
 ---
 
-### `getConnectorSchema()`
+### `getConnectionSchema()`
 
 Get cached schema.
 
 ```
-GET /v1/connectors/{connector_id}/schema
+GET /v1/connections/{connection_id}/schema
 ```
 
 **Parameters:**
 
-- `connector_id` — `string (uuid)` (required, path)
+- `connection_id` — `string (uuid)` (required, path)
 
-**Returns:** `ConnectorSchemaResponse`
+**Returns:** `ConnectionSchemaResponse`
 
 ---
 
@@ -285,58 +363,58 @@ GET /v1/connectors/{connector_id}/schema
 LLM-generated Portuguese business questions.
 
 ```
-GET /v1/connectors/{connector_id}/suggestions
+GET /v1/connections/{connection_id}/suggestions
 ```
 
 **Parameters:**
 
-- `connector_id` — `string (uuid)` (required, path)
+- `connection_id` — `string (uuid)` (required, path)
 
 **Returns:** `SuggestionsResponse`
 
 ---
 
-### `listConnectors()`
+### `listConnections()`
 
-List connectors.
+List connections.
 
 ```
-GET /v1/connectors
+GET /v1/connections
 ```
 
 
 ---
 
-### `syncConnector()`
+### `syncConnection()`
 
 Push schema from client (refresh).
 
 ```
-POST /v1/connectors/{connector_id}/sync
+POST /v1/connections/{connection_id}/sync
 ```
 
 **Parameters:**
 
-- `body` — `ConnectorSyncRequest`
-- `connector_id` — `string (uuid)` (required, path)
+- `body` — `ConnectionSyncRequest`
+- `connection_id` — `string (uuid)` (required, path)
 
 
 ---
 
-### `updateConnector()`
+### `updateConnection()`
 
-Update connector.
+Update connection.
 
 ```
-PATCH /v1/connectors/{connector_id}
+PATCH /v1/connections/{connection_id}
 ```
 
 **Parameters:**
 
-- `body` — `ConnectorUpdate`
-- `connector_id` — `string (uuid)` (required, path)
+- `body` — `ConnectionUpdate`
+- `connection_id` — `string (uuid)` (required, path)
 
-**Returns:** `ConnectorResponse`
+**Returns:** `ConnectionResponse`
 
 ---
 
@@ -344,7 +422,7 @@ PATCH /v1/connectors/{connector_id}
 
 ### `dashboardStats()`
 
-Dashboard stats (connectors, queries, top usage).
+Dashboard stats (connections, queries, top usage).
 
 ```
 GET /v1/dashboard/stats
@@ -356,52 +434,33 @@ GET /v1/dashboard/stats
 
 ## Feedbacks
 
-### `deleteFeedback()`
+### `createFeedback()`
 
-Delete feedback for a query.
-
-```
-DELETE /v1/feedbacks/{query_id}
-```
-
-**Parameters:**
-
-- `query_id` — `string (uuid)` (required, path)
-
-**Returns:** `204 No Content`
-
----
-
-### `getFeedback()`
-
-Get feedback for a query.
+Create feedback (append-only; no read/update/delete).
 
 ```
-GET /v1/feedbacks/{query_id}
-```
-
-**Parameters:**
-
-- `query_id` — `string (uuid)` (required, path)
-
-**Returns:** `FeedbackResponse`
-
----
-
-### `upsertFeedback()`
-
-Upsert feedback for a query.
-
-```
-PUT /v1/feedbacks/{query_id}
+POST /v1/feedbacks
 ```
 
 **Parameters:**
 
 - `body` — `FeedbackCreate`
-- `query_id` — `string (uuid)` (required, path)
 
 **Returns:** `FeedbackResponse`
+
+---
+
+## Flags
+
+### `getFlags()`
+
+Feature flags for the current user (Cloudflare Flagship).
+
+```
+GET /v1/flags
+```
+
+**Returns:** `FlagsResponse`
 
 ---
 
@@ -424,6 +483,35 @@ Health check (legacy).
 
 ```
 GET /health
+```
+
+
+---
+
+## Integrations
+
+### `getIntegration()`
+
+Get one integration by id.
+
+```
+GET /v1/integrations/{integration_id}
+```
+
+**Parameters:**
+
+- `integration_id` — `string` (required, path)
+
+**Returns:** `Integration`
+
+---
+
+### `listIntegrations()`
+
+List the integration catalog.
+
+```
+GET /v1/integrations
 ```
 
 
@@ -511,23 +599,6 @@ GET /v1/auth/oidc/start
 
 ## Queries
 
-### `answerQuery()`
-
-WP plugin submits locally-executed result (API key only).
-
-```
-POST /v1/queries/{query_id}/answer
-```
-
-**Parameters:**
-
-- `body` — `LocalResultRequest`
-- `query_id` — `string (uuid)` (required, path)
-
-**Returns:** `QueryResponse`
-
----
-
 ### `createQuery()`
 
 Ask question (generate SQL only — client executes).
@@ -546,7 +617,7 @@ POST /v1/queries
 
 ### `getQuery()`
 
-Get query detail (poll this to wait for status=ready).
+Get query detail.
 
 ```
 GET /v1/queries/{query_id}
@@ -562,7 +633,7 @@ GET /v1/queries/{query_id}
 
 ### `listQueries()`
 
-Paginated query history.
+Cursor-paginated query history (R2 Data Catalog).
 
 ```
 GET /v1/queries
@@ -570,25 +641,10 @@ GET /v1/queries
 
 **Parameters:**
 
-- `page` — `integer` (optional, query)
-- `per_page` — `integer` (optional, query)
+- `limit` — `integer` (optional, query)
+- `cursor` — `string` (optional, query)
 
-**Returns:** `PaginatedQueries`
-
----
-
-### `streamQuery()`
-
-SSE stream — emits QueryResponse every 500ms until ready/failed or 60s timeout.
-
-```
-GET /v1/queries/{query_id}/stream
-```
-
-**Parameters:**
-
-- `query_id` — `string (uuid)` (required, path)
-
+**Returns:** `HistoryPage`
 
 ---
 

@@ -96,6 +96,19 @@ class Client
     // ── Generated API methods ────────────────────────────────
 
     /**
+     * User's queries from Cloudflare Analytics Engine (last N days).
+     * @param array $query
+     * @return array
+     */
+    public function listAnalyticsQueries(array $query = []): array
+    {
+        $response = $this->request('get', '/v1/analytics/queries', [
+            'query' => $query,
+        ]);
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
      * Create API key (returns full key once).
      * @param array $body
      * @return array
@@ -184,6 +197,16 @@ class Client
     }
 
     /**
+     * Schedule subscription cancellation at period end.
+     * @return array
+     */
+    public function cancel(): array
+    {
+        $response = $this->request('post', '/v1/billing/cancel');
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
      * Create Stripe Checkout session.
      * @param array $query
      * @return array
@@ -197,7 +220,7 @@ class Client
     }
 
     /**
-     * List plans (Free/Starter/Pro/Business).
+     * List plans (Free/Starter/Pro/Max).
      * @return array
      */
     public function getPlan(): array
@@ -207,7 +230,17 @@ class Client
     }
 
     /**
-     * Current usage vs plan limits (daily/weekly/monthly).
+     * Current subscription details (period, amount, card).
+     * @return array
+     */
+    public function getSubscription(): array
+    {
+        $response = $this->request('get', '/v1/billing/subscription');
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Current usage as percentage per window (5h/7d).
      * @return array
      */
     public function getUsage(): array
@@ -217,12 +250,38 @@ class Client
     }
 
     /**
-     * Create Stripe Customer Portal session.
+     * Payment history for the user's Stripe customer.
+     * @param array $query
      * @return array
      */
-    public function portal(): array
+    public function listInvoices(array $query = []): array
     {
-        $response = $this->request('post', '/v1/billing/portal');
+        $response = $this->request('get', '/v1/billing/invoices', [
+            'query' => $query,
+        ]);
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Create Stripe Customer Portal session.
+     * @param array $query
+     * @return array
+     */
+    public function portal(array $query = []): array
+    {
+        $response = $this->request('post', '/v1/billing/portal', [
+            'query' => $query,
+        ]);
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Revert a scheduled cancellation.
+     * @return array
+     */
+    public function resume(): array
+    {
+        $response = $this->request('post', '/v1/billing/resume');
         return (array) json_decode((string) $response->getBody(), true);
     }
 
@@ -242,113 +301,113 @@ class Client
     /**
      * LLM autocomplete for partial question.
      * @param array $body
-     * @param string $connector_id
+     * @param string $connection_id
      * @return array
      */
-    public function autocomplete(array $body, string $connector_id): array
+    public function autocomplete(array $body, string $connection_id): array
     {
-        $response = $this->request('post', '/v1/connectors/' . $connector_id . '/autocomplete', [
+        $response = $this->request('post', '/v1/connections/' . $connection_id . '/autocomplete', [
             'json' => $body,
         ]);
         return (array) json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Create schema-only connector.
+     * Create schema-only connection.
      * @param array $body
      * @return array
      */
-    public function createConnector(array $body): array
+    public function createConnection(array $body): array
     {
-        $response = $this->request('post', '/v1/connectors', [
+        $response = $this->request('post', '/v1/connections', [
             'json' => $body,
         ]);
         return (array) json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Delete connector.
-     * @param string $connector_id
+     * Delete connection.
+     * @param string $connection_id
      * @return void
      */
-    public function deleteConnector(string $connector_id): void
+    public function deleteConnection(string $connection_id): void
     {
-        $response = $this->request('delete', '/v1/connectors/' . $connector_id);
+        $response = $this->request('delete', '/v1/connections/' . $connection_id);
     }
 
     /**
-     * Get connector.
-     * @param string $connector_id
+     * Get connection.
+     * @param string $connection_id
      * @return array
      */
-    public function getConnector(string $connector_id): array
+    public function getConnection(string $connection_id): array
     {
-        $response = $this->request('get', '/v1/connectors/' . $connector_id);
+        $response = $this->request('get', '/v1/connections/' . $connection_id);
         return (array) json_decode((string) $response->getBody(), true);
     }
 
     /**
      * Get cached schema.
-     * @param string $connector_id
+     * @param string $connection_id
      * @return array
      */
-    public function getConnectorSchema(string $connector_id): array
+    public function getConnectionSchema(string $connection_id): array
     {
-        $response = $this->request('get', '/v1/connectors/' . $connector_id . '/schema');
+        $response = $this->request('get', '/v1/connections/' . $connection_id . '/schema');
         return (array) json_decode((string) $response->getBody(), true);
     }
 
     /**
      * LLM-generated Portuguese business questions.
-     * @param string $connector_id
+     * @param string $connection_id
      * @return array
      */
-    public function getSuggestions(string $connector_id): array
+    public function getSuggestions(string $connection_id): array
     {
-        $response = $this->request('get', '/v1/connectors/' . $connector_id . '/suggestions');
+        $response = $this->request('get', '/v1/connections/' . $connection_id . '/suggestions');
         return (array) json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * List connectors.
+     * List connections.
      * @return array
      */
-    public function listConnectors(): array
+    public function listConnections(): array
     {
-        $response = $this->request('get', '/v1/connectors');
+        $response = $this->request('get', '/v1/connections');
         return (array) json_decode((string) $response->getBody(), true);
     }
 
     /**
      * Push schema from client (refresh).
      * @param array $body
-     * @param string $connector_id
+     * @param string $connection_id
      * @return array
      */
-    public function syncConnector(array $body, string $connector_id): array
+    public function syncConnection(array $body, string $connection_id): array
     {
-        $response = $this->request('post', '/v1/connectors/' . $connector_id . '/sync', [
+        $response = $this->request('post', '/v1/connections/' . $connection_id . '/sync', [
             'json' => $body,
         ]);
         return (array) json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Update connector.
+     * Update connection.
      * @param array $body
-     * @param string $connector_id
+     * @param string $connection_id
      * @return array
      */
-    public function updateConnector(array $body, string $connector_id): array
+    public function updateConnection(array $body, string $connection_id): array
     {
-        $response = $this->request('patch', '/v1/connectors/' . $connector_id, [
+        $response = $this->request('patch', '/v1/connections/' . $connection_id, [
             'json' => $body,
         ]);
         return (array) json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Dashboard stats (connectors, queries, top usage).
+     * Dashboard stats (connections, queries, top usage).
      * @return array
      */
     public function dashboardStats(): array
@@ -358,37 +417,25 @@ class Client
     }
 
     /**
-     * Delete feedback for a query.
-     * @param string $query_id
-     * @return void
-     */
-    public function deleteFeedback(string $query_id): void
-    {
-        $response = $this->request('delete', '/v1/feedbacks/' . $query_id);
-    }
-
-    /**
-     * Get feedback for a query.
-     * @param string $query_id
+     * Create feedback (append-only; no read/update/delete).
+     * @param array $body
      * @return array
      */
-    public function getFeedback(string $query_id): array
+    public function createFeedback(array $body): array
     {
-        $response = $this->request('get', '/v1/feedbacks/' . $query_id);
+        $response = $this->request('post', '/v1/feedbacks', [
+            'json' => $body,
+        ]);
         return (array) json_decode((string) $response->getBody(), true);
     }
 
     /**
-     * Upsert feedback for a query.
-     * @param array $body
-     * @param string $query_id
+     * Feature flags for the current user (Cloudflare Flagship).
      * @return array
      */
-    public function upsertFeedback(array $body, string $query_id): array
+    public function getFlags(): array
     {
-        $response = $this->request('put', '/v1/feedbacks/' . $query_id, [
-            'json' => $body,
-        ]);
+        $response = $this->request('get', '/v1/flags');
         return (array) json_decode((string) $response->getBody(), true);
     }
 
@@ -409,6 +456,27 @@ class Client
     public function healthHealth(): array
     {
         $response = $this->request('get', '/health');
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Get one integration by id.
+     * @param string $integration_id
+     * @return array
+     */
+    public function getIntegration(string $integration_id): array
+    {
+        $response = $this->request('get', '/v1/integrations/' . $integration_id);
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * List the integration catalog.
+     * @return array
+     */
+    public function listIntegrations(): array
+    {
+        $response = $this->request('get', '/v1/integrations');
         return (array) json_decode((string) $response->getBody(), true);
     }
 
@@ -477,20 +545,6 @@ class Client
     }
 
     /**
-     * WP plugin submits locally-executed result (API key only).
-     * @param array $body
-     * @param string $query_id
-     * @return array
-     */
-    public function answerQuery(array $body, string $query_id): array
-    {
-        $response = $this->request('post', '/v1/queries/' . $query_id . '/answer', [
-            'json' => $body,
-        ]);
-        return (array) json_decode((string) $response->getBody(), true);
-    }
-
-    /**
      * Ask question (generate SQL only — client executes).
      * @param array $body
      * @return array
@@ -504,7 +558,7 @@ class Client
     }
 
     /**
-     * Get query detail (poll this to wait for status=ready).
+     * Get query detail.
      * @param string $query_id
      * @return array
      */
@@ -515,7 +569,7 @@ class Client
     }
 
     /**
-     * Paginated query history.
+     * Cursor-paginated query history (R2 Data Catalog).
      * @param array $query
      * @return array
      */
@@ -524,17 +578,6 @@ class Client
         $response = $this->request('get', '/v1/queries', [
             'query' => $query,
         ]);
-        return (array) json_decode((string) $response->getBody(), true);
-    }
-
-    /**
-     * SSE stream — emits QueryResponse every 500ms until ready/failed or 60s timeout.
-     * @param string $query_id
-     * @return array
-     */
-    public function streamQuery(string $query_id): array
-    {
-        $response = $this->request('get', '/v1/queries/' . $query_id . '/stream');
         return (array) json_decode((string) $response->getBody(), true);
     }
 }

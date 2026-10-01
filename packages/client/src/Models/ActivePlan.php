@@ -13,9 +13,9 @@ class ActivePlan
 {
     public string $id;
     public string $name;
-    public int $max_queries_daily;
-    public int $max_queries_weekly;
-    public int $max_queries_monthly;
+    public int $credits_5h;
+    public int $credits_7d;
+    public string $support_tier;
 
     /**
      * @param array $data Raw API response data.
@@ -25,9 +25,9 @@ class ActivePlan
         $instance = new self();
         $instance->id = (string) ($data['id'] ?? '');
         $instance->name = (string) ($data['name'] ?? '');
-        $instance->max_queries_daily = (int) ($data['max_queries_daily'] ?? 0);
-        $instance->max_queries_weekly = (int) ($data['max_queries_weekly'] ?? 0);
-        $instance->max_queries_monthly = (int) ($data['max_queries_monthly'] ?? 0);
+        $instance->credits_5h = (int) ($data['credits_5h'] ?? 0);
+        $instance->credits_7d = (int) ($data['credits_7d'] ?? 0);
+        $instance->support_tier = (string) ($data['support_tier'] ?? '');
         return $instance;
     }
 }

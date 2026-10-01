@@ -27,7 +27,7 @@ EASYSQL_TIMEOUT=30
 ```php
 use Clearsoft\EasySql\Laravel\Facades\EasySQL;
 
-$result = EasySQL::createQuery(['connector_id' => 'conn_abc123', 'question' => '...']);
+$result = EasySQL::createQuery(['connection_id' => 'conn_abc123', 'question' => '...']);
 $analytics = EasySQL::connection('analytics');
 ```
 

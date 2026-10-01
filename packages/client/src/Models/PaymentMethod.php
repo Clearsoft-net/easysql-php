@@ -9,9 +9,12 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class LocalResultRequest
+class PaymentMethod
 {
-    public string $result_data;
+    public string $brand;
+    public string $last4;
+    public int $exp_month;
+    public int $exp_year;
 
     /**
      * @param array $data Raw API response data.
@@ -19,7 +22,10 @@ class LocalResultRequest
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->result_data = (string) ($data['result_data'] ?? []);
+        $instance->brand = (string) ($data['brand'] ?? '');
+        $instance->last4 = (string) ($data['last4'] ?? '');
+        $instance->exp_month = (int) ($data['exp_month'] ?? 0);
+        $instance->exp_year = (int) ($data['exp_year'] ?? 0);
         return $instance;
     }
 }

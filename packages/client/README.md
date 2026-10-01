@@ -31,7 +31,7 @@ $client = new Client([
 ]);
 
 $user = $client->me();
-$connector = $client->getConnector('conn_abc123');
+$connection = $client->getConnection('conn_abc123');
 ```
 
 With automatic token refresh:

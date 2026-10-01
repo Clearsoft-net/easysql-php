@@ -9,10 +9,11 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class UsageBucket
+class ConnectionUsage
 {
-    public int $used;
-    public int $limit;
+    public string $connection_id;
+    public string $connection_name;
+    public int $query_count;
 
     /**
      * @param array $data Raw API response data.
@@ -20,8 +21,9 @@ class UsageBucket
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->used = (int) ($data['used'] ?? 0);
-        $instance->limit = (int) ($data['limit'] ?? 0);
+        $instance->connection_id = (string) ($data['connection_id'] ?? '');
+        $instance->connection_name = (string) ($data['connection_name'] ?? '');
+        $instance->query_count = (int) ($data['query_count'] ?? 0);
         return $instance;
     }
 }

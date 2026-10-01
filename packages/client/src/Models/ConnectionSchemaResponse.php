@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class QueryRequest
+class ConnectionSchemaResponse
 {
-    public string $connection_id;
-    public string $question;
+    public string $tables;
+    public string $db_version;
 
     /**
      * @param array $data Raw API response data.
@@ -20,8 +20,8 @@ class QueryRequest
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->connection_id = (string) ($data['connection_id'] ?? '');
-        $instance->question = (string) ($data['question'] ?? '');
+        $instance->tables = (string) ($data['tables'] ?? []);
+        $instance->db_version = (string) ($data['db_version'] ?? '');
         return $instance;
     }
 }

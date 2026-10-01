@@ -9,10 +9,9 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class QueryRequest
+class FlagsResponse
 {
-    public string $connection_id;
-    public string $question;
+    public bool $analytics_screen;
 
     /**
      * @param array $data Raw API response data.
@@ -20,8 +19,7 @@ class QueryRequest
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->connection_id = (string) ($data['connection_id'] ?? '');
-        $instance->question = (string) ($data['question'] ?? '');
+        $instance->analytics_screen = (bool) ($data['analytics_screen'] ?? false);
         return $instance;
     }
 }

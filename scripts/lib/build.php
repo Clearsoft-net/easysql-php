@@ -264,10 +264,28 @@ function buildPathExpr(string $path, array $pathParams): string
 }
 
 /**
+ * Reduce an OpenAPI type to a single scalar type string.
+ *
+ * OpenAPI 3.1 allows `type` to be a union array (e.g. ["string", "null"]); the
+ * previous string-only signature crashed on those schemas.
+ */
+function normalizedType(mixed $openApiType): string
+{
+    if (is_array($openApiType)) {
+        $nonNull = array_values(array_filter($openApiType, fn ($t) => $t !== "null"));
+        return (string) ($nonNull[0] ?? "string");
+    }
+
+    return (string) ($openApiType ?? "string");
+}
+
+/**
  * Map OpenAPI type to PHP type.
  */
-function phpType(string $openApiType): string
+function phpType(string|array $openApiType): string
 {
+    $openApiType = normalizedType($openApiType);
+
     return match ($openApiType) {
         "integer", "number" => "int",
         "boolean" => "bool",
@@ -386,7 +404,7 @@ function buildModelClass(
  */
 function defaultForProp(array $propSchema): string
 {
-    $type = $propSchema["type"] ?? "string";
+    $type = normalizedType($propSchema["type"] ?? "string");
     return match ($type) {
         "integer", "number" => "0",
         "boolean" => "false",

@@ -9,9 +9,10 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class ConnectorSyncRequest
+class HistoryPage
 {
-    public string $schema;
+    public string $items;
+    public string $next_cursor;
 
     /**
      * @param array $data Raw API response data.
@@ -19,7 +20,8 @@ class ConnectorSyncRequest
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->schema = (string) ($data['schema'] ?? []);
+        $instance->items = (string) ($data['items'] ?? []);
+        $instance->next_cursor = (string) ($data['next_cursor'] ?? '');
         return $instance;
     }
 }
