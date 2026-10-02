@@ -1,3 +1,27 @@
+# [3.0.0](https://github.com/Clearsoft-net/easysql-php/compare/v2.1.0...v3.0.0) (2026-10-02)
+
+
+* refactor(sdk)!: rename connectors to connections in the API client ([5c65ad3](https://github.com/Clearsoft-net/easysql-php/commit/5c65ad303e1d8e45854bca922fcca46c9387c2f3))
+
+
+### Features
+
+* **sdk:** regenerate SDK from latest spec ([#11](https://github.com/Clearsoft-net/easysql-php/issues/11)) ([be1da3d](https://github.com/Clearsoft-net/easysql-php/commit/be1da3da0d2c983d191a45f4e2c3324d501f37f0))
+* **sdk:** regenerate SDK from latest spec ([#12](https://github.com/Clearsoft-net/easysql-php/issues/12)) ([4f44c8a](https://github.com/Clearsoft-net/easysql-php/commit/4f44c8a5d4ef4d65613fee77081e31ba07ea005d))
+* **sdk:** regenerate SDK from latest spec ([#13](https://github.com/Clearsoft-net/easysql-php/issues/13)) ([84d9060](https://github.com/Clearsoft-net/easysql-php/commit/84d9060600f5ce16ff29d1d6745a5165933f1c6b))
+* **sdk:** regenerate SDK from latest spec ([#14](https://github.com/Clearsoft-net/easysql-php/issues/14)) ([2f8df8f](https://github.com/Clearsoft-net/easysql-php/commit/2f8df8f7d166a97a8629f6f3e6de8e6a8de140dd))
+* **sdk:** regenerate SDK from latest spec ([#15](https://github.com/Clearsoft-net/easysql-php/issues/15)) ([284a153](https://github.com/Clearsoft-net/easysql-php/commit/284a153e1576816bdae08d8d335146abd7359d5d))
+* **sdk:** regenerate SDK from latest spec ([#16](https://github.com/Clearsoft-net/easysql-php/issues/16)) ([a3526cf](https://github.com/Clearsoft-net/easysql-php/commit/a3526cfab7419bb67de729857f5df96db659f9e8))
+* **sdk:** regenerate SDK from latest spec ([#17](https://github.com/Clearsoft-net/easysql-php/issues/17)) ([d98099a](https://github.com/Clearsoft-net/easysql-php/commit/d98099a26d12924064b68b3af29b58ab804e90bb))
+
+
+### BREAKING CHANGES
+
+* generated client methods (listConnections, createConnection,
+getConnection, updateConnection, deleteConnection, syncConnection,
+getConnectionSchema) and the `connection_id` parameter replace the old
+`*Connector` names.
+
 # [2.1.0](https://github.com/Clearsoft-net/easysql-php/compare/v2.0.0...v2.1.0) (2026-09-17)
 
 
