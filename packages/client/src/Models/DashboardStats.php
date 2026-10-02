@@ -11,11 +11,11 @@ namespace Clearsoft\EasySQL\Client\Models;
 
 class DashboardStats
 {
-    public int $active_connectors;
+    public int $active_connections;
     public int $queries_used_this_month;
     public int $queries_limit;
     public string $queries_per_day;
-    public string $most_used_connectors;
+    public string $most_used_connections;
     public string $fetched_at;
 
     /**
@@ -24,11 +24,11 @@ class DashboardStats
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->active_connectors = (int) ($data['active_connectors'] ?? 0);
+        $instance->active_connections = (int) ($data['active_connections'] ?? 0);
         $instance->queries_used_this_month = (int) ($data['queries_used_this_month'] ?? 0);
         $instance->queries_limit = (int) ($data['queries_limit'] ?? 0);
         $instance->queries_per_day = (string) ($data['queries_per_day'] ?? []);
-        $instance->most_used_connectors = (string) ($data['most_used_connectors'] ?? []);
+        $instance->most_used_connections = (string) ($data['most_used_connections'] ?? []);
         $instance->fetched_at = (string) ($data['fetched_at'] ?? '');
         return $instance;
     }

@@ -63,17 +63,17 @@ Algorithm (from `extract.php:deriveMethodName`):
 
 Examples:
 - `login_v1_auth_login_post` → `login`
-- `list_connectors_v1_connectors_get` → `listConnectors`
-- `get_connector_v1_connectors__connector_id__get` → `getConnector`
+- `list_connections_v1_connections_get` → `listConnections`
+- `get_connection_v1_connections__connection_id__get` → `getConnection`
 
 ### Parameter flattening
 
 | Parameter types | Consumer writes |
 |---|---|
 | Body only | `$client->refresh(['refresh_token' => ...])` |
-| Path only | `$client->getConnector('conn_123')` |
+| Path only | `$client->getConnection('conn_123')` |
 | Query only | `$client->listQueries(['page' => 1])` |
-| Body + Path | `$client->updateConnector(['name' => 'X'], 'conn_123')` |
+| Body + Path | `$client->updateConnection(['name' => 'X'], 'conn_123')` |
 
 ### Template placeholders
 

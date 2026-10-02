@@ -95,8 +95,8 @@ use Clearsoft\EasySql\Laravel\Facades\EasySQL;
 
 // Ask questions in natural language
 $result = EasySQL::createQuery([
-    'connector_id' => 'conn_abc123',
-    'question'     => 'How many users registered this month?',
+    'connection_id' => 'conn_abc123',
+    'question'      => 'How many users registered this month?',
 ]);
 
 // Generated SQL and query results
@@ -106,9 +106,9 @@ $rows = $result['result'];
 // List recent queries
 $queries = EasySQL::listQueries(['page' => 1, 'per_page' => 10]);
 
-// Manage database connectors
-$connectors = EasySQL::listConnectors();
-$connector  = EasySQL::getConnector('conn_abc123');
+// Manage database connections
+$connections = EasySQL::listConnections();
+$connection  = EasySQL::getConnection('conn_abc123');
 
 // Access specific named connections defined in config/easysql.php
 $analyticsClient = EasySQL::connection('analytics');
@@ -139,19 +139,19 @@ $client = new Client([
 $tokens = $client->refresh(['refresh_token' => $refreshToken]);
 $user = $client->me();
 
-// Managing Database Connectors
-$client->createConnector([
+// Managing Database Connections
+$client->createConnection([
     'name'   => 'Production MySQL',
     'type'   => 'mysql',
     'schema' => $schemaPayload, // from the schema-generation package
 ]);
 
-$connectors = $client->listConnectors();
+$connections = $client->listConnections();
 
 // Running Natural Language Queries
 $query = $client->createQuery([
-    'connector_id' => 'conn_abc123',
-    'question'     => 'What were the top 5 selling products last week?',
+    'connection_id' => 'conn_abc123',
+    'question'      => 'What were the top 5 selling products last week?',
 ]);
 
 print_r($query['sql']);
@@ -262,8 +262,8 @@ $client->syncConnector(['schema' => $payload], 'conn_abc123');
 |---|---|
 | **Auth** | `refresh`, `logout`, `me`, `deleteMe`, `updateMe` |
 | **Queries** | `createQuery`, `listQueries`, `getQuery`, `answerQuery` |
-| **Connectors** | `listConnectors`, `createConnector`, `getConnector`, `getConnectorSchema`, `getSuggestions`, `updateConnector`, `deleteConnector`, `syncConnector` |
-| **Billing** | `getPlan`, `checkout`, `portal` |
+| **Connections** | `listConnections`, `createConnection`, `getConnection`, `getConnectionSchema`, `getSuggestions`, `updateConnection`, `deleteConnection`, `syncConnection` |
+| **Billing** | `getPlan`, `getUsage`, `checkout`, `portal` |
 | **Dashboard** | `dashboardStats` |
 | **Health** | `health`, `healthHealth` |
 
@@ -286,13 +286,13 @@ The multipackage layout keeps that package as a meta-package (same name, same ve
 | `Clearsoft\EasySQL\SDK\TokenStoreInterface` | `Clearsoft\EasySQL\Api\Http\TokenStoreInterface` |
 | `Clearsoft\EasySql\Laravel\*` | unchanged (now in `easysql/laravel`) |
 
-Connector methods now take their path parameters explicitly (this also fixes a v1.x bug where
-`getConnector('conn_1')` silently ignored the id and requested a literal `{connector_id}` URL):
+Connection methods now take their path parameters explicitly (this also fixes a v1.x bug where
+`getConnection('conn_1')` silently ignored the id and requested a literal `{connection_id}` URL):
 
 ```php
-$client->getConnector('conn_abc123');              // was: getConnector() — broken URL
-$client->updateConnector(['name' => 'X'], 'conn_abc123');
-$client->syncConnector(['schema' => $payload], 'conn_abc123');
+$client->getConnection('conn_abc123');              // was: getConnection() — broken URL
+$client->updateConnection(['name' => 'X'], 'conn_abc123');
+$client->syncConnection(['schema' => $payload], 'conn_abc123');
 ```
 
 ---

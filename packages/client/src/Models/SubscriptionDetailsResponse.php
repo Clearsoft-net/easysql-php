@@ -9,10 +9,9 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class ConnectorSchemaResponse
+class SubscriptionDetailsResponse
 {
-    public string $tables;
-    public string $db_version;
+    public string $subscription;
 
     /**
      * @param array $data Raw API response data.
@@ -20,8 +19,7 @@ class ConnectorSchemaResponse
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->tables = (string) ($data['tables'] ?? []);
-        $instance->db_version = (string) ($data['db_version'] ?? '');
+        $instance->subscription = (string) ($data['subscription'] ?? '');
         return $instance;
     }
 }

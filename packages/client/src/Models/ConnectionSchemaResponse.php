@@ -9,14 +9,10 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class ConnectorResponse
+class ConnectionSchemaResponse
 {
-    public string $id;
-    public string $type;
-    public string $name;
+    public string $tables;
     public string $db_version;
-    public string $last_sync_at;
-    public string $created_at;
 
     /**
      * @param array $data Raw API response data.
@@ -24,12 +20,8 @@ class ConnectorResponse
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->id = (string) ($data['id'] ?? '');
-        $instance->type = (string) ($data['type'] ?? '');
-        $instance->name = (string) ($data['name'] ?? '');
+        $instance->tables = (string) ($data['tables'] ?? []);
         $instance->db_version = (string) ($data['db_version'] ?? '');
-        $instance->last_sync_at = (string) ($data['last_sync_at'] ?? '');
-        $instance->created_at = (string) ($data['created_at'] ?? '');
         return $instance;
     }
 }

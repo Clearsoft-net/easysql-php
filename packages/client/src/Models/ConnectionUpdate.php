@@ -9,11 +9,11 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class ConnectorUsage
+class ConnectionUpdate
 {
-    public string $connector_id;
-    public string $connector_name;
-    public int $query_count;
+    public ?string $name;
+    public ?string $schema;
+    public ?string $db_version;
 
     /**
      * @param array $data Raw API response data.
@@ -21,9 +21,9 @@ class ConnectorUsage
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->connector_id = (string) ($data['connector_id'] ?? '');
-        $instance->connector_name = (string) ($data['connector_name'] ?? '');
-        $instance->query_count = (int) ($data['query_count'] ?? 0);
+        $instance->name = (string) ($data['name'] ?? '');
+        $instance->schema = (string) ($data['schema'] ?? []);
+        $instance->db_version = (string) ($data['db_version'] ?? '');
         return $instance;
     }
 }

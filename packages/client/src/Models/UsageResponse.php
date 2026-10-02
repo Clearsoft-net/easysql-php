@@ -13,6 +13,8 @@ class UsageResponse
 {
     public string $plan_id;
     public string $plan_name;
+    public bool $cancel_at_period_end;
+    public string $current_period_end;
     public string $windows;
     public string $fetched_at;
 
@@ -24,6 +26,8 @@ class UsageResponse
         $instance = new self();
         $instance->plan_id = (string) ($data['plan_id'] ?? '');
         $instance->plan_name = (string) ($data['plan_name'] ?? '');
+        $instance->cancel_at_period_end = (bool) ($data['cancel_at_period_end'] ?? false);
+        $instance->current_period_end = (string) ($data['current_period_end'] ?? '');
         $instance->windows = (string) ($data['windows'] ?? []);
         $instance->fetched_at = (string) ($data['fetched_at'] ?? '');
         return $instance;

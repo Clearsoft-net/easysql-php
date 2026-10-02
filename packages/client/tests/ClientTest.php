@@ -85,7 +85,7 @@ class ClientTest extends TestCase
 
     // ── Path param methods ────────────────────────────────────
 
-    public function testGetConnector(): void
+    public function testGetConnection(): void
     {
         $client = $this->createClient([
             new Response(200, [], json_encode([
@@ -97,19 +97,19 @@ class ClientTest extends TestCase
             ])),
         ]);
 
-        $result = $client->getConnector('conn_1');
+        $result = $client->getConnection('conn_1');
 
         $this->assertSame('conn_1', $result['id']);
         $this->assertSame('mysql', $result['type']);
     }
 
-    public function testDeleteConnector(): void
+    public function testDeleteConnection(): void
     {
         $client = $this->createClient([
             new Response(204),
         ]);
 
-        $client->deleteConnector('conn_1');
+        $client->deleteConnection('conn_1');
 
         // No exception means success
         $this->assertTrue(true);
@@ -137,7 +137,7 @@ class ClientTest extends TestCase
 
     // ── Explicit params (body + path) ─────────────────────────
 
-    public function testUpdateConnector(): void
+    public function testUpdateConnection(): void
     {
         $client = $this->createClient([
             new Response(200, [], json_encode([
@@ -149,7 +149,7 @@ class ClientTest extends TestCase
             ])),
         ]);
 
-        $result = $client->updateConnector(
+        $result = $client->updateConnection(
             ['name' => 'Updated DB'],
             'conn_1',
         );

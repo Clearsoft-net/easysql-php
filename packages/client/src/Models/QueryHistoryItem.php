@@ -12,7 +12,7 @@ namespace Clearsoft\EasySQL\Client\Models;
 class QueryHistoryItem
 {
     public string $id;
-    public string $connector_id;
+    public string $connection_id;
     public string $question;
     public ?string $sql_generated;
     public ?string $error;
@@ -26,7 +26,7 @@ class QueryHistoryItem
     {
         $instance = new self();
         $instance->id = (string) ($data['id'] ?? '');
-        $instance->connector_id = (string) ($data['connector_id'] ?? '');
+        $instance->connection_id = (string) ($data['connection_id'] ?? '');
         $instance->question = (string) ($data['question'] ?? '');
         $instance->sql_generated = (string) ($data['sql_generated'] ?? '');
         $instance->error = (string) ($data['error'] ?? '');

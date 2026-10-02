@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class QueryRequest
+class SubscriptionStateResponse
 {
-    public string $connection_id;
-    public string $question;
+    public bool $cancel_at_period_end;
+    public ?string $current_period_end;
 
     /**
      * @param array $data Raw API response data.
@@ -20,8 +20,8 @@ class QueryRequest
     public static function fromArray(array $data): self
     {
         $instance = new self();
-        $instance->connection_id = (string) ($data['connection_id'] ?? '');
-        $instance->question = (string) ($data['question'] ?? '');
+        $instance->cancel_at_period_end = (bool) ($data['cancel_at_period_end'] ?? false);
+        $instance->current_period_end = (string) ($data['current_period_end'] ?? '');
         return $instance;
     }
 }

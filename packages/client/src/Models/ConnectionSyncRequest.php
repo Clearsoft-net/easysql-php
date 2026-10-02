@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\Client\Models;
 
-class ConnectorSyncRequest
+class ConnectionSyncRequest
 {
     public string $schema;
     public ?string $db_version;
