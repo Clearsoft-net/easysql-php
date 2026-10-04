@@ -207,6 +207,19 @@ class Client
     }
 
     /**
+     * Change plan (monthly to annual) with immediate proration.
+     * @param array $query
+     * @return array
+     */
+    public function changePlan(array $query = []): array
+    {
+        $response = $this->request('post', '/v1/billing/change-plan', [
+            'query' => $query,
+        ]);
+        return (array) json_decode((string) $response->getBody(), true);
+    }
+
+    /**
      * Create Stripe Checkout session.
      * @param array $query
      * @return array
