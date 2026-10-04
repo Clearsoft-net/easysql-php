@@ -166,6 +166,22 @@ POST /v1/billing/cancel
 
 ---
 
+### `changePlan()`
+
+Change plan (monthly to annual) with immediate proration.
+
+```
+POST /v1/billing/change-plan
+```
+
+**Parameters:**
+
+- `price_id` — `string` (required, query)
+
+**Returns:** `ChangePlanResponse`
+
+---
+
 ### `checkout()`
 
 Create Stripe Checkout session.
