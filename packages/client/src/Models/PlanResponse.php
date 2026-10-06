@@ -20,6 +20,7 @@ class PlanResponse
     public string $support_tier;
     public string $stripe_price_id_monthly;
     public string $stripe_price_id_annual;
+    public ?string $prices;
 
     /**
      * @param array $data Raw API response data.
@@ -36,6 +37,7 @@ class PlanResponse
         $instance->support_tier = (string) ($data['support_tier'] ?? '');
         $instance->stripe_price_id_monthly = (string) ($data['stripe_price_id_monthly'] ?? '');
         $instance->stripe_price_id_annual = (string) ($data['stripe_price_id_annual'] ?? '');
+        $instance->prices = (string) ($data['prices'] ?? '');
         return $instance;
     }
 }
