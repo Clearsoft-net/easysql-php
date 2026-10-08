@@ -8,7 +8,7 @@ declare(strict_types=1);
  * Credentials stay on the machine: only the schema payload is sent to EasySQL.
  *
  * Run:
- *   EASYSQL_ACCESS_TOKEN=... CONNECTOR_ID=conn_... \
+ *   EASYSQL_ACCESS_TOKEN=... CONNECTION_ID=conn_... \
  *   MYSQL_HOST=127.0.0.1 MYSQL_USER=readonly MYSQL_PASSWORD=secret MYSQL_DATABASE=shop \
  *   php samples/06-conn-mysql-sync.php
  */
@@ -42,7 +42,7 @@ try {
         'base_url' => getenv('EASYSQL_BASE_URL') ?: 'https://api.easysql.net',
         'access_token' => getenv('EASYSQL_ACCESS_TOKEN') ?: '',
     ]);
-    $client->syncConnector(['schema' => $schema], getenv('CONNECTOR_ID') ?: 'conn_abc123');
+    $client->syncConnection(['schema' => $schema], getenv('CONNECTION_ID') ?: 'conn_abc123');
     echo "Schema synced." . PHP_EOL;
 
     // 4. The API returns generated SQL — execute it locally.

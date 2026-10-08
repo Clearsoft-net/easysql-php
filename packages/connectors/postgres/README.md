@@ -49,22 +49,11 @@ try {
 
 ## Type mapping
 
-`format_type()` output is normalized by `TypeMapper`; modifiers and array suffixes are preserved.
-PostgreSQL types without a JSON equivalent are kept under their canonical PostgreSQL name (no lossy
-conversion) — the API stores the type string verbatim:
-
-| PostgreSQL type | Schema vocabulary |
-|---|---|
-| `character varying(n)` | `varchar(n)` |
-| `character(n)` | `char(n)` |
-| `double precision` | `double` |
-| `timestamp without time zone` | `timestamp` |
-| `timestamp with time zone` | `timestamptz` |
-| `time without time zone` | `time` |
-| `time with time zone` | `timetz` |
-| `bit varying(n)` | `varbit(n)` |
-| `integer[]`, `varchar(50)[]`, … | array suffix preserved |
-| `bytea`, `jsonb`, `uuid`, `tsvector`, `xml`, ranges, enums, … | verbatim |
+Introspection returns the engine-native `format_type()` string unchanged, along with the
+`postgresql` engine identifier and column ordinal. `easysql/schema-generation` maps those values into
+the canonical API vocabulary: `integer`, `bigint`, `smallint`, `decimal`, `float`, `boolean`,
+`string`, `text`, `binary`, `date`, `time`, `timestamp`, `interval`, `json`, `uuid`, or `unknown`.
+PostgreSQL arrays map to `json`; unmapped types fall back to `unknown`.
 
 ## Tests
 

@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Clearsoft\EasySQL\SchemaGeneration;
 
-use InvalidArgumentException;
-
 /**
  * Transforms raw connector introspection output into the schema payload
- * the EasySQL API consumes on POST /v1/connectors and POST /v1/connectors/{id}/sync.
+ * the EasySQL API consumes on POST /v1/connections and POST /v1/connections/{id}/sync.
  *
  * Responsibilities:
- *  - map engine-native types into the schema vocabulary
+ *  - map engine-native types into the canonical schema vocabulary
  *  - guarantee deterministic output (stable ordering of tables/columns)
  *  - validate the input shape produced by the connector packages
  *
@@ -19,20 +17,22 @@ use InvalidArgumentException;
  *
  * Input shape (produced by every connector package):
  *   [
+ *     'engine' => 'mysql',
  *     'tables' => [
  *       [
  *         'name' => 'users',
  *         'columns' => [
  *           [
  *             'name' => 'id',
- *             'type' => 'int',             // engine-native, verbatim from the driver
+ *             'dataType' => 'int',         // engine-native, verbatim from the driver
  *             'nullable' => false,
- *             'primary_key' => true,
- *             'default' => null,           // string|null
- *             'foreign_key' => null        // ['table' => ..., 'column' => ...]|null
+ *             'primaryKey' => true,
+ *             'defaultValue' => null,      // string|null
+ *             'foreignKey' => null,        // ['table' => ..., 'column' => ...]|null
+ *             'ordinal' => 1,              // int|null
  *           ],
  *         ],
- *         'rows_approx' => 42,             // int|null
+ *         'rowsApprox' => 42,              // int|null
  *       ],
  *     ],
  *   ]
@@ -49,8 +49,9 @@ use InvalidArgumentException;
  * Determinism contract (mirrored by the TypeScript sibling package):
  *  - tables are sorted by name using a byte-wise comparison (PHP strcmp /
  *    ASCII order) — the TS package must NOT use localeCompare();
- *  - columns keep the introspection order;
- *  - ties on the table name are stable (PHP sort is stable since 8.0), so the
+ *  - columns keep the declared order when every column reports an ordinal and
+ *    fall back to name order otherwise;
+ *  - ties on the sort keys are stable (PHP sort is stable since 8.0), so the
  *    same input always produces the same output.
  */
 final class SchemaGenerator
@@ -63,28 +64,31 @@ final class SchemaGenerator
     {
         RawSchemaValidator::validate($rawSchema);
 
+        $engine = $rawSchema['engine'];
         $payload = [];
 
         $tables = $rawSchema['tables'];
         usort($tables, static fn (array $a, array $b): int => strcmp($a['name'], $b['name']));
 
         foreach ($tables as $table) {
-            $columns = [];
-            foreach ($table['columns'] as $column) {
-                $columns[] = [
+            $columns = $this->sortColumns($table['columns']);
+
+            $mapped = [];
+            foreach ($columns as $column) {
+                $mapped[] = [
                     'name' => $column['name'],
-                    'type' => $this->mapType($column['type']),
+                    'type' => TypeMapper::map($engine, $column['dataType']),
                     'nullable' => (bool) $column['nullable'],
-                    'primary_key' => (bool) $column['primary_key'],
-                    'default' => $column['default'],
-                    'foreign_key' => $this->mapForeignKey($column['foreign_key'] ?? null),
+                    'primary_key' => (bool) ($column['primaryKey'] ?? false),
+                    'default' => $column['defaultValue'] ?? null,
+                    'foreign_key' => $this->mapForeignKey($column['foreignKey'] ?? null),
                 ];
             }
 
             $payload[] = [
                 'name' => $table['name'],
-                'columns' => $columns,
-                'rows_approx' => $table['rows_approx'] ?? null,
+                'columns' => $mapped,
+                'rows_approx' => $table['rowsApprox'] ?? null,
             ];
         }
 
@@ -97,24 +101,31 @@ final class SchemaGenerator
      */
     public function toJson(array $payload): string
     {
-        return json_encode(
+        return (string) json_encode(
             $payload,
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
         );
     }
 
     /**
-     * Map an engine-native type into the schema vocabulary.
+     * Declared order when the connector provides an ordinal; name order
+     * otherwise. Both keys are compared independently so a partially-ordered
+     * input stays stable.
      *
-     * Types are normalized to lowercase (MySQL's information_schema already
-     * reports lowercase types; SQLite reports uppercase pragma types) and an
-     * empty declaration (SQLite allows untyped columns) falls back to 'blob'.
+     * @param list<array<string, mixed>> $columns
+     * @return list<array<string, mixed>>
      */
-    private function mapType(string $type): string
+    private function sortColumns(array $columns): array
     {
-        $normalized = strtolower(trim($type));
+        usort($columns, static function (array $a, array $b): int {
+            if (isset($a['ordinal']) && isset($b['ordinal'])) {
+                return ((int) $a['ordinal']) <=> ((int) $b['ordinal']);
+            }
 
-        return $normalized === '' ? 'blob' : $normalized;
+            return strcmp($a['name'], $b['name']);
+        });
+
+        return $columns;
     }
 
     /**

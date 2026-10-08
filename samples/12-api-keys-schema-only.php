@@ -27,8 +27,8 @@ $created = $client->createApiKey(['name' => 'WordPress plugin']);
 $apiKey = $created['key']; // easysql_sk_... — shown once
 echo "Store this key securely: {$apiKey}" . PHP_EOL;
 
-// 2. Create a schema-only connector (no credentials, no config).
-$connector = $client->createConnector([
+// 2. Create a schema-only connection (no credentials, no config).
+$connection = $client->createConnection([
     'name' => 'WP Database',
     'type' => 'mysql',
     'schema' => [[
@@ -40,8 +40,8 @@ $connector = $client->createConnector([
         'rows_approx' => 1250,
     ]],
 ]);
-$connectorId = $connector['id'];
-echo "Schema-only connector created: {$connectorId}" . PHP_EOL;
+$connectionId = $connection['id'];
+echo "Schema-only connection created: {$connectionId}" . PHP_EOL;
 
 // 3. The external client authenticates with the API key and runs a query.
 $external = new Client([
@@ -49,15 +49,15 @@ $external = new Client([
     'access_token' => $apiKey,
 ]);
 $query = $external->createQuery([
-    'connector_id' => $connectorId,
+    'connection_id' => $connectionId,
     'question' => 'How many posts were published this month?',
 ]);
 echo "Query {$query['id']} — needs local execution: " . json_encode((bool) ($query['needs_local_execution'] ?? true)) . PHP_EOL;
 
-// The external client executes the generated SQL against its local DB and
-// posts the rows back with answerQuery() (see sample 13 for the full loop).
+// The external client executes the generated SQL against its local DB (see
+// sample 13 for the full loop).
 
-// 4. Cleanup: revoke the key and delete the connector.
+// 4. Cleanup: revoke the key and delete the connection.
 $external->deleteApiKey($created['id']);
-$client->deleteConnector($connectorId);
-echo "Revoked key and deleted connector." . PHP_EOL;
+$client->deleteConnection($connectionId);
+echo "Revoked key and deleted connection." . PHP_EOL;

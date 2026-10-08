@@ -24,8 +24,8 @@ $client = new Client([
 ]);
 
 try {
-    // A connector id that does not exist -> 404.
-    $client->getConnector('conn_does_not_exist');
+    // A connection id that does not exist -> 404.
+    $client->getConnection('conn_does_not_exist');
 } catch (ApiException $e) {
     echo "HTTP {$e->getStatusCode()}: {$e->getMessage()}" . PHP_EOL;
 

@@ -76,7 +76,7 @@ final class Connector
      * Introspect the database schema.
      *
      * Returns the raw introspection shape consumed by the schema-generation
-     * package: ['tables' => [['name', 'columns' => [...], 'rows_approx']]].
+     * package: ['engine' => 'sqlite', 'tables' => [['name', 'columns' => [...], 'rowsApprox']]].
      *
      * @throws ConnectorException When introspection fails.
      */
@@ -113,24 +113,29 @@ final class Connector
 
                 $columns = [];
                 foreach ($columnsStmt->fetchAll() as $column) {
+                    $pk = (int) $column['pk'];
+                    $notNull = (int) $column['notnull'];
                     $columns[] = [
                         'name' => $column['name'],
-                        'type' => $column['type'] !== '' ? $column['type'] : 'BLOB',
-                        'nullable' => (int) $column['notnull'] === 0,
-                        'primary_key' => (int) $column['pk'] > 0,
-                        'default' => $column['dflt_value'],
-                        'foreign_key' => $fkByColumn[$column['name']] ?? null,
+                        'dataType' => $column['type'],
+                        // A primary key is never nullable; PRAGMA reports notnull=0
+                        // for an INTEGER PRIMARY KEY, so it is excluded explicitly.
+                        'nullable' => $notNull === 0 && $pk === 0,
+                        'primaryKey' => $pk > 0,
+                        'defaultValue' => $column['dflt_value'],
+                        'foreignKey' => $fkByColumn[$column['name']] ?? null,
+                        'ordinal' => (int) $column['cid'],
                     ];
                 }
 
                 $tables[] = [
                     'name' => $name,
                     'columns' => $columns,
-                    'rows_approx' => $this->countRows($pdo, $name),
+                    'rowsApprox' => $this->countRows($pdo, $name),
                 ];
             }
 
-            return ['tables' => $tables];
+            return ['engine' => 'sqlite', 'tables' => $tables];
         } catch (PDOException $e) {
             throw ConnectorException::introspectionFailed($e);
         }

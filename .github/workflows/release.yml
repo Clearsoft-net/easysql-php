@@ -86,7 +86,7 @@ jobs:
       - name: Validate composer manifests
         run: |
           composer validate --no-check-lock
-          for f in packages/client/composer.json packages/common/composer.json packages/laravel/composer.json packages/connectors/mysql/composer.json packages/connectors/postgres/composer.json packages/connectors/sqlite/composer.json packages/schema-generation/composer.json; do
+          for f in packages/client/composer.json packages/common/composer.json packages/laravel/composer.json packages/connectors/mysql/composer.json packages/connectors/clickhouse/composer.json packages/connectors/postgres/composer.json packages/connectors/sqlite/composer.json packages/schema-generation/composer.json; do
             (cd "$(dirname "$f")" && composer validate --no-check-lock)
           done
 

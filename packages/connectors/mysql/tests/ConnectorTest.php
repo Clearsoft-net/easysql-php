@@ -21,6 +21,7 @@ class ConnectorTest extends TestCase
         $this->assertSame('127.0.0.1', $config->host);
         $this->assertSame(3306, $config->port);
         $this->assertSame('utf8mb4', $config->charset);
+        $this->assertSame('mysql', $config->engine);
         $this->assertFalse($config->ssl);
         $this->assertSame(10.0, $config->timeout);
     }
@@ -32,7 +33,10 @@ class ConnectorTest extends TestCase
             port: 3307,
             database: 'shop',
             charset: 'utf8mb4',
+            engine: 'mariadb',
         );
+
+        $this->assertSame('mariadb', $config->engine);
 
         $this->assertSame(
             'mysql:host=db.internal;port=3307;dbname=shop;charset=utf8mb4',
@@ -117,8 +121,11 @@ class ConnectorTest extends TestCase
         $host = getenv('EASYSQL_TEST_MYSQL_HOST') ?: '127.0.0.1';
         $port = (int) (getenv('EASYSQL_TEST_MYSQL_PORT') ?: 3306);
         $user = getenv('EASYSQL_TEST_MYSQL_USER') ?: 'root';
-        $password = getenv('EASYSQL_TEST_MYSQL_PASSWORD') ?: '';
+        $password = getenv('EASYSQL_TEST_MYSQL_PASSWORD') !== false
+            ? (string) getenv('EASYSQL_TEST_MYSQL_PASSWORD')
+            : '';
         $database = getenv('EASYSQL_TEST_MYSQL_DATABASE') ?: 'easysql_test';
+        $engine = getenv('EASYSQL_TEST_MYSQL_ENGINE') ?: 'mysql';
 
         if (getenv('EASYSQL_TEST_MYSQL') !== '1') {
             $this->markTestSkipped('Set EASYSQL_TEST_MYSQL=1 with a local MySQL to run integration tests.');
@@ -130,11 +137,13 @@ class ConnectorTest extends TestCase
             user: $user,
             password: $password,
             database: $database,
+            engine: $engine,
         ));
         $connector->connect();
 
         try {
             $raw = $connector->introspect();
+            $this->assertSame($engine, $raw['engine']);
             $this->assertArrayHasKey('tables', $raw);
             $this->assertNotEmpty($raw['tables']);
 

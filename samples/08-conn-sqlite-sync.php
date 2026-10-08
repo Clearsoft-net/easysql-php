@@ -8,7 +8,7 @@ declare(strict_types=1);
  * SQLite needs no server; this sample also demonstrates the read-only mode.
  *
  * Run:
- *   EASYSQL_ACCESS_TOKEN=... CONNECTOR_ID=conn_... SQLITE_PATH=/path/app.db \
+ *   EASYSQL_ACCESS_TOKEN=... CONNECTION_ID=conn_... SQLITE_PATH=/path/app.db \
  *   php samples/08-conn-sqlite-sync.php
  */
 
@@ -35,7 +35,7 @@ try {
         'base_url' => getenv('EASYSQL_BASE_URL') ?: 'https://api.easysql.net',
         'access_token' => getenv('EASYSQL_ACCESS_TOKEN') ?: '',
     ]);
-    $client->syncConnector(['schema' => $schema], getenv('CONNECTOR_ID') ?: 'conn_abc123');
+    $client->syncConnection(['schema' => $schema], getenv('CONNECTION_ID') ?: 'conn_abc123');
     echo "Schema synced." . PHP_EOL;
 
     $result = $connector->execute('SELECT * FROM sqlite_master LIMIT 5');

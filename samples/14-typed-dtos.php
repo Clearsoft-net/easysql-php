@@ -9,13 +9,13 @@ declare(strict_types=1);
  * classes provide typed, documented access via `fromArray()`.
  *
  * Run:
- *   EASYSQL_ACCESS_TOKEN=... CONNECTOR_ID=conn_... php samples/14-typed-dtos.php
+ *   EASYSQL_ACCESS_TOKEN=... CONNECTION_ID=conn_... php samples/14-typed-dtos.php
  */
 
 require __DIR__ . '/../vendor/autoload.php';
 
 use Clearsoft\EasySQL\Client\Client;
-use Clearsoft\EasySQL\Client\Models\ConnectorResponse;
+use Clearsoft\EasySQL\Client\Models\ConnectionResponse;
 use Clearsoft\EasySQL\Client\Models\TokenResponse;
 use Clearsoft\EasySQL\Client\Models\UserResponse;
 
@@ -34,12 +34,12 @@ echo "Bearer type: {$tokens->token_type}" . PHP_EOL;
 $user = UserResponse::fromArray($client->me());
 echo "User: {$user->email} (id: {$user->id})" . PHP_EOL;
 
-// A connector.
-$connector = ConnectorResponse::fromArray(
-    $client->getConnector(getenv('CONNECTOR_ID') ?: 'conn_abc123'),
+// A connection.
+$connection = ConnectionResponse::fromArray(
+    $client->getConnection(getenv('CONNECTION_ID') ?: 'conn_abc123'),
 );
-echo "Connector: {$connector->name} [{$connector->type}] last sync: {$connector->last_sync_at}" . PHP_EOL;
+echo "Connection: {$connection->name} [{$connection->type}] last sync: {$connection->last_sync_at}" . PHP_EOL;
 
 // Hydration is tolerant: missing keys fall back to type defaults.
-$empty = ConnectorResponse::fromArray([]);
+$empty = ConnectionResponse::fromArray([]);
 echo "Empty hydration -> name: '{$empty->name}', type: '{$empty->type}'" . PHP_EOL;

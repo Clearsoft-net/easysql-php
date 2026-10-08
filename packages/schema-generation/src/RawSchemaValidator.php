@@ -8,15 +8,33 @@ use InvalidArgumentException;
 
 /**
  * @internal Validates the raw schema input shape produced by the connectors.
+ *
+ * Mirrors the TypeScript sibling contract: a `RawSchema` carries the `engine`
+ * it was introspected from plus a list of tables whose columns use the
+ * engine-native `dataType`.
  */
 final class RawSchemaValidator
 {
+    private const ENGINES = ['mysql', 'mariadb', 'sqlite', 'postgresql', 'clickhouse'];
+
     /**
      * @param array $rawSchema
      * @throws InvalidArgumentException When the input shape is malformed.
      */
     public static function validate(array $rawSchema): void
     {
+        if (!array_key_exists('engine', $rawSchema) || !is_string($rawSchema['engine'])) {
+            throw new InvalidArgumentException(
+                "Invalid raw schema: expected a string 'engine'.",
+            );
+        }
+
+        if (!in_array($rawSchema['engine'], self::ENGINES, true)) {
+            throw new InvalidArgumentException(
+                "Invalid raw schema: unknown engine '{$rawSchema['engine']}'.",
+            );
+        }
+
         if (!array_key_exists('tables', $rawSchema) || !is_array($rawSchema['tables'])) {
             throw new InvalidArgumentException(
                 "Invalid raw schema: expected key 'tables' containing a list of tables.",
@@ -44,7 +62,7 @@ final class RawSchemaValidator
                     );
                 }
                 self::assertString($column, 'name', "table[{$index}].columns[{$columnIndex}]");
-                self::assertString($column, 'type', "table[{$index}].columns[{$columnIndex}]");
+                self::assertString($column, 'dataType', "table[{$index}].columns[{$columnIndex}]");
             }
         }
     }

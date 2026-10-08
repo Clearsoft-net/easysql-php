@@ -28,7 +28,7 @@
   ],
   "require": {
     "php": ">=8.2",
-    "easysql/common": "^2.0",
+    "easysql/common": "^3.0",
     "ext-pdo": "*",
     "ext-pdo_pgsql": "*"
   },

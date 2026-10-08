@@ -96,6 +96,7 @@ class ConnectorTest extends TestCase
 
         try {
             $raw = $connector->introspect();
+            $this->assertSame('postgresql', $raw['engine']);
             $this->assertArrayHasKey('tables', $raw);
 
             $tables = array_column($raw['tables'], 'name');
@@ -119,7 +120,7 @@ class ConnectorTest extends TestCase
             $this->assertNotNull($customerId);
             $this->assertSame(
                 ['table' => 'customers', 'column' => 'id'],
-                $customerId['foreign_key'],
+                $customerId['foreignKey'],
             );
 
             $result = $connector->execute('SELECT id, email FROM customers ORDER BY id');
