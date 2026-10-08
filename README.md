@@ -24,7 +24,7 @@
 
 ---
 
-Ask questions in natural language to your MySQL, MariaDB, or SQLite databases directly from your PHP applications and Laravel projects.
+Ask questions in natural language to your MySQL, MariaDB, PostgreSQL, SQLite, or ClickHouse databases directly from your PHP applications and Laravel projects.
 
 ## Packages
 
@@ -36,8 +36,9 @@ This is a multipackage repository. All packages are versioned and released toget
 | [`packages/connectors/mysql`](packages/connectors/mysql) | `easysql/connectors-mysql` | Local MySQL/MariaDB introspection + SELECT execution |
 | [`packages/connectors/postgres`](packages/connectors/postgres) | `easysql/connectors-postgres` | Local PostgreSQL introspection + SELECT execution |
 | [`packages/connectors/sqlite`](packages/connectors/sqlite) | `easysql/connectors-sqlite` | Local SQLite introspection + SELECT execution |
+| [`packages/connectors/clickhouse`](packages/connectors/clickhouse) | `easysql/connectors-clickhouse` | Local ClickHouse (HTTP) introspection + SELECT execution |
 | [`packages/common`](packages/common) | `easysql/common` | Shared code (SQL safety validation, credential sanitization) |
-| [`packages/schema-generation`](packages/schema-generation) | `easysql/schema-generation` | Raw introspection → API schema payload (deterministic, no I/O) |
+| [`packages/schema-generation`](packages/schema-generation) | `easysql/schema-generation` | Raw introspection → canonical API schema payload (deterministic, no I/O) |
 | [`packages/laravel`](packages/laravel) | `easysql/laravel` | Laravel service provider, manager and facade |
 
 ## Requirements
@@ -45,7 +46,7 @@ This is a multipackage repository. All packages are versioned and released toget
 - **PHP** >= 8.2
 - **ext-json**
 - **guzzlehttp/guzzle** ^7.0 (client package)
-- **ext-pdo_mysql** (mysql connector), **ext-pdo_pgsql** (postgres connector), **ext-pdo_sqlite** (sqlite connector)
+- **ext-pdo_mysql** (mysql connector), **ext-pdo_pgsql** (postgres connector), **ext-pdo_sqlite** (sqlite connector), **ext-curl** (clickhouse connector)
 - *(Optional)* **Laravel** ^11.0 || ^12.0 (for Service Provider and Facade)
 
 ## Installation
@@ -59,6 +60,7 @@ composer require easysql/client
 composer require easysql/connectors-mysql
 composer require easysql/connectors-postgres
 composer require easysql/connectors-sqlite
+composer require easysql/connectors-clickhouse
 composer require easysql/schema-generation
 composer require easysql/laravel
 ```
@@ -154,8 +156,8 @@ $query = $client->createQuery([
     'question'      => 'What were the top 5 selling products last week?',
 ]);
 
-print_r($query['sql']);
-print_r($query['result']);
+print_r($query['sql_generated']);
+print_r($query['needs_local_execution']);
 ```
 
 ### Automatic Token Refresh
@@ -225,7 +227,7 @@ echo $tokens->access_token;
 
 ### Local Connectors + Schema Generation
 
-Introspect a local database and push only the schema to the API — credentials never leave the machine:
+Introspect a local database and push only the canonical schema to the API — credentials never leave the machine. Supported engines are MySQL/MariaDB, PostgreSQL, SQLite, and ClickHouse HTTP.
 
 ```php
 use Clearsoft\EasySQL\Connectors\MySQL\ConnectionConfig;
@@ -251,7 +253,7 @@ try {
 }
 
 // Push the schema to the API
-$client->syncConnector(['schema' => $payload], 'conn_abc123');
+$client->syncConnection(['schema' => $payload], 'conn_abc123');
 ```
 
 ---
@@ -261,7 +263,7 @@ $client->syncConnector(['schema' => $payload], 'conn_abc123');
 | Module | Available Methods |
 |---|---|
 | **Auth** | `refresh`, `logout`, `me`, `deleteMe`, `updateMe` |
-| **Queries** | `createQuery`, `listQueries`, `getQuery`, `answerQuery` |
+| **Queries** | `createQuery`, `listQueries`, `getQuery` |
 | **Connections** | `listConnections`, `createConnection`, `getConnection`, `getConnectionSchema`, `getSuggestions`, `updateConnection`, `deleteConnection`, `syncConnection` |
 | **Billing** | `getPlan`, `getUsage`, `checkout`, `portal` |
 | **Dashboard** | `dashboardStats` |

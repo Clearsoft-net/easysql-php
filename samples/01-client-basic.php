@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Sample 01 — Basic typed client: authenticate, read the current user and list connectors.
+ * Sample 01 — Basic typed client: authenticate, read the current user and list connections.
  *
  * Requires a valid access token (generate one in the EasySQL panel).
  *
@@ -29,8 +29,8 @@ echo "API health: " . ($health['status'] ?? 'unknown') . PHP_EOL;
 $user = $client->me();
 echo "Signed in as {$user['email']} (plan: " . ($user['active_plan']['name'] ?? 'free') . ")" . PHP_EOL;
 
-// List connectors.
-$connectors = $client->listConnectors();
-foreach ($connectors['items'] ?? $connectors as $connector) {
-    echo "- {$connector['id']} {$connector['name']} ({$connector['type']})" . PHP_EOL;
+// List connections.
+$connections = $client->listConnections();
+foreach ($connections['items'] ?? $connections as $connection) {
+    echo "- {$connection['id']} {$connection['name']} ({$connection['type']})" . PHP_EOL;
 }

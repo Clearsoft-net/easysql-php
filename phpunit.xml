@@ -11,6 +11,9 @@
         <testsuite name="connectors-mysql">
             <directory>packages/connectors/mysql/tests</directory>
         </testsuite>
+        <testsuite name="connectors-clickhouse">
+            <directory>packages/connectors/clickhouse/tests</directory>
+        </testsuite>
         <testsuite name="connectors-postgres">
             <directory>packages/connectors/postgres/tests</directory>
         </testsuite>

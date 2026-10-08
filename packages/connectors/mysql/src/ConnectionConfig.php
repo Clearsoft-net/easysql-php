@@ -21,6 +21,7 @@ final class ConnectionConfig
         public readonly string $charset = 'utf8mb4',
         public readonly bool $ssl = false,
         public readonly float $timeout = 10.0,
+        public readonly string $engine = 'mysql',
     ) {
     }
 

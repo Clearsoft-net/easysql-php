@@ -17,23 +17,24 @@ require __DIR__ . '/../vendor/autoload.php';
 use Clearsoft\EasySQL\SchemaGeneration\SchemaGenerator;
 
 $raw = [
+    'engine' => 'mysql',
     'tables' => [
         [
             'name' => 'orders',
             'columns' => [
-                ['name' => 'id', 'type' => 'INT', 'nullable' => false, 'primary_key' => true, 'default' => null, 'foreign_key' => null],
-                ['name' => 'customer_id', 'type' => 'INT', 'nullable' => false, 'primary_key' => false, 'default' => null, 'foreign_key' => ['table' => 'customers', 'column' => 'id']],
+                ['name' => 'id', 'dataType' => 'int', 'nullable' => false, 'primaryKey' => true, 'defaultValue' => null, 'foreignKey' => null, 'ordinal' => 1],
+                ['name' => 'customer_id', 'dataType' => 'int', 'nullable' => false, 'primaryKey' => false, 'defaultValue' => null, 'foreignKey' => ['table' => 'customers', 'column' => 'id'], 'ordinal' => 2],
             ],
-            'rows_approx' => 1523,
+            'rowsApprox' => 1523,
         ],
         [
             'name' => 'customers',
             'columns' => [
-                ['name' => 'id', 'type' => 'INT', 'nullable' => false, 'primary_key' => true, 'default' => null, 'foreign_key' => null],
-                ['name' => 'email', 'type' => 'VARCHAR', 'nullable' => false, 'primary_key' => false, 'default' => null, 'foreign_key' => null],
-                ['name' => 'metadata', 'type' => '', 'nullable' => true, 'primary_key' => false, 'default' => null, 'foreign_key' => null],
+                ['name' => 'id', 'dataType' => 'int', 'nullable' => false, 'primaryKey' => true, 'defaultValue' => null, 'foreignKey' => null, 'ordinal' => 1],
+                ['name' => 'email', 'dataType' => 'varchar(255)', 'nullable' => false, 'primaryKey' => false, 'defaultValue' => null, 'foreignKey' => null, 'ordinal' => 2],
+                ['name' => 'metadata', 'dataType' => '', 'nullable' => true, 'primaryKey' => false, 'defaultValue' => null, 'foreignKey' => null, 'ordinal' => 3],
             ],
-            'rows_approx' => 210,
+            'rowsApprox' => 210,
         ],
     ],
 ];
@@ -41,7 +42,8 @@ $raw = [
 $generator = new SchemaGenerator();
 $schema = $generator->generate($raw);
 
-// Tables are sorted by name, types lowercased (empty SQLite type -> "blob").
+// Tables are sorted by name, types mapped to the canonical vocabulary
+// (empty SQLite type -> "blob", "varchar" -> "string", "int" -> "integer").
 foreach ($schema as $table) {
     echo "{$table['name']} (" . count($table['columns']) . " columns)" . PHP_EOL;
 }

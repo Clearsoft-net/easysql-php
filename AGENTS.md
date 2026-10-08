@@ -3,7 +3,7 @@
 ## Project overview
 
 This is the official **PHP SDK** for the EasySQL API — a **multipackage Composer repository**.
-Only the `api` package is **auto-generated** from the OpenAPI specification at
+Only the `client` package is **auto-generated** from the OpenAPI specification at
 `https://api.easysql.net/openapi.json`. Manual edits to generated files will be overwritten
 (CI fails via `make check`).
 
@@ -11,7 +11,7 @@ Only the `api` package is **auto-generated** from the OpenAPI specification at
 
 ```
 packages/
-├── api/                            # 🤖 Generated Client + Models + docs; ✋ minimal runtime
+├── client/                         # 🤖 Generated Client + Models + docs; ✋ minimal runtime
 │   ├── src/
 │   │   ├── Client.php              # 🤖 Generated — named API methods
 │   │   ├── Models/                 # 🤖 Generated — request/response DTOs
@@ -21,10 +21,12 @@ packages/
 │   └── tests/                      # PHPUnit with Guzzle MockHandler
 ├── connectors/
 │   ├── mysql/                      # ✋ PDO MySQL — Connector, ConnectionConfig
-│   ├── postgres/                   # ✋ PDO PostgreSQL — Connector, ConnectionConfig, TypeMapper
-│   └── sqlite/                     # ✋ PDO SQLite — Connector, ConnectionConfig
+│   ├── postgres/                   # ✋ PDO PostgreSQL — Connector, ConnectionConfig
+│   ├── sqlite/                     # ✋ PDO SQLite — Connector, ConnectionConfig
+│   └── clickhouse/                 # ✋ cURL ClickHouse HTTP — Connector, ConnectionConfig
 ├── common/                         # ✋ SqlValidator + CredentialSanitizer (shared)
-├── schema-generation/              # ✋ Raw introspection → API schema payload (no I/O)
+├── schema-generation/              # ✋ Raw introspection → canonical API schema payload (no I/O)
+│   ├── src/TypeMapper.php          # ✋ Engine-native type → canonical schema vocabulary
 │   └── tests/fixtures/             # Shared fixtures (also used by the TS sibling package)
 └── laravel/                        # ✋ Service provider, manager, facade, config
 
@@ -83,13 +85,22 @@ Examples:
 
 | Package | Namespace |
 |---|---|
-| api | `Clearsoft\EasySQL\Api` (+ `\Models`, `\Exceptions`, `\Http`) |
+| client | `Clearsoft\EasySQL\Client` (+ `\Models`, `\Exceptions`, `\Http`) |
 | connectors/mysql | `Clearsoft\EasySQL\Connectors\MySQL` |
 | connectors/postgres | `Clearsoft\EasySQL\Connectors\Postgres` |
 | connectors/sqlite | `Clearsoft\EasySQL\Connectors\SQLite` |
+| connectors/clickhouse | `Clearsoft\EasySQL\Connectors\ClickHouse` |
 | common | `Clearsoft\EasySQL\Common` |
 | schema-generation | `Clearsoft\EasySQL\SchemaGeneration` |
 | laravel | `Clearsoft\EasySql\Laravel` (unchanged) |
+
+### Connector → schema contract
+
+Every connector's `introspect()` returns the shared raw shape consumed by `schema-generation`
+(mirrors the TS sibling package): `['engine' => ..., 'tables' => [['name', 'columns' => [...],
+'rowsApprox']]]`, where each column is `['name', 'dataType', 'nullable', 'primaryKey',
+'defaultValue', 'foreignKey', 'ordinal']` (`dataType` is the engine-native type, verbatim).
+`schema-generation` maps those types into the canonical vocabulary and emits the API payload.
 
 ### Release
 
@@ -105,7 +116,7 @@ it `require`s client + schema-generation and lists connectors/Laravel under `sug
 make generate   # Re-generate packages/client from spec
 make lint       # PHP syntax check (packages + scripts)
 make analyse    # PHPStan static analysis (level 5, packages/)
-make test       # PHPUnit (all packages; per-suite: --testsuite client|common|connectors-mysql|connectors-postgres|connectors-sqlite|schema-generation|laravel)
+make test       # PHPUnit (all packages; per-suite: --testsuite client|common|connectors-mysql|connectors-postgres|connectors-sqlite|connectors-clickhouse|schema-generation|laravel)
 make check      # Regenerate + fail if packages/client has any change (modified or untracked)
 make build      # generate + lint + analyse + test
 make db-up      # Start local MySQL + PostgreSQL for integration tests (Docker Compose)

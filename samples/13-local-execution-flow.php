@@ -5,13 +5,13 @@ declare(strict_types=1);
 /**
  * Sample 13 — End-to-end local execution loop (the core EasySQL flow).
  *
- *   createQuery  ->  execute the generated SQL locally  ->  answerQuery  ->  read the final answer
+ *   createQuery  ->  execute the generated SQL locally  ->  render the answer
  *
- * The API generates SQL/answer/chart; the customer database is only touched by
- * this process, so credentials never leave the machine.
+ * The API generates the SQL from the connection's cached schema; the customer
+ * database is only touched by this process, so credentials never leave the machine.
  *
  * Run:
- *   EASYSQL_ACCESS_TOKEN=... CONNECTOR_ID=conn_... \
+ *   EASYSQL_ACCESS_TOKEN=... CONNECTION_ID=conn_... \
  *   MYSQL_HOST=127.0.0.1 MYSQL_USER=readonly MYSQL_PASSWORD=secret MYSQL_DATABASE=shop \
  *   php samples/13-local-execution-flow.php
  */
@@ -27,18 +27,18 @@ $client = new Client([
     'base_url' => getenv('EASYSQL_BASE_URL') ?: 'https://api.easysql.net',
     'access_token' => getenv('EASYSQL_ACCESS_TOKEN') ?: '',
 ]);
-$connectorId = getenv('CONNECTOR_ID') ?: 'conn_abc123';
+$connectionId = getenv('CONNECTION_ID') ?: 'conn_abc123';
 
-// 1. Ask a question — the API generates the SQL and returns immediately.
+// 1. Ask a question — the API generates + validates the SQL and returns immediately.
 $query = QueryResponse::fromArray($client->createQuery([
-    'connector_id' => $connectorId,
+    'connection_id' => $connectionId,
     'question' => 'How many users signed up last month?',
 ]));
 echo "Query {$query->id} (status: {$query->status})" . PHP_EOL;
 
 if (!$query->needs_local_execution || $query->sql_generated === null) {
-    // The API can answer without local execution on its own.
-    echo "Answer: {$query->answer}" . PHP_EOL;
+    // The API answered on its own — nothing to execute locally.
+    echo "No local execution needed." . PHP_EOL;
     exit(0);
 }
 
@@ -60,13 +60,6 @@ try {
     $connector->close();
 }
 
-// 3. Post the rows back so the API can produce the answer and chart.
-$client->answerQuery([
-    'columns' => $result['columns'],
-    'rows' => $result['rows'],
-], $query->id);
-
-// 4. Read the completed query.
-$final = QueryResponse::fromArray($client->getQuery($query->id));
-echo "Status: {$final->status}" . PHP_EOL;
-echo "Answer: " . ($final->answer ?? '(pending)') . PHP_EOL;
+// 3. The rows never leave the machine — the client-side runtime renders the
+// answer/chart locally (the API is schema-only: it only generates SQL).
+echo "Answer rows: " . json_encode(array_slice($result['rows'], 0, 5)) . PHP_EOL;

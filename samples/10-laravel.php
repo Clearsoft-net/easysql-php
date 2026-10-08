@@ -23,7 +23,7 @@ $user = EasySQL::me();
 echo "Signed in as {$user['email']}" . PHP_EOL;
 
 $result = EasySQL::createQuery([
-    'connector_id' => 'conn_abc123',
+    'connection_id' => 'conn_abc123',
     'question' => 'How many users signed up last month?',
 ]);
 echo "Query {$result['id']} created." . PHP_EOL;
@@ -37,5 +37,5 @@ echo "Queries today: " . ($stats['queries_today'] ?? 0) . PHP_EOL;
 // Named connections defined in config/easysql.php.
 // Add e.g. 'analytics' under "connections" and switch:
 $analytics = EasySQL::connection('analytics');
-// $analytics->listConnectors();
+// $analytics->listConnections();
 echo "Default connection: {$manager->getDefaultConnection()}" . PHP_EOL;

@@ -78,19 +78,20 @@ class ConnectorTest extends TestCase
             $connector->close();
         }
 
+        $this->assertSame('sqlite', $raw['engine']);
         $this->assertArrayHasKey('tables', $raw);
         $this->assertSame(['customers', 'orders'], array_column($raw['tables'], 'name'));
 
         $customers = $raw['tables'][0];
-        $this->assertSame(2, $customers['rows_approx']);
+        $this->assertSame(2, $customers['rowsApprox']);
         $this->assertSame(['id', 'email', 'name'], array_column($customers['columns'], 'name'));
-        $this->assertTrue($customers['columns'][0]['primary_key']);
+        $this->assertTrue($customers['columns'][0]['primaryKey']);
         $this->assertFalse($customers['columns'][1]['nullable']);
 
         $orders = $raw['tables'][1];
         $this->assertSame(
             ['table' => 'customers', 'column' => 'id'],
-            $orders['columns'][1]['foreign_key'],
+            $orders['columns'][1]['foreignKey'],
         );
     }
 
@@ -105,7 +106,7 @@ class ConnectorTest extends TestCase
             $connector->close();
         }
 
-        $this->assertSame(['tables' => []], $raw);
+        $this->assertSame(['engine' => 'sqlite', 'tables' => []], $raw);
     }
 
     public function testIntrospectReadOnly(): void
@@ -204,7 +205,7 @@ class ConnectorTest extends TestCase
             // Same session: introspect the empty in-memory db, then verify
             // execute() works against it via a SELECT.
             $raw = $connector->introspect();
-            $this->assertSame(['tables' => []], $raw);
+            $this->assertSame(['engine' => 'sqlite', 'tables' => []], $raw);
 
             $result = $connector->execute('SELECT 1 AS one');
             $this->assertSame(['one'], $result['columns']);

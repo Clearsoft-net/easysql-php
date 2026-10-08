@@ -23,6 +23,7 @@ $connector = new Connector(new ConnectionConfig(
     password: 'secret',  // in-memory only — never written to disk or logged
     database: 'myapp',
     charset: 'utf8mb4',  // default
+    engine: 'mysql',     // or 'mariadb'
     ssl: false,          // default
     timeout: 10.0,       // seconds, default
 ));
@@ -41,8 +42,8 @@ try {
 
 - **Credentials** are supplied per connection and never written to disk, logged, or kept after `close()`.
   Driver error messages are sanitized before surfacing.
-- **Introspection** reads `information_schema` (user tables only) and produces the raw shape consumed by
-  `easysql/schema-generation`.
+- **Introspection** reads `information_schema` (user tables only) and produces the shared raw shape
+  (`engine`, engine-native `dataType`, and `ordinal`) consumed by `easysql/schema-generation`.
 - **Execution** accepts SELECT/WITH/EXPLAIN/SHOW only (client-side safety check mirrors the server);
   uses prepared statements and returns typed rows.
 - **No global state** — several connections can be open at the same time.

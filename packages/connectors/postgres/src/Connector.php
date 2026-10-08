@@ -67,7 +67,9 @@ final class Connector
      * Introspect the configured schemas.
      *
      * Returns the raw introspection shape consumed by the schema-generation
-     * package: ['tables' => [['name', 'columns' => [...], 'rows_approx']]].
+     * package: ['engine' => 'postgresql', 'tables' => [['name', 'columns' => [...], 'rowsApprox']]].
+     * Types are reported verbatim from `format_type()`; the schema-generation
+     * package maps them into the canonical vocabulary.
      *
      * @throws ConnectorException When introspection fails.
      */
@@ -98,7 +100,8 @@ final class Connector
                               AND i.indisprimary
                         ) AS is_primary,
                         ref.relname AS foreign_table,
-                        ref_att.attname AS foreign_column
+                        ref_att.attname AS foreign_column,
+                        a.attnum AS ordinal
                  FROM pg_attribute a
                  JOIN pg_class c ON c.oid = a.attrelid
                  JOIN pg_namespace n ON n.oid = c.relnamespace
@@ -132,31 +135,32 @@ final class Connector
                     foreach ($columnsStmt->fetchAll() as $column) {
                         $columns[] = [
                             'name' => $column['column_name'],
-                            'type' => TypeMapper::map($column['data_type']),
+                            'dataType' => $column['data_type'],
                             'nullable' => $this->toBool($column['is_nullable']),
-                            'primary_key' => $this->toBool($column['is_primary']),
-                            'default' => $column['column_default'],
-                            'foreign_key' => $column['foreign_table'] !== null
+                            'primaryKey' => $this->toBool($column['is_primary']),
+                            'defaultValue' => $column['column_default'],
+                            'foreignKey' => $column['foreign_table'] !== null
                                 && $column['foreign_column'] !== null
                                 ? [
                                     'table' => $column['foreign_table'],
                                     'column' => $column['foreign_column'],
                                 ]
                                 : null,
+                            'ordinal' => (int) $column['ordinal'],
                         ];
                     }
 
                     $tables[] = [
                         'name' => $table['table_name'],
                         'columns' => $columns,
-                        'rows_approx' => $table['rows_approx'] !== null
+                        'rowsApprox' => $table['rows_approx'] !== null
                             ? (int) $table['rows_approx']
                             : null,
                     ];
                 }
             }
 
-            return ['tables' => $tables];
+            return ['engine' => 'postgresql', 'tables' => $tables];
         } catch (PDOException $e) {
             throw ConnectorException::introspectionFailed($e);
         }

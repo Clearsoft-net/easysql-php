@@ -1,6 +1,6 @@
 {
-  "name": "easysql/connectors-sqlite",
-  "description": "EasySQL SQLite connector package — local schema introspection and SELECT execution for SQLite files.",
+  "name": "easysql/connectors-clickhouse",
+  "description": "EasySQL ClickHouse connector package — local schema introspection and SELECT execution over the HTTP interface.",
   "type": "library",
   "license": "MIT",
   "version": "3.0.0",
@@ -9,7 +9,7 @@
     "easysql",
     "clearsoft",
     "connector",
-    "sqlite",
+    "clickhouse",
     "database",
     "sdk",
     "php"
@@ -28,17 +28,16 @@
   "require": {
     "php": ">=8.2",
     "easysql/common": "^3.0",
-    "ext-pdo": "*",
-    "ext-pdo_sqlite": "*"
+    "ext-curl": "*"
   },
   "autoload": {
     "psr-4": {
-      "Clearsoft\\EasySQL\\Connectors\\SQLite\\": "src/"
+      "Clearsoft\\EasySQL\\Connectors\\ClickHouse\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Clearsoft\\EasySQL\\Connectors\\SQLite\\Tests\\": "tests/"
+      "Clearsoft\\EasySQL\\Connectors\\ClickHouse\\Tests\\": "tests/"
     }
   }
 }

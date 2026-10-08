@@ -71,7 +71,7 @@ final class Connector
      * Introspect the database schema.
      *
      * Returns the raw introspection shape consumed by the schema-generation
-     * package: ['tables' => [['name', 'columns' => [...], 'rows_approx']]].
+     * package: ['engine' => 'mysql', 'tables' => [['name', 'columns' => [...], 'rowsApprox']]].
      *
      * @throws ConnectorException When introspection fails.
      */
@@ -92,7 +92,7 @@ final class Connector
             $columnsStmt = $pdo->prepare(
                 "SELECT c.COLUMN_NAME AS column_name, c.DATA_TYPE AS data_type,
                         c.IS_NULLABLE AS is_nullable, c.COLUMN_DEFAULT AS column_default,
-                        c.COLUMN_KEY AS column_key,
+                        c.COLUMN_KEY AS column_key, c.ORDINAL_POSITION AS ordinal_position,
                         k.REFERENCED_TABLE_NAME AS referenced_table_name,
                         k.REFERENCED_COLUMN_NAME AS referenced_column_name
                  FROM information_schema.COLUMNS c
@@ -116,30 +116,31 @@ final class Connector
                 foreach ($columnsStmt->fetchAll() as $column) {
                     $columns[] = [
                         'name' => $column['column_name'],
-                        'type' => $column['data_type'],
+                        'dataType' => $column['data_type'],
                         'nullable' => $column['is_nullable'] === 'YES',
-                        'primary_key' => $column['column_key'] === 'PRI',
-                        'default' => $column['column_default'],
-                        'foreign_key' => $column['referenced_table_name'] !== null
+                        'primaryKey' => $column['column_key'] === 'PRI',
+                        'defaultValue' => $column['column_default'],
+                        'foreignKey' => $column['referenced_table_name'] !== null
                             && $column['referenced_column_name'] !== null
                             ? [
                                 'table' => $column['referenced_table_name'],
                                 'column' => $column['referenced_column_name'],
                             ]
                             : null,
+                        'ordinal' => (int) $column['ordinal_position'],
                     ];
                 }
 
                 $tables[] = [
                     'name' => $table['table_name'],
                     'columns' => $columns,
-                    'rows_approx' => $table['table_rows'] !== null
+                    'rowsApprox' => $table['table_rows'] !== null
                         ? (int) $table['table_rows']
                         : null,
                 ];
             }
 
-            return ['tables' => $tables];
+            return ['engine' => $this->config->engine, 'tables' => $tables];
         } catch (PDOException $e) {
             throw ConnectorException::introspectionFailed($e);
         }

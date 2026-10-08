@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fbde058286d6e2bc2ba8ae4b404d2380",
+    "content-hash": "6d82f7c0641de40d524e8a2df8b1927b",
     "packages": [
         {
             "name": "easysql/client",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/client",
-                "reference": "9d0b6202f19a7918804591175fb4dea1a2f22220"
+                "reference": "4573de730293892c8d6bc8ee119f2140ed8d9bde"
             },
             "require": {
                 "ext-json": "*",
@@ -54,11 +54,11 @@
         },
         {
             "name": "easysql/schema-generation",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/schema-generation",
-                "reference": "e2955dba58180a78ef217ecf59acc4f9f7899358"
+                "reference": "22f4372a25602f24df36d8afebb5b02ed0b48e27"
             },
             "require": {
                 "php": ">=8.2"
@@ -1312,11 +1312,11 @@
         },
         {
             "name": "easysql/common",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/common",
-                "reference": "bb2bbc1274ad43901c6d2235a8118125ad4b57a2"
+                "reference": "b1bb2f57e594006f1e922afb11acc03e3ddda3cc"
             },
             "require": {
                 "php": ">=8.2"
@@ -1361,15 +1361,68 @@
             }
         },
         {
+            "name": "easysql/connectors-clickhouse",
+            "version": "3.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/connectors/clickhouse",
+                "reference": "12edaf4b2bdf85d581d603f7dd7836175be7dfb1"
+            },
+            "require": {
+                "easysql/common": "^3.0",
+                "ext-curl": "*",
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Connectors\\ClickHouse\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Connectors\\ClickHouse\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Clearsoft",
+                    "email": "contact@clearsoft.net",
+                    "homepage": "https://clearsoft.net"
+                }
+            ],
+            "description": "EasySQL ClickHouse connector package — local schema introspection and SELECT execution over the HTTP interface.",
+            "homepage": "https://easysql.net",
+            "keywords": [
+                "clearsoft",
+                "clickhouse",
+                "connector",
+                "database",
+                "easysql",
+                "php",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+                "source": "https://github.com/Clearsoft-net/easysql-php"
+            },
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "easysql/connectors-mysql",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/connectors/mysql",
-                "reference": "c8e2b555edc75b55bc94cfa465e01b7484ce3f36"
+                "reference": "d5a9f51006ca573a1da2e79bcc6074db70b1d1d2"
             },
             "require": {
-                "easysql/common": "^2.0",
+                "easysql/common": "^3.0",
                 "ext-pdo": "*",
                 "ext-pdo_mysql": "*",
                 "php": ">=8.2"
@@ -1417,14 +1470,14 @@
         },
         {
             "name": "easysql/connectors-postgres",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/connectors/postgres",
-                "reference": "cbdeb165b97b3fe302f2259c779427fc42d3101b"
+                "reference": "b0773c55275951a3add3993bb5d8fc0f759d3c28"
             },
             "require": {
-                "easysql/common": "^2.0",
+                "easysql/common": "^3.0",
                 "ext-pdo": "*",
                 "ext-pdo_pgsql": "*",
                 "php": ">=8.2"
@@ -1472,14 +1525,14 @@
         },
         {
             "name": "easysql/connectors-sqlite",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/connectors/sqlite",
-                "reference": "3b6209c8192e6be72dca4bf8568f55710fe5f57d"
+                "reference": "8ba344be829550a77071b2148a25924e1d359ebf"
             },
             "require": {
-                "easysql/common": "^2.0",
+                "easysql/common": "^3.0",
                 "ext-pdo": "*",
                 "ext-pdo_sqlite": "*",
                 "php": ">=8.2"
@@ -1526,14 +1579,14 @@
         },
         {
             "name": "easysql/laravel",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/laravel",
-                "reference": "ab5926f8c02aafb7d4a6eeac8b26c4b2c86c4252"
+                "reference": "e19a7199807a42e7dafb14397617ebe961c0fbbd"
             },
             "require": {
-                "easysql/client": "^2.0",
+                "easysql/client": "^3.0",
                 "illuminate/contracts": "^11.0 || ^12.0",
                 "illuminate/support": "^11.0 || ^12.0",
                 "php": ">=8.2"
