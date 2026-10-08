@@ -1,3 +1,12 @@
+# [3.1.0](https://github.com/Clearsoft-net/easysql-php/compare/v3.0.0...v3.1.0) (2026-10-08)
+
+
+### Features
+
+* align PHP SDK with JS connector schema ([1ec24d9](https://github.com/Clearsoft-net/easysql-php/commit/1ec24d963cbcae7cbb0a904ad88250b9897977a5))
+* **sdk:** regenerate SDK from latest spec ([#19](https://github.com/Clearsoft-net/easysql-php/issues/19)) ([2b35c03](https://github.com/Clearsoft-net/easysql-php/commit/2b35c03ae7d2fa231ed29f109c8d7682b222cb0c))
+* **sdk:** regenerate SDK from latest spec ([#20](https://github.com/Clearsoft-net/easysql-php/issues/20)) ([e1c4165](https://github.com/Clearsoft-net/easysql-php/commit/e1c416592bc6087b23e0727686de9fd3215583a9))
+
 # [3.0.0](https://github.com/Clearsoft-net/easysql-php/compare/v2.1.0...v3.0.0) (2026-10-02)
 
 
