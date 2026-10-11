@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/Clearsoft-net/easysql-php/compare/v3.1.0...v3.2.0) (2026-10-11)
+
+
+### Features
+
+* **sdk:** publish packages under the clearsoft vendor ([4b16cbe](https://github.com/Clearsoft-net/easysql-php/commit/4b16cbe8d81c2682d0b1caa938c5e93e2dc3eb56))
+
 # [3.1.0](https://github.com/Clearsoft-net/easysql-php/compare/v3.0.0...v3.1.0) (2026-10-08)
 
 
