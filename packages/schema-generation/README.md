@@ -1,4 +1,4 @@
-# easysql/schema-generation
+# clearsoft/schema-generation
 
 Schema generation for the EasySQL PHP SDK — transforms raw connector introspection output into the
 schema payload the API consumes (`POST /v1/connections`, `POST /v1/connections/{id}/sync`).
@@ -6,7 +6,7 @@ schema payload the API consumes (`POST /v1/connections`, `POST /v1/connections/{
 ## Installation
 
 ```bash
-composer require easysql/schema-generation
+composer require clearsoft/schema-generation
 ```
 
 Requirements: PHP >= 8.2. No other dependencies — and no I/O of its own.

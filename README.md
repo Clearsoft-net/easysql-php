@@ -32,14 +32,14 @@ This is a multipackage repository. All packages are versioned and released toget
 
 | Package | Composer name | Description |
 |---|---|---|
-| [`packages/client`](packages/client) | `easysql/client` | 🤖 Generated API client (from the OpenAPI spec) + token-refresh runtime |
-| [`packages/connectors/mysql`](packages/connectors/mysql) | `easysql/connectors-mysql` | Local MySQL/MariaDB introspection + SELECT execution |
-| [`packages/connectors/postgres`](packages/connectors/postgres) | `easysql/connectors-postgres` | Local PostgreSQL introspection + SELECT execution |
-| [`packages/connectors/sqlite`](packages/connectors/sqlite) | `easysql/connectors-sqlite` | Local SQLite introspection + SELECT execution |
-| [`packages/connectors/clickhouse`](packages/connectors/clickhouse) | `easysql/connectors-clickhouse` | Local ClickHouse (HTTP) introspection + SELECT execution |
-| [`packages/common`](packages/common) | `easysql/common` | Shared code (SQL safety validation, credential sanitization) |
-| [`packages/schema-generation`](packages/schema-generation) | `easysql/schema-generation` | Raw introspection → canonical API schema payload (deterministic, no I/O) |
-| [`packages/laravel`](packages/laravel) | `easysql/laravel` | Laravel service provider, manager and facade |
+| [`packages/client`](packages/client) | `clearsoft/client` | 🤖 Generated API client (from the OpenAPI spec) + token-refresh runtime |
+| [`packages/connectors/mysql`](packages/connectors/mysql) | `clearsoft/connectors-mysql` | Local MySQL/MariaDB introspection + SELECT execution |
+| [`packages/connectors/postgres`](packages/connectors/postgres) | `clearsoft/connectors-postgres` | Local PostgreSQL introspection + SELECT execution |
+| [`packages/connectors/sqlite`](packages/connectors/sqlite) | `clearsoft/connectors-sqlite` | Local SQLite introspection + SELECT execution |
+| [`packages/connectors/clickhouse`](packages/connectors/clickhouse) | `clearsoft/connectors-clickhouse` | Local ClickHouse (HTTP) introspection + SELECT execution |
+| [`packages/common`](packages/common) | `clearsoft/common` | Shared code (SQL safety validation, credential sanitization) |
+| [`packages/schema-generation`](packages/schema-generation) | `clearsoft/schema-generation` | Raw introspection → canonical API schema payload (deterministic, no I/O) |
+| [`packages/laravel`](packages/laravel) | `clearsoft/laravel` | Laravel service provider, manager and facade |
 
 ## Requirements
 
@@ -56,13 +56,13 @@ This is a multipackage repository. All packages are versioned and released toget
 composer require clearsoft/easysql-sdk
 
 # Or pick individual packages:
-composer require easysql/client
-composer require easysql/connectors-mysql
-composer require easysql/connectors-postgres
-composer require easysql/connectors-sqlite
-composer require easysql/connectors-clickhouse
-composer require easysql/schema-generation
-composer require easysql/laravel
+composer require clearsoft/client
+composer require clearsoft/connectors-mysql
+composer require clearsoft/connectors-postgres
+composer require clearsoft/connectors-sqlite
+composer require clearsoft/connectors-clickhouse
+composer require clearsoft/schema-generation
+composer require clearsoft/laravel
 ```
 ---
 
@@ -286,7 +286,7 @@ The multipackage layout keeps that package as a meta-package (same name, same ve
 | `Clearsoft\EasySQL\SDK\Exceptions\ApiException` | `Clearsoft\EasySQL\Api\Exceptions\ApiException` |
 | `Clearsoft\EasySQL\SDK\EasySQLClient` | `Clearsoft\EasySQL\Api\Http\EasySQLClient` |
 | `Clearsoft\EasySQL\SDK\TokenStoreInterface` | `Clearsoft\EasySQL\Api\Http\TokenStoreInterface` |
-| `Clearsoft\EasySql\Laravel\*` | unchanged (now in `easysql/laravel`) |
+| `Clearsoft\EasySql\Laravel\*` | unchanged (now in `clearsoft/laravel`) |
 
 Connection methods now take their path parameters explicitly (this also fixes a v1.x bug where
 `getConnection('conn_1')` silently ignored the id and requested a literal `{connection_id}` URL):

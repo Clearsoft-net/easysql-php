@@ -1,5 +1,5 @@
 {
-  "name": "easysql/connectors-sqlite",
+  "name": "clearsoft/connectors-sqlite",
   "description": "EasySQL SQLite connector package — local schema introspection and SELECT execution for SQLite files.",
   "type": "library",
   "license": "MIT",
@@ -27,7 +27,7 @@
   ],
   "require": {
     "php": ">=8.2",
-    "easysql/common": "^3.0",
+    "clearsoft/common": "^3.0",
     "ext-pdo": "*",
     "ext-pdo_sqlite": "*"
   },

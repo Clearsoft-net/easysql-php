@@ -1,5 +1,5 @@
 {
-  "name": "easysql/connectors-clickhouse",
+  "name": "clearsoft/connectors-clickhouse",
   "description": "EasySQL ClickHouse connector package — local schema introspection and SELECT execution over the HTTP interface.",
   "type": "library",
   "license": "MIT",
@@ -27,7 +27,7 @@
   ],
   "require": {
     "php": ">=8.2",
-    "easysql/common": "^3.0",
+    "clearsoft/common": "^3.0",
     "ext-curl": "*"
   },
   "autoload": {

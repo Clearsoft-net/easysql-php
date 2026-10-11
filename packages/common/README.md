@@ -1,11 +1,11 @@
-# easysql/common
+# clearsoft/common
 
 Shared code for the EasySQL PHP SDK packages.
 
 ## Installation
 
 ```bash
-composer require easysql/common
+composer require clearsoft/common
 ```
 
 Requirements: PHP >= 8.2.
@@ -13,8 +13,8 @@ Requirements: PHP >= 8.2.
 ## Contents
 
 - `Clearsoft\EasySQL\Common\SqlValidator` — client-side SELECT-only safety check used by the
-  MySQL, PostgreSQL and SQLite connectors before executing any generated SQL. Mirrors the
-  server-side validator as defense in depth.
+  MySQL, PostgreSQL, SQLite and ClickHouse connectors before executing any generated SQL. Mirrors
+  the server-side validator as defense in depth.
 - `Clearsoft\EasySQL\Common\CredentialSanitizer` — strips credentials (connection URIs and
   `password=`/`pwd=` assignments) from driver messages before they are surfaced or logged.
 

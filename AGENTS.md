@@ -41,7 +41,8 @@ scripts/
 
 .github/workflows/
 ├── generate-sdk.yml      # CI — triggered by repository_dispatch from easysql-api
-└── release.yml           # lint + composer validate + make check + test + semantic-release
+├── release.yml           # lint + composer validate + make check + test + semantic-release
+└── split-packages.yml    # mirror each package to Clearsoft-net/easysql-php-* + forward tag (Packagist)
 ```
 
 ## Generation flow
@@ -110,6 +111,14 @@ All packages are versioned and released together: `scripts/update-version.php` (
 it `require`s client + schema-generation and lists connectors/Laravel under `suggest` +
 `require-dev`, resolving every package via `repositories: path`.
 
+Sub-packages are published on Packagist as `clearsoft/<name>` (client, common, laravel,
+schema-generation, connectors-*). The `easysql` vendor is owned by an unrelated project on
+Packagist, so `clearsoft` is used. `split-packages.yml` mirrors each `packages/*` into a
+`Clearsoft-net/easysql-php-*` repo and forwards the release tag, which Packagist reads via its
+webhook. It pushes with the `SPLIT_PAT` secret (the default `GITHUB_TOKEN` cannot push to the
+sibling repos) and is dispatched by the release job, because a tag pushed with `GITHUB_TOKEN`
+does not fire the `push: tags` event.
+
 ## Commands
 
 ```bash
@@ -133,3 +142,5 @@ Composer scripts mirror: `composer test`, `composer analyse`, `composer generate
   → checkout → setup PHP → `make install` → `make generate` → detect changes → open PR
 - **release**: push to main/master → `make install` → `make lint` → composer validate (root + packages)
   → `make check` → `make test` → semantic-release
+- **split-packages**: on a `v*` tag or dispatched by the release job → mirror each `packages/*` to
+  `Clearsoft-net/easysql-php-*` and forward the tag (Packagist webhook publishes it)

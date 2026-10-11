@@ -1,5 +1,5 @@
 {
-  "name": "easysql/common",
+  "name": "clearsoft/common",
   "description": "Shared code for the EasySQL PHP SDK packages (SQL safety validation, credential sanitization).",
   "type": "library",
   "license": "MIT",

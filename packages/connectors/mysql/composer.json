@@ -1,5 +1,5 @@
 {
-  "name": "easysql/connectors-mysql",
+  "name": "clearsoft/connectors-mysql",
   "description": "EasySQL MySQL connector package — local schema introspection and SELECT execution for MySQL/MariaDB.",
   "type": "library",
   "license": "MIT",
@@ -28,7 +28,7 @@
   ],
   "require": {
     "php": ">=8.2",
-    "easysql/common": "^3.0",
+    "clearsoft/common": "^3.0",
     "ext-pdo": "*",
     "ext-pdo_mysql": "*"
   },

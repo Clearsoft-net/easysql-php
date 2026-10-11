@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d82f7c0641de40d524e8a2df8b1927b",
+    "content-hash": "ab3959d887fc8ebe19841f5c42ff43ca",
     "packages": [
         {
-            "name": "easysql/client",
-            "version": "3.0.0",
+            "name": "clearsoft/client",
+            "version": "3.1.0",
             "dist": {
                 "type": "path",
                 "url": "packages/client",
-                "reference": "4573de730293892c8d6bc8ee119f2140ed8d9bde"
+                "reference": "f9febc7bd3bcaecc740e80888a8573d5052f07a6"
             },
             "require": {
                 "ext-json": "*",
@@ -53,12 +53,12 @@
             }
         },
         {
-            "name": "easysql/schema-generation",
-            "version": "3.0.0",
+            "name": "clearsoft/schema-generation",
+            "version": "3.1.0",
             "dist": {
                 "type": "path",
                 "url": "packages/schema-generation",
-                "reference": "22f4372a25602f24df36d8afebb5b02ed0b48e27"
+                "reference": "8c094168f0a862668a354f225fafd00293d76a3f"
             },
             "require": {
                 "php": ">=8.2"
@@ -928,6 +928,342 @@
             "time": "2026-09-06T14:11:38+00:00"
         },
         {
+            "name": "clearsoft/common",
+            "version": "3.1.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/common",
+                "reference": "2f51360c277b1acdda68f0eab0cc04a594bd2c40"
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Common\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Common\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Clearsoft",
+                    "email": "contact@clearsoft.net",
+                    "homepage": "https://clearsoft.net"
+                }
+            ],
+            "description": "Shared code for the EasySQL PHP SDK packages (SQL safety validation, credential sanitization).",
+            "homepage": "https://easysql.net",
+            "keywords": [
+                "clearsoft",
+                "common",
+                "easysql",
+                "php",
+                "sdk",
+                "sql"
+            ],
+            "support": {
+                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+                "source": "https://github.com/Clearsoft-net/easysql-php"
+            },
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "clearsoft/connectors-clickhouse",
+            "version": "3.1.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/connectors/clickhouse",
+                "reference": "0757071f3a165df931459ea7effce9025c2b3f30"
+            },
+            "require": {
+                "clearsoft/common": "^3.0",
+                "ext-curl": "*",
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Connectors\\ClickHouse\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Connectors\\ClickHouse\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Clearsoft",
+                    "email": "contact@clearsoft.net",
+                    "homepage": "https://clearsoft.net"
+                }
+            ],
+            "description": "EasySQL ClickHouse connector package — local schema introspection and SELECT execution over the HTTP interface.",
+            "homepage": "https://easysql.net",
+            "keywords": [
+                "clearsoft",
+                "clickhouse",
+                "connector",
+                "database",
+                "easysql",
+                "php",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+                "source": "https://github.com/Clearsoft-net/easysql-php"
+            },
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "clearsoft/connectors-mysql",
+            "version": "3.1.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/connectors/mysql",
+                "reference": "fb77364530bfaa3b67c9f53a9abb12c711f5b456"
+            },
+            "require": {
+                "clearsoft/common": "^3.0",
+                "ext-pdo": "*",
+                "ext-pdo_mysql": "*",
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Connectors\\MySQL\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Connectors\\MySQL\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Clearsoft",
+                    "email": "contact@clearsoft.net",
+                    "homepage": "https://clearsoft.net"
+                }
+            ],
+            "description": "EasySQL MySQL connector package — local schema introspection and SELECT execution for MySQL/MariaDB.",
+            "homepage": "https://easysql.net",
+            "keywords": [
+                "clearsoft",
+                "connector",
+                "database",
+                "easysql",
+                "mariadb",
+                "mysql",
+                "php",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+                "source": "https://github.com/Clearsoft-net/easysql-php"
+            },
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "clearsoft/connectors-postgres",
+            "version": "3.1.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/connectors/postgres",
+                "reference": "0a5af49b89a9e6cd2d2bf01ace786e4a0212272b"
+            },
+            "require": {
+                "clearsoft/common": "^3.0",
+                "ext-pdo": "*",
+                "ext-pdo_pgsql": "*",
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Connectors\\Postgres\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Connectors\\Postgres\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Clearsoft",
+                    "email": "contact@clearsoft.net",
+                    "homepage": "https://clearsoft.net"
+                }
+            ],
+            "description": "EasySQL PostgreSQL connector package — local schema introspection and SELECT execution for PostgreSQL.",
+            "homepage": "https://easysql.net",
+            "keywords": [
+                "clearsoft",
+                "connector",
+                "database",
+                "easysql",
+                "php",
+                "postgres",
+                "postgresql",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+                "source": "https://github.com/Clearsoft-net/easysql-php"
+            },
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "clearsoft/connectors-sqlite",
+            "version": "3.1.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/connectors/sqlite",
+                "reference": "1fb7ec4d9be907a40f5bd48232b6821058001164"
+            },
+            "require": {
+                "clearsoft/common": "^3.0",
+                "ext-pdo": "*",
+                "ext-pdo_sqlite": "*",
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Connectors\\SQLite\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Clearsoft\\EasySQL\\Connectors\\SQLite\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Clearsoft",
+                    "email": "contact@clearsoft.net",
+                    "homepage": "https://clearsoft.net"
+                }
+            ],
+            "description": "EasySQL SQLite connector package — local schema introspection and SELECT execution for SQLite files.",
+            "homepage": "https://easysql.net",
+            "keywords": [
+                "clearsoft",
+                "connector",
+                "database",
+                "easysql",
+                "php",
+                "sdk",
+                "sqlite"
+            ],
+            "support": {
+                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+                "source": "https://github.com/Clearsoft-net/easysql-php"
+            },
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "clearsoft/laravel",
+            "version": "3.1.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/laravel",
+                "reference": "94da9607fe98c52ca6921c37a6cff57087d4c1f0"
+            },
+            "require": {
+                "clearsoft/client": "^3.0",
+                "illuminate/contracts": "^11.0 || ^12.0",
+                "illuminate/support": "^11.0 || ^12.0",
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^9.0 || ^10.0",
+                "phpunit/phpunit": "^11.0"
+            },
+            "suggest": {
+                "illuminate/support": "Required to use the Laravel Service Provider and Facade (^11.0)"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Clearsoft\\EasySql\\Laravel\\EasySqlServiceProvider"
+                    ],
+                    "aliases": {
+                        "EasySQL": "Clearsoft\\EasySql\\Laravel\\Facades\\EasySQL"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Clearsoft\\EasySql\\Laravel\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Clearsoft\\EasySql\\Laravel\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Clearsoft",
+                    "email": "contact@clearsoft.net",
+                    "homepage": "https://clearsoft.net"
+                }
+            ],
+            "description": "Laravel integration for the EasySQL PHP SDK — service provider, manager and facade.",
+            "homepage": "https://easysql.net",
+            "keywords": [
+                "clearsoft",
+                "easysql",
+                "laravel",
+                "php",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
+                "source": "https://github.com/Clearsoft-net/easysql-php"
+            },
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "composer/semver",
             "version": "3.4.4",
             "source": {
@@ -1309,342 +1645,6 @@
                 }
             ],
             "time": "2025-10-31T18:51:33+00:00"
-        },
-        {
-            "name": "easysql/common",
-            "version": "3.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/common",
-                "reference": "b1bb2f57e594006f1e922afb11acc03e3ddda3cc"
-            },
-            "require": {
-                "php": ">=8.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Common\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Common\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Clearsoft",
-                    "email": "contact@clearsoft.net",
-                    "homepage": "https://clearsoft.net"
-                }
-            ],
-            "description": "Shared code for the EasySQL PHP SDK packages (SQL safety validation, credential sanitization).",
-            "homepage": "https://easysql.net",
-            "keywords": [
-                "clearsoft",
-                "common",
-                "easysql",
-                "php",
-                "sdk",
-                "sql"
-            ],
-            "support": {
-                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
-                "source": "https://github.com/Clearsoft-net/easysql-php"
-            },
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "easysql/connectors-clickhouse",
-            "version": "3.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/connectors/clickhouse",
-                "reference": "12edaf4b2bdf85d581d603f7dd7836175be7dfb1"
-            },
-            "require": {
-                "easysql/common": "^3.0",
-                "ext-curl": "*",
-                "php": ">=8.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\ClickHouse\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\ClickHouse\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Clearsoft",
-                    "email": "contact@clearsoft.net",
-                    "homepage": "https://clearsoft.net"
-                }
-            ],
-            "description": "EasySQL ClickHouse connector package — local schema introspection and SELECT execution over the HTTP interface.",
-            "homepage": "https://easysql.net",
-            "keywords": [
-                "clearsoft",
-                "clickhouse",
-                "connector",
-                "database",
-                "easysql",
-                "php",
-                "sdk"
-            ],
-            "support": {
-                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
-                "source": "https://github.com/Clearsoft-net/easysql-php"
-            },
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "easysql/connectors-mysql",
-            "version": "3.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/connectors/mysql",
-                "reference": "d5a9f51006ca573a1da2e79bcc6074db70b1d1d2"
-            },
-            "require": {
-                "easysql/common": "^3.0",
-                "ext-pdo": "*",
-                "ext-pdo_mysql": "*",
-                "php": ">=8.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\MySQL\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\MySQL\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Clearsoft",
-                    "email": "contact@clearsoft.net",
-                    "homepage": "https://clearsoft.net"
-                }
-            ],
-            "description": "EasySQL MySQL connector package — local schema introspection and SELECT execution for MySQL/MariaDB.",
-            "homepage": "https://easysql.net",
-            "keywords": [
-                "clearsoft",
-                "connector",
-                "database",
-                "easysql",
-                "mariadb",
-                "mysql",
-                "php",
-                "sdk"
-            ],
-            "support": {
-                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
-                "source": "https://github.com/Clearsoft-net/easysql-php"
-            },
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "easysql/connectors-postgres",
-            "version": "3.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/connectors/postgres",
-                "reference": "b0773c55275951a3add3993bb5d8fc0f759d3c28"
-            },
-            "require": {
-                "easysql/common": "^3.0",
-                "ext-pdo": "*",
-                "ext-pdo_pgsql": "*",
-                "php": ">=8.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\Postgres\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\Postgres\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Clearsoft",
-                    "email": "contact@clearsoft.net",
-                    "homepage": "https://clearsoft.net"
-                }
-            ],
-            "description": "EasySQL PostgreSQL connector package — local schema introspection and SELECT execution for PostgreSQL.",
-            "homepage": "https://easysql.net",
-            "keywords": [
-                "clearsoft",
-                "connector",
-                "database",
-                "easysql",
-                "php",
-                "postgres",
-                "postgresql",
-                "sdk"
-            ],
-            "support": {
-                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
-                "source": "https://github.com/Clearsoft-net/easysql-php"
-            },
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "easysql/connectors-sqlite",
-            "version": "3.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/connectors/sqlite",
-                "reference": "8ba344be829550a77071b2148a25924e1d359ebf"
-            },
-            "require": {
-                "easysql/common": "^3.0",
-                "ext-pdo": "*",
-                "ext-pdo_sqlite": "*",
-                "php": ">=8.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\SQLite\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\SQLite\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Clearsoft",
-                    "email": "contact@clearsoft.net",
-                    "homepage": "https://clearsoft.net"
-                }
-            ],
-            "description": "EasySQL SQLite connector package — local schema introspection and SELECT execution for SQLite files.",
-            "homepage": "https://easysql.net",
-            "keywords": [
-                "clearsoft",
-                "connector",
-                "database",
-                "easysql",
-                "php",
-                "sdk",
-                "sqlite"
-            ],
-            "support": {
-                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
-                "source": "https://github.com/Clearsoft-net/easysql-php"
-            },
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "easysql/laravel",
-            "version": "3.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/laravel",
-                "reference": "e19a7199807a42e7dafb14397617ebe961c0fbbd"
-            },
-            "require": {
-                "easysql/client": "^3.0",
-                "illuminate/contracts": "^11.0 || ^12.0",
-                "illuminate/support": "^11.0 || ^12.0",
-                "php": ">=8.2"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^9.0 || ^10.0",
-                "phpunit/phpunit": "^11.0"
-            },
-            "suggest": {
-                "illuminate/support": "Required to use the Laravel Service Provider and Facade (^11.0)"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Clearsoft\\EasySql\\Laravel\\EasySqlServiceProvider"
-                    ],
-                    "aliases": {
-                        "EasySQL": "Clearsoft\\EasySql\\Laravel\\Facades\\EasySQL"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Clearsoft\\EasySql\\Laravel\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Clearsoft\\EasySql\\Laravel\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Clearsoft",
-                    "email": "contact@clearsoft.net",
-                    "homepage": "https://clearsoft.net"
-                }
-            ],
-            "description": "Laravel integration for the EasySQL PHP SDK — service provider, manager and facade.",
-            "homepage": "https://easysql.net",
-            "keywords": [
-                "clearsoft",
-                "easysql",
-                "laravel",
-                "php",
-                "sdk"
-            ],
-            "support": {
-                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
-                "source": "https://github.com/Clearsoft-net/easysql-php"
-            },
-            "transport-options": {
-                "relative": true
-            }
         },
         {
             "name": "egulias/email-validator",

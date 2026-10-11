@@ -10,20 +10,20 @@ php samples/09-schema-generation.php   # no credentials needed
 
 | File | Package(s) | Needs |
 |---|---|---|
-| [`01-client-basic.php`](01-client-basic.php) | `easysql/client` | API access token |
-| [`02-token-store-refresh.php`](02-token-store-refresh.php) | `easysql/client` | access + refresh token |
-| [`03-manage-connectors.php`](03-manage-connectors.php) | `easysql/client` | API access token |
-| [`04-run-queries.php`](04-run-queries.php) | `easysql/client` | API access token + connection id |
-| [`05-dashboard-billing.php`](05-dashboard-billing.php) | `easysql/client` | API access token |
+| [`01-client-basic.php`](01-client-basic.php) | `clearsoft/client` | API access token |
+| [`02-token-store-refresh.php`](02-token-store-refresh.php) | `clearsoft/client` | access + refresh token |
+| [`03-manage-connectors.php`](03-manage-connectors.php) | `clearsoft/client` | API access token |
+| [`04-run-queries.php`](04-run-queries.php) | `clearsoft/client` | API access token + connection id |
+| [`05-dashboard-billing.php`](05-dashboard-billing.php) | `clearsoft/client` | API access token |
 | [`06-conn-mysql-sync.php`](06-conn-mysql-sync.php) | mysql connector + schema-generation + client | MySQL + token + connection id |
 | [`07-conn-postgres-sync.php`](07-conn-postgres-sync.php) | postgres connector + schema-generation + client | PostgreSQL + token + connection id |
 | [`08-conn-sqlite-sync.php`](08-conn-sqlite-sync.php) | sqlite connector + schema-generation + client | SQLite file + token + connection id |
-| [`09-schema-generation.php`](09-schema-generation.php) | `easysql/schema-generation` | nothing |
-| [`10-laravel.php`](10-laravel.php) | `easysql/laravel` | a Laravel application |
-| [`11-error-handling.php`](11-error-handling.php) | `easysql/client` | API access token |
-| [`12-api-keys-schema-only.php`](12-api-keys-schema-only.php) | `easysql/client` | API access token |
+| [`09-schema-generation.php`](09-schema-generation.php) | `clearsoft/schema-generation` | nothing |
+| [`10-laravel.php`](10-laravel.php) | `clearsoft/laravel` | a Laravel application |
+| [`11-error-handling.php`](11-error-handling.php) | `clearsoft/client` | API access token |
+| [`12-api-keys-schema-only.php`](12-api-keys-schema-only.php) | `clearsoft/client` | API access token |
 | [`13-local-execution-flow.php`](13-local-execution-flow.php) | client + mysql connector | MySQL + token + connection id |
-| [`14-typed-dtos.php`](14-typed-dtos.php) | `easysql/client` | API access token (+ refresh token) |
+| [`14-typed-dtos.php`](14-typed-dtos.php) | `clearsoft/client` | API access token (+ refresh token) |
 | [`15-conn-clickhouse-sync.php`](15-conn-clickhouse-sync.php) | clickhouse connector + schema-generation + client | ClickHouse HTTP + token + connection id |
 
 ## Environment variables
