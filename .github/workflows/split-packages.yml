@@ -6,12 +6,21 @@ name: Split packages
 #
 # - Every push of a `v*` tag updates the split repos' main branch AND forwards
 #   the tag → Packagist auto-updates via its GitHub webhook.
-# - Manual runs (workflow_dispatch) sync main only, without tagging.
+# - `workflow_dispatch` syncs main only, or splits the supplied `tag`.
 #
-# One-time setup (already done):
+# The release workflow dispatches this workflow with the tag semantic-release
+# just created (see .releaserc.json successCmd), because a tag pushed with the
+# default GITHUB_TOKEN does NOT trigger the `push: tags` event.
+#
+# One-time setup (required):
 # 1. Mirror repos exist: Clearsoft-net/easysql-php-{client,common,laravel,
-#    schema-generation,connectors-mysql,connectors-postgres,connectors-sqlite}.
-# 2. Each mirror is submitted on Packagist with auto-update enabled.
+#    schema-generation,connectors-mysql,connectors-postgres,connectors-sqlite,
+#    connectors-clickhouse}.
+# 2. A token with write access to those repos is stored as the `SPLIT_PAT`
+#    secret (a classic PAT with `repo`, or a fine-grained PAT with Contents:
+#    read/write on every mirror). The default GITHUB_TOKEN is scoped to this
+#    repository only and CANNOT push to the mirrors.
+# 3. Each mirror is submitted on Packagist with auto-update enabled.
 #
 # NOTE: no `paths:` filter — a `paths` filter also gates tag pushes, which
 # would skip publishing when a release tag's commit doesn't touch packages/.
@@ -22,6 +31,11 @@ on:
     tags:
       - "v*"
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to split (e.g. v3.1.0); leave empty to sync main only"
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -40,11 +54,26 @@ jobs:
           - { directory: "packages/connectors/mysql", repo: "easysql-php-connectors-mysql" }
           - { directory: "packages/connectors/postgres", repo: "easysql-php-connectors-postgres" }
           - { directory: "packages/connectors/sqlite", repo: "easysql-php-connectors-sqlite" }
+          - { directory: "packages/connectors/clickhouse", repo: "easysql-php-connectors-clickhouse" }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.tag || github.ref }}
           fetch-depth: 0
+
+      - name: Resolve release tag
+        id: release
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          if [ -n "$INPUT_TAG" ]; then
+            echo "tag=$INPUT_TAG" >> "$GITHUB_OUTPUT"
+          elif [ "${GITHUB_REF_TYPE:-}" = "tag" ]; then
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=" >> "$GITHUB_OUTPUT"
+          fi
 
       # The published composer.json must not carry a hardcoded "version"
       # (Packagist derives the version from the git tag) nor path
@@ -71,7 +100,7 @@ jobs:
 
       # Sync the subdirectory to the split repo's main branch.
       - name: Split (branch)
-        if: "!startsWith(github.ref, 'refs/tags/')"
+        if: steps.release.outputs.tag == ''
         uses: danharrin/monorepo-split-github-action@v2.3.0
         with:
           package_directory: ${{ matrix.package.directory }}
@@ -81,14 +110,14 @@ jobs:
           user_name: Clearsoft Bot
           user_email: support@clearsoft.net
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SPLIT_PAT }}
 
       # Forward the version tag → Packagist publishes the stable release.
       - name: Split (tag)
-        if: "startsWith(github.ref, 'refs/tags/')"
+        if: steps.release.outputs.tag != ''
         uses: danharrin/monorepo-split-github-action@v2.3.0
         with:
-          tag: ${{ github.ref_name }}
+          tag: ${{ steps.release.outputs.tag }}
           package_directory: ${{ matrix.package.directory }}
           repository_organization: Clearsoft-net
           repository_name: ${{ matrix.package.repo }}
@@ -96,4 +125,4 @@ jobs:
           user_name: Clearsoft Bot
           user_email: support@clearsoft.net
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SPLIT_PAT }}
