@@ -1,4 +1,4 @@
-# clearsoft/client
+# clearsoft/easysql-client
 
 Generated API client for the [EasySQL API](https://easysql.net) — the `client` package of the PHP SDK.
 
@@ -15,7 +15,7 @@ client) is never overwritten by the generator.
 ## Installation
 
 ```bash
-composer require clearsoft/client
+composer require clearsoft/easysql-client
 ```
 
 Requirements: PHP >= 8.2, ext-json, guzzlehttp/guzzle ^7.0.

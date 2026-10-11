@@ -111,7 +111,7 @@ All packages are versioned and released together: `scripts/update-version.php` (
 it `require`s client + schema-generation and lists connectors/Laravel under `suggest` +
 `require-dev`, resolving every package via `repositories: path`.
 
-Sub-packages are published on Packagist as `clearsoft/<name>` (client, common, laravel,
+Sub-packages are published on Packagist as `clearsoft/easysql-<name>` (client, common, laravel,
 schema-generation, connectors-*). The `easysql` vendor is owned by an unrelated project on
 Packagist, so `clearsoft` is used. `split-packages.yml` mirrors each `packages/*` into a
 `Clearsoft-net/easysql-php-*` repo and forwards the release tag, which Packagist reads via its

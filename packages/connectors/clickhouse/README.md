@@ -1,4 +1,4 @@
-# clearsoft/connectors-clickhouse
+# clearsoft/easysql-connectors-clickhouse
 
 ClickHouse connector for the EasySQL PHP SDK — local schema introspection and SELECT execution over
 the ClickHouse HTTP interface.
@@ -6,7 +6,7 @@ the ClickHouse HTTP interface.
 ## Installation
 
 ```bash
-composer require clearsoft/connectors-clickhouse
+composer require clearsoft/easysql-connectors-clickhouse
 ```
 
 Requirements: PHP >= 8.2, ext-curl.
@@ -42,7 +42,7 @@ try {
 - **Credentials** are supplied per connection and never written to disk, logged, or kept after `close()`.
   Driver error messages are sanitized before surfacing.
 - **Introspection** reads `system.tables` / `system.columns` (skipping views) and produces the raw shape
-  consumed by `clearsoft/schema-generation`, including the engine-native type (e.g. `Nullable(Decimal(18, 4))`).
+  consumed by `clearsoft/easysql-schema-generation`, including the engine-native type (e.g. `Nullable(Decimal(18, 4))`).
 - **Execution** accepts SELECT/WITH/EXPLAIN/SHOW only (client-side safety check mirrors the server);
   queries run against the HTTP interface and return typed rows.
 - **No global state** — several connections can be open at the same time.
