@@ -1,5 +1,5 @@
 {
-  "name": "easysql/connectors-postgres",
+  "name": "clearsoft/connectors-postgres",
   "description": "EasySQL PostgreSQL connector package — local schema introspection and SELECT execution for PostgreSQL.",
   "type": "library",
   "license": "MIT",
@@ -28,7 +28,7 @@
   ],
   "require": {
     "php": ">=8.2",
-    "easysql/common": "^3.0",
+    "clearsoft/common": "^3.0",
     "ext-pdo": "*",
     "ext-pdo_pgsql": "*"
   },

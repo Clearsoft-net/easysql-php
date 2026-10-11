@@ -1,11 +1,11 @@
-# easysql/connectors-sqlite
+# clearsoft/connectors-sqlite
 
 SQLite connector for the EasySQL PHP SDK — local schema introspection and SELECT execution.
 
 ## Installation
 
 ```bash
-composer require easysql/connectors-sqlite
+composer require clearsoft/connectors-sqlite
 ```
 
 Requirements: PHP >= 8.2, ext-pdo, ext-pdo_sqlite.
@@ -36,7 +36,7 @@ try {
 - **Introspection** reads `sqlite_master` (excludes `sqlite_%` internals) + `PRAGMA table_info` /
   `PRAGMA foreign_key_list` per table; row counts via `COUNT(*)` (best effort, `null` on failure).
   It produces the shared raw shape (`engine`, engine-native `dataType`, and `ordinal`) consumed by
-  `easysql/schema-generation`.
+  `clearsoft/schema-generation`.
 - **Execution** accepts SELECT/WITH/EXPLAIN/SHOW only; prepared statements; typed rows.
 - **Read-only mode** opens the database with `SQLITE_OPEN_READONLY` — writes are rejected by the driver.
 - **No global state** — the database is opened per connection.

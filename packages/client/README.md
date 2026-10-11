@@ -1,6 +1,6 @@
-# easysql/client
+# clearsoft/client
 
-Generated API client for the [EasySQL API](https://easysql.net) — the `api` package of the PHP SDK.
+Generated API client for the [EasySQL API](https://easysql.net) — the `client` package of the PHP SDK.
 
 ## Status
 
@@ -15,7 +15,7 @@ client) is never overwritten by the generator.
 ## Installation
 
 ```bash
-composer require easysql/client
+composer require clearsoft/client
 ```
 
 Requirements: PHP >= 8.2, ext-json, guzzlehttp/guzzle ^7.0.
@@ -23,7 +23,7 @@ Requirements: PHP >= 8.2, ext-json, guzzlehttp/guzzle ^7.0.
 ## Usage
 
 ```php
-use Clearsoft\EasySQL\Api\Client;
+use Clearsoft\EasySQL\Client\Client;
 
 $client = new Client([
     'base_url'     => 'https://api.easysql.net',
@@ -37,7 +37,7 @@ $connection = $client->getConnection('conn_abc123');
 With automatic token refresh:
 
 ```php
-use Clearsoft\EasySQL\Api\Http\EasySQLClient;
+use Clearsoft\EasySQL\Client\Http\EasySQLClient;
 
 $client = new EasySQLClient([
     'base_url'      => 'https://api.easysql.net',
