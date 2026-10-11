@@ -15,7 +15,8 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "php scripts/update-version.php ${nextRelease.version}"
+        "prepareCmd": "php scripts/update-version.php ${nextRelease.version}",
+        "successCmd": "GH_TOKEN=$GITHUB_TOKEN gh workflow run split-packages.yml --ref main -f tag=${nextRelease.gitTag}"
       }
     ],
     [
