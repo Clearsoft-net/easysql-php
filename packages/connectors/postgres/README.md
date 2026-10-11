@@ -1,11 +1,11 @@
-# clearsoft/connectors-postgres
+# clearsoft/easysql-connectors-postgres
 
 PostgreSQL connector for the EasySQL PHP SDK — local schema introspection and SELECT execution.
 
 ## Installation
 
 ```bash
-composer require clearsoft/connectors-postgres
+composer require clearsoft/easysql-connectors-postgres
 ```
 
 Requirements: PHP >= 8.2, ext-pdo, ext-pdo_pgsql.
@@ -50,7 +50,7 @@ try {
 ## Type mapping
 
 Introspection returns the engine-native `format_type()` string unchanged, along with the
-`postgresql` engine identifier and column ordinal. `clearsoft/schema-generation` maps those values into
+`postgresql` engine identifier and column ordinal. `clearsoft/easysql-schema-generation` maps those values into
 the canonical API vocabulary: `integer`, `bigint`, `smallint`, `decimal`, `float`, `boolean`,
 `string`, `text`, `binary`, `date`, `time`, `timestamp`, `interval`, `json`, `uuid`, or `unknown`.
 PostgreSQL arrays map to `json`; unmapped types fall back to `unknown`.
