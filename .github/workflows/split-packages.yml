@@ -122,3 +122,27 @@ jobs:
           user_email: support@clearsoft.net
         env:
           GITHUB_TOKEN: ${{ secrets.SPLIT_PAT }}
+
+      # The split action reports success even when its internal push fails
+      # (e.g. the mirror repository does not exist, or SPLIT_PAT lacks write
+      # access to it). Verify the expected ref actually landed so a failed split
+      # fails the job instead of passing silently.
+      - name: Verify the mirror received the split
+        env:
+          SPLIT_PAT: ${{ secrets.SPLIT_PAT }}
+        run: |
+          set -euo pipefail
+          remote="https://x-access-token:${SPLIT_PAT}@github.com/Clearsoft-net/${{ matrix.package.repo }}.git"
+          tag="${{ steps.release.outputs.tag }}"
+          if [ -n "$tag" ]; then
+            ref="refs/tags/${tag}"
+          else
+            ref="refs/heads/main"
+          fi
+          if git ls-remote --exit-code "$remote" "$ref" >/dev/null 2>&1; then
+            echo "OK: Clearsoft-net/${{ matrix.package.repo }} has ${ref}."
+          else
+            echo "::error::Clearsoft-net/${{ matrix.package.repo }} is missing ${ref} — the split push failed. Check that the mirror repository exists and that SPLIT_PAT has write access to it."
+            exit 1
+          fi
+
