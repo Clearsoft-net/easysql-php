@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/Clearsoft-net/easysql-php/compare/v3.3.0...v4.0.0) (2026-10-15)
+
+
+* feat(connectors)!: consolidate package, add 11 engines and Postgres providers ([9b88c6b](https://github.com/Clearsoft-net/easysql-php/commit/9b88c6b4824435b6f4d36471eabaeb36d166db0b))
+
+
+### BREAKING CHANGES
+
+* the four per-engine connector packages are replaced by a single
+`clearsoft/easysql-connectors`; the per-engine ConnectorException classes are
+replaced by the shared `Clearsoft\EasySQL\Connectors\ConnectorException`.
+
 # [3.3.0](https://github.com/Clearsoft-net/easysql-php/compare/v3.2.0...v3.3.0) (2026-10-11)
 
 

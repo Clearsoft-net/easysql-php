@@ -3,7 +3,7 @@
   "description": "EasySQL connector package — local schema introspection and SELECT execution for MySQL/MariaDB, PostgreSQL, SQLite, ClickHouse, SQL Server, Oracle, Firebird, Db2, DuckDB, libSQL, Cloudflare D1, Snowflake, BigQuery, Trino and SAP HANA.",
   "type": "library",
   "license": "MIT",
-  "version": "3.3.0",
+  "version": "4.0.0",
   "homepage": "https://easysql.net",
   "keywords": [
     "easysql",
