@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/Clearsoft-net/easysql-php/compare/v4.0.0...v4.0.1) (2026-10-15)
+
+
+### Bug Fixes
+
+* **sdk:** bump internal package constraints to ^4.0 and automate it on release ([c2c1e9f](https://github.com/Clearsoft-net/easysql-php/commit/c2c1e9ffcfeae2f1242cc518274fdf46bbd62986))
+
 # [4.0.0](https://github.com/Clearsoft-net/easysql-php/compare/v3.3.0...v4.0.0) (2026-10-15)
 
 
