@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ce06e096d06e537f5cab4fa71c2348cc",
+    "content-hash": "4e440f5661c424c1d3b54ec25bffdc12",
     "packages": [
         {
             "name": "clearsoft/easysql-client",
-            "version": "3.2.0",
+            "version": "3.3.0",
             "dist": {
                 "type": "path",
                 "url": "packages/client",
-                "reference": "31214acde963087278285856fda0ff28dd6dac1d"
+                "reference": "a740ed8f1b1c35bba12ff8b0c97866590dae61fe"
             },
             "require": {
                 "ext-json": "*",
@@ -54,11 +54,11 @@
         },
         {
             "name": "clearsoft/easysql-schema-generation",
-            "version": "3.2.0",
+            "version": "3.3.0",
             "dist": {
                 "type": "path",
                 "url": "packages/schema-generation",
-                "reference": "dd7d49f41b66f722c7302fd99d8c1d8e32516ee0"
+                "reference": "5f9505650f7247e3a0d02d7ed8ccf388633c9263"
             },
             "require": {
                 "php": ">=8.2"
@@ -929,11 +929,11 @@
         },
         {
             "name": "clearsoft/easysql-common",
-            "version": "3.2.0",
+            "version": "3.3.0",
             "dist": {
                 "type": "path",
                 "url": "packages/common",
-                "reference": "a06a31ebcb557d8fabd396389bbe748272d1b183"
+                "reference": "d7560336235ae0f8f369cdd77c5b5e1debc94f3e"
             },
             "require": {
                 "php": ">=8.2"
@@ -978,27 +978,40 @@
             }
         },
         {
-            "name": "clearsoft/easysql-connectors-clickhouse",
-            "version": "3.2.0",
+            "name": "clearsoft/easysql-connectors",
+            "version": "3.3.0",
             "dist": {
                 "type": "path",
-                "url": "packages/connectors/clickhouse",
-                "reference": "2823d648a1331a53e74d7c0d207cf393a79da4aa"
+                "url": "packages/connectors",
+                "reference": "3d3afa5028605a9dc5fd85e52ae7230214f3e2c1"
             },
             "require": {
                 "clearsoft/easysql-common": "^3.0",
-                "ext-curl": "*",
+                "ext-pdo": "*",
                 "php": ">=8.2"
+            },
+            "suggest": {
+                "ext-curl": "Required for the ClickHouse, Trino, Cloudflare D1 and remote libSQL connectors",
+                "ext-pdo_duckdb": "Required for the DuckDB connector",
+                "ext-pdo_firebird": "Required for the Firebird connector",
+                "ext-pdo_ibm": "Required for the Db2 connector",
+                "ext-pdo_mysql": "Required for the MySQL/MariaDB connector",
+                "ext-pdo_oci": "Required for the Oracle connector",
+                "ext-pdo_odbc": "Required for the Snowflake and SAP HANA connectors",
+                "ext-pdo_pgsql": "Required for the PostgreSQL connector",
+                "ext-pdo_sqlite": "Required for the SQLite connector",
+                "ext-pdo_sqlsrv": "Required for the SQL Server connector",
+                "google/cloud-bigquery": "Required for the BigQuery connector"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\ClickHouse\\": "src/"
+                    "Clearsoft\\EasySQL\\Connectors\\": "src/"
                 }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\ClickHouse\\Tests\\": "tests/"
+                    "Clearsoft\\EasySQL\\Connectors\\Tests\\": "tests/"
                 }
             },
             "license": [
@@ -1011,180 +1024,31 @@
                     "homepage": "https://clearsoft.net"
                 }
             ],
-            "description": "EasySQL ClickHouse connector package — local schema introspection and SELECT execution over the HTTP interface.",
+            "description": "EasySQL connector package — local schema introspection and SELECT execution for MySQL/MariaDB, PostgreSQL, SQLite, ClickHouse, SQL Server, Oracle, Firebird, Db2, DuckDB, libSQL, Cloudflare D1, Snowflake, BigQuery, Trino and SAP HANA.",
             "homepage": "https://easysql.net",
             "keywords": [
+                "bigquery",
                 "clearsoft",
                 "clickhouse",
                 "connector",
+                "d1",
                 "database",
+                "db2",
+                "duckdb",
                 "easysql",
-                "php",
-                "sdk"
-            ],
-            "support": {
-                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
-                "source": "https://github.com/Clearsoft-net/easysql-php"
-            },
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "clearsoft/easysql-connectors-mysql",
-            "version": "3.2.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/connectors/mysql",
-                "reference": "ce16d791299ae47b4392f1df85ce82d4cc5c1b31"
-            },
-            "require": {
-                "clearsoft/easysql-common": "^3.0",
-                "ext-pdo": "*",
-                "ext-pdo_mysql": "*",
-                "php": ">=8.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\MySQL\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\MySQL\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Clearsoft",
-                    "email": "contact@clearsoft.net",
-                    "homepage": "https://clearsoft.net"
-                }
-            ],
-            "description": "EasySQL MySQL connector package — local schema introspection and SELECT execution for MySQL/MariaDB.",
-            "homepage": "https://easysql.net",
-            "keywords": [
-                "clearsoft",
-                "connector",
-                "database",
-                "easysql",
+                "firebird",
+                "hana",
+                "libsql",
                 "mariadb",
                 "mysql",
-                "php",
-                "sdk"
-            ],
-            "support": {
-                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
-                "source": "https://github.com/Clearsoft-net/easysql-php"
-            },
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "clearsoft/easysql-connectors-postgres",
-            "version": "3.2.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/connectors/postgres",
-                "reference": "4b64b81519c19cc05a80e870a083a7b3a765737b"
-            },
-            "require": {
-                "clearsoft/easysql-common": "^3.0",
-                "ext-pdo": "*",
-                "ext-pdo_pgsql": "*",
-                "php": ">=8.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\Postgres\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\Postgres\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Clearsoft",
-                    "email": "contact@clearsoft.net",
-                    "homepage": "https://clearsoft.net"
-                }
-            ],
-            "description": "EasySQL PostgreSQL connector package — local schema introspection and SELECT execution for PostgreSQL.",
-            "homepage": "https://easysql.net",
-            "keywords": [
-                "clearsoft",
-                "connector",
-                "database",
-                "easysql",
+                "oracle",
                 "php",
                 "postgres",
-                "postgresql",
-                "sdk"
-            ],
-            "support": {
-                "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
-                "source": "https://github.com/Clearsoft-net/easysql-php"
-            },
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "clearsoft/easysql-connectors-sqlite",
-            "version": "3.2.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/connectors/sqlite",
-                "reference": "6ef684e84eda4ce143e01ab10bee6b4e1f85172d"
-            },
-            "require": {
-                "clearsoft/easysql-common": "^3.0",
-                "ext-pdo": "*",
-                "ext-pdo_sqlite": "*",
-                "php": ">=8.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\SQLite\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Clearsoft\\EasySQL\\Connectors\\SQLite\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Clearsoft",
-                    "email": "contact@clearsoft.net",
-                    "homepage": "https://clearsoft.net"
-                }
-            ],
-            "description": "EasySQL SQLite connector package — local schema introspection and SELECT execution for SQLite files.",
-            "homepage": "https://easysql.net",
-            "keywords": [
-                "clearsoft",
-                "connector",
-                "database",
-                "easysql",
-                "php",
                 "sdk",
-                "sqlite"
+                "snowflake",
+                "sqlite",
+                "sqlserver",
+                "trino"
             ],
             "support": {
                 "issues": "https://github.com/Clearsoft-net/easysql-php/issues",
@@ -1196,11 +1060,11 @@
         },
         {
             "name": "clearsoft/easysql-laravel",
-            "version": "3.2.0",
+            "version": "3.3.0",
             "dist": {
                 "type": "path",
                 "url": "packages/laravel",
-                "reference": "916e87812b6a6df73b6d02be1d6d210182a6caf5"
+                "reference": "dd5f4a7615a9e343a4bf481b9540163fd93821b9"
             },
             "require": {
                 "clearsoft/easysql-client": "^3.0",

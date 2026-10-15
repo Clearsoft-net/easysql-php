@@ -335,7 +335,7 @@ class SchemaGeneratorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->generator->generate(['engine' => 'oracle', 'tables' => []]);
+        $this->generator->generate(['engine' => 'redis', 'tables' => []]);
     }
 
     public function testMissingTablesKeyThrows(): void

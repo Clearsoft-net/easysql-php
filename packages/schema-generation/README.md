@@ -52,6 +52,20 @@ Input shape (produced by every connector package):
   - PostgreSQL: `format_type()` variants collapse to a storage class; arrays map to `json`.
   - ClickHouse: `Nullable(...)` / `LowCardinality(...)` are unwrapped; composite types
     (`Array`, `Map`, `Tuple`, `Nested`) map to `json`.
+  - SQL Server: `timestamp` is the rowversion binary type (not temporal); `uniqueidentifier` → `uuid`.
+  - Oracle: `NUMBER(p)` precision is inspected (`p <= 4` → `integer`, wider → `bigint`, otherwise
+    `decimal`); `DATE` carries a time component → `datetime`.
+  - Firebird: `BLOB` is split by sub-type (sub-type 1 / text → `text`, else `binary`); `INT128` →
+    `bigint`.
+  - Db2: `GRAPHIC`/`VARGRAPHIC` → `string`, `DBCLOB` → `text`, `XML` → `text`.
+  - DuckDB: PostgreSQL mapping as its base, plus unsigned/128-bit integers and the nested
+    `STRUCT`/`MAP`/`LIST`/`UNION`/`T[]` types → `json`.
+  - libSQL and Cloudflare D1: delegate to the SQLite affinity rules.
+  - Snowflake: the `NUMBER` family (`INTEGER`/`BIGINT`/…) collapses to `decimal`; `TIMESTAMP_*` →
+    `timestamp`; `VARIANT`/`OBJECT`/`ARRAY` → `json`.
+  - BigQuery: `INT64` → `bigint`; `ARRAY`/`STRUCT`/`RECORD` (incl. `ARRAY<T>`/`STRUCT<…>`) → `json`.
+  - Trino: `ARRAY`/`MAP`/`ROW` → `json`; `IPADDRESS`/`IPPREFIX` → `string`.
+  - SAP HANA: `SECONDDATE` → `datetime`; `ARRAY(...)` → `json`; `ST_GEOMETRY` → `unknown`.
 - Deterministic: tables sorted by name, columns kept in declared order (`ordinal`) with a name-order
   fallback; same input → byte-identical output (`toJson()`).
 - Validates the input shape (`InvalidArgumentException` on malformed input).

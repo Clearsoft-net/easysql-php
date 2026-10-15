@@ -14,8 +14,7 @@ name: Split packages
 #
 # One-time setup (required):
 # 1. Mirror repos exist: Clearsoft-net/easysql-php-{client,common,laravel,
-#    schema-generation,connectors-mysql,connectors-postgres,connectors-sqlite,
-#    connectors-clickhouse}.
+#    schema-generation,connectors}.
 # 2. A token with write access to those repos is stored as the `SPLIT_PAT`
 #    secret (a classic PAT with `repo`, or a fine-grained PAT with Contents:
 #    read/write on every mirror). The default GITHUB_TOKEN is scoped to this
@@ -51,10 +50,7 @@ jobs:
           - { directory: "packages/common", repo: "easysql-php-common" }
           - { directory: "packages/laravel", repo: "easysql-php-laravel" }
           - { directory: "packages/schema-generation", repo: "easysql-php-schema-generation" }
-          - { directory: "packages/connectors/mysql", repo: "easysql-php-connectors-mysql" }
-          - { directory: "packages/connectors/postgres", repo: "easysql-php-connectors-postgres" }
-          - { directory: "packages/connectors/sqlite", repo: "easysql-php-connectors-sqlite" }
-          - { directory: "packages/connectors/clickhouse", repo: "easysql-php-connectors-clickhouse" }
+          - { directory: "packages/connectors", repo: "easysql-php-connectors" }
     steps:
       - name: Checkout
         uses: actions/checkout@v4

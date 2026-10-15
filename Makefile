@@ -10,7 +10,7 @@ help:
 	@echo "  make check            Verify packages/client was not hand-edited (regenerate + diff)"
 	@echo "  make clean            Remove generated files"
 	@echo "  make db-down          Stop and remove the local MySQL test container"
-	@echo "  make db-up            Start the local MySQL test container (Docker Compose)"
+	@echo "  make db-up            Start the local MySQL, PostgreSQL and ClickHouse test containers (Docker Compose)"
 	@echo "  make generate         Re-generate packages/client (Client, Models, docs) from spec"
 	@echo "  make install          Install dependencies"
 	@echo "  make lint             Check PHP syntax in every package"
@@ -51,8 +51,8 @@ clean:
 # ── Local databases ──────────────────────────────────────────
 
 db-up:
-	docker compose up -d --wait mysql postgres
-	@echo "MySQL ready on 127.0.0.1:3306 and PostgreSQL on 127.0.0.1:5433."
+	docker compose up -d --wait mysql postgres clickhouse
+	@echo "MySQL ready on 127.0.0.1:3306, PostgreSQL on 127.0.0.1:5433 and ClickHouse on 127.0.0.1:8123."
 
 db-down:
 	docker compose down -v
@@ -80,4 +80,4 @@ test:
 	./vendor/bin/phpunit
 
 test-integration: db-up
-	EASYSQL_TEST_MYSQL=1 EASYSQL_TEST_POSTGRES=1 ./vendor/bin/phpunit
+	EASYSQL_TEST_MYSQL=1 EASYSQL_TEST_POSTGRES=1 EASYSQL_TEST_CLICKHOUSE=1 ./vendor/bin/phpunit

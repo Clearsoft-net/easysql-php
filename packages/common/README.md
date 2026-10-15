@@ -17,6 +17,9 @@ Requirements: PHP >= 8.2.
   the server-side validator as defense in depth.
 - `Clearsoft\EasySQL\Common\CredentialSanitizer` — strips credentials (connection URIs and
   `password=`/`pwd=` assignments) from driver messages before they are surfaced or logged.
+- `Clearsoft\EasySQL\Common\ConnectionUrl` — parses engine-native connection URLs/DSNs
+  (`mysql://`, `mariadb://`, `postgresql://`, `clickhouse://`/`clickhouses://`,
+  `sqlite:///path`) into their parts, and merges partial overrides onto a base connection.
 
 ## Usage
 

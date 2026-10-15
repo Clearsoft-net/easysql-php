@@ -33,10 +33,7 @@ This is a multipackage repository. All packages are versioned and released toget
 | Package | Composer name | Description |
 |---|---|---|
 | [`packages/client`](packages/client) | `clearsoft/easysql-client` | 🤖 Generated API client (from the OpenAPI spec) + token-refresh runtime |
-| [`packages/connectors/mysql`](packages/connectors/mysql) | `clearsoft/easysql-connectors-mysql` | Local MySQL/MariaDB introspection + SELECT execution |
-| [`packages/connectors/postgres`](packages/connectors/postgres) | `clearsoft/easysql-connectors-postgres` | Local PostgreSQL introspection + SELECT execution |
-| [`packages/connectors/sqlite`](packages/connectors/sqlite) | `clearsoft/easysql-connectors-sqlite` | Local SQLite introspection + SELECT execution |
-| [`packages/connectors/clickhouse`](packages/connectors/clickhouse) | `clearsoft/easysql-connectors-clickhouse` | Local ClickHouse (HTTP) introspection + SELECT execution |
+| [`packages/connectors`](packages/connectors) | `clearsoft/easysql-connectors` | Local introspection + SELECT execution for MySQL/MariaDB, PostgreSQL, SQLite and ClickHouse |
 | [`packages/common`](packages/common) | `clearsoft/easysql-common` | Shared code (SQL safety validation, credential sanitization) |
 | [`packages/schema-generation`](packages/schema-generation) | `clearsoft/easysql-schema-generation` | Raw introspection → canonical API schema payload (deterministic, no I/O) |
 | [`packages/laravel`](packages/laravel) | `clearsoft/easysql-laravel` | Laravel service provider, manager and facade |
@@ -57,10 +54,7 @@ composer require clearsoft/easysql-sdk
 
 # Or pick individual packages:
 composer require clearsoft/easysql-client
-composer require clearsoft/easysql-connectors-mysql
-composer require clearsoft/easysql-connectors-postgres
-composer require clearsoft/easysql-connectors-sqlite
-composer require clearsoft/easysql-connectors-clickhouse
+composer require clearsoft/easysql-connectors
 composer require clearsoft/easysql-schema-generation
 composer require clearsoft/easysql-laravel
 ```
@@ -230,16 +224,16 @@ echo $tokens->access_token;
 Introspect a local database and push only the canonical schema to the API — credentials never leave the machine. Supported engines are MySQL/MariaDB, PostgreSQL, SQLite, and ClickHouse HTTP.
 
 ```php
-use Clearsoft\EasySQL\Connectors\MySQL\ConnectionConfig;
-use Clearsoft\EasySQL\Connectors\MySQL\Connector as MySQLConnector;
+use Clearsoft\EasySQL\Connectors\ConnectorEngine;
+use Clearsoft\EasySQL\Connectors\ConnectorFactory;
 use Clearsoft\EasySQL\SchemaGeneration\SchemaGenerator;
 
-$connector = new MySQLConnector(new ConnectionConfig(
-    host: '127.0.0.1',
-    user: 'readonly',
-    password: 'secret',
-    database: 'myapp',
-));
+$connector = ConnectorFactory::create(ConnectorEngine::MySQL, [
+    'host' => '127.0.0.1',
+    'user' => 'readonly',
+    'password' => 'secret',
+    'database' => 'myapp',
+]);
 $connector->connect();
 
 try {
@@ -270,6 +264,33 @@ $client->syncConnection(['schema' => $payload], 'conn_abc123');
 | **Health** | `health`, `healthHealth` |
 
 See [packages/client/docs/API.md](packages/client/docs/API.md) for full endpoint reference and parameters.
+
+---
+
+## Migration from 3.x to 4.0
+
+4.0 consolidates the connector packages into one and adds 11 engines.
+
+- **One connector package.** The four packages `clearsoft/easysql-connectors-mysql`,
+  `…-postgres`, `…-sqlite` and `…-clickhouse` are replaced by a single
+  `clearsoft/easysql-connectors`. Replace those requirements with:
+
+  ```bash
+  composer remove clearsoft/easysql-connectors-mysql clearsoft/easysql-connectors-postgres \
+      clearsoft/easysql-connectors-sqlite clearsoft/easysql-connectors-clickhouse
+  composer require clearsoft/easysql-connectors
+  ```
+
+- **Connection classes keep their namespaces** (`Clearsoft\EasySQL\Connectors\MySQL\Connector`,
+  `…\Postgres\…`, …), so most code is unchanged. New engines add `SqlServer`, `Oracle`, `Firebird`,
+  `Db2`, `DuckDb`, `LibSql`, `D1`, `Snowflake`, `BigQuery`, `Trino` and `Hana` sub-namespaces.
+- **`ConnectorException` is shared** — import `Clearsoft\EasySQL\Connectors\ConnectorException`
+  (the per-engine `…\MySQL\ConnectorException` etc. no longer exist).
+- **New entry point** `ConnectorFactory::create($engine, $connection)` accepts a config object, an
+  options array, or an engine-native URL/DSN.
+- **PostgreSQL** gained `provider` (`postgres`/`neon`/`cockroachdb`/`redshift`) and `transport`
+  (`tcp`/`http`); the Neon `websocket` transport is **not supported in PHP**.
+- Driver extensions are optional (`suggest`), so install only the one for the engine you use.
 
 ---
 
