@@ -30,20 +30,20 @@
   ],
   "require": {
     "php": ">=8.2",
-    "clearsoft/easysql-client": "^3.0",
-    "clearsoft/easysql-schema-generation": "^3.0"
+    "clearsoft/easysql-client": "^4.0",
+    "clearsoft/easysql-schema-generation": "^4.0"
   },
   "suggest": {
-    "clearsoft/easysql-laravel": "Laravel service provider, manager and facade (^3.0)",
-    "clearsoft/easysql-connectors": "Local MySQL/MariaDB, PostgreSQL, SQLite and ClickHouse introspection and execution (^3.0)"
+    "clearsoft/easysql-laravel": "Laravel service provider, manager and facade (^4.0)",
+    "clearsoft/easysql-connectors": "Local MySQL/MariaDB, PostgreSQL, SQLite and ClickHouse introspection and execution (^4.0)"
   },
   "require-dev": {
     "phpunit/phpunit": "^11.0",
     "orchestra/testbench": "^10.0",
     "illuminate/support": "^12.0",
     "illuminate/contracts": "^12.0",
-    "clearsoft/easysql-laravel": "^3.0",
-    "clearsoft/easysql-connectors": "^3.0",
+    "clearsoft/easysql-laravel": "^4.0",
+    "clearsoft/easysql-connectors": "^4.0",
     "phpstan/phpstan": "^2.0"
   },
   "repositories": [

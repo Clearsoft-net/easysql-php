@@ -42,7 +42,7 @@
   ],
   "require": {
     "php": ">=8.2",
-    "clearsoft/easysql-common": "^3.0",
+    "clearsoft/easysql-common": "^4.0",
     "ext-pdo": "*"
   },
   "suggest": {
