@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e440f5661c424c1d3b54ec25bffdc12",
+    "content-hash": "1243570a9d19418bfbb513ae9d52617f",
     "packages": [
         {
             "name": "clearsoft/easysql-client",
-            "version": "3.3.0",
+            "version": "4.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/client",
-                "reference": "a740ed8f1b1c35bba12ff8b0c97866590dae61fe"
+                "reference": "cde49e804dadcdcec6c0a513f0bf015173ca1270"
             },
             "require": {
                 "ext-json": "*",
@@ -54,11 +54,11 @@
         },
         {
             "name": "clearsoft/easysql-schema-generation",
-            "version": "3.3.0",
+            "version": "4.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/schema-generation",
-                "reference": "5f9505650f7247e3a0d02d7ed8ccf388633c9263"
+                "reference": "011b3dd70fcfe5b49fd53cce3bbea8e791446e3e"
             },
             "require": {
                 "php": ">=8.2"
@@ -929,11 +929,11 @@
         },
         {
             "name": "clearsoft/easysql-common",
-            "version": "3.3.0",
+            "version": "4.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/common",
-                "reference": "d7560336235ae0f8f369cdd77c5b5e1debc94f3e"
+                "reference": "2fa5899d873af987296ffda626c8243234569208"
             },
             "require": {
                 "php": ">=8.2"
@@ -979,14 +979,14 @@
         },
         {
             "name": "clearsoft/easysql-connectors",
-            "version": "3.3.0",
+            "version": "4.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/connectors",
-                "reference": "3d3afa5028605a9dc5fd85e52ae7230214f3e2c1"
+                "reference": "39f4c10847b18d1f26bcf1cdb66f066274d2609d"
             },
             "require": {
-                "clearsoft/easysql-common": "^3.0",
+                "clearsoft/easysql-common": "^4.0",
                 "ext-pdo": "*",
                 "php": ">=8.2"
             },
@@ -1060,14 +1060,14 @@
         },
         {
             "name": "clearsoft/easysql-laravel",
-            "version": "3.3.0",
+            "version": "4.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/laravel",
-                "reference": "dd5f4a7615a9e343a4bf481b9540163fd93821b9"
+                "reference": "0492ab59c86ba62c2aa7107892a0a49c7ae01c45"
             },
             "require": {
-                "clearsoft/easysql-client": "^3.0",
+                "clearsoft/easysql-client": "^4.0",
                 "illuminate/contracts": "^11.0 || ^12.0",
                 "illuminate/support": "^11.0 || ^12.0",
                 "php": ">=8.2"

@@ -5,6 +5,11 @@
  * composer.json and every package composer.json (all packages of the
  * repository are versioned and released together).
  *
+ * It also rewrites every internal `clearsoft/easysql-*` requirement
+ * (`require`/`require-dev`) and the version hint in `suggest` descriptions to
+ * `^<major>.0`, so the cross-package constraints track the released major
+ * (otherwise a major bump leaves them pinned to the previous major).
+ *
  * Usage: php scripts/update-version.php 1.8.0
  */
 
@@ -15,6 +20,9 @@ if ($version === '' || !preg_match('/^\d+\.\d+\.\d+/', $version)) {
     fwrite(STDERR, "❌ No valid version provided.\n");
     exit(1);
 }
+
+$major = (int) explode('.', $version)[0];
+$internalConstraint = '^' . $major . '.0';
 
 $rootDir = dirname(__DIR__);
 
@@ -32,6 +40,33 @@ foreach ($paths as $path) {
         exit(1);
     }
     $json['version'] = $version;
+
+    foreach (['require', 'require-dev'] as $section) {
+        if (!isset($json[$section]) || !is_array($json[$section])) {
+            continue;
+        }
+        foreach ($json[$section] as $package => $constraint) {
+            if (is_string($package) && str_starts_with($package, 'clearsoft/easysql-')) {
+                $json[$section][$package] = $internalConstraint;
+            }
+        }
+    }
+
+    if (isset($json['suggest']) && is_array($json['suggest'])) {
+        foreach ($json['suggest'] as $package => $description) {
+            if (is_string($package)
+                && str_starts_with($package, 'clearsoft/easysql-')
+                && is_string($description)
+            ) {
+                $json['suggest'][$package] = (string) preg_replace(
+                    '/\(\^\d+\.\d+\)/',
+                    '(' . $internalConstraint . ')',
+                    $description,
+                );
+            }
+        }
+    }
+
     $encoded = json_encode(
         $json,
         JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
