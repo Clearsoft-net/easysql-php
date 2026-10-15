@@ -15,7 +15,24 @@ use InvalidArgumentException;
  */
 final class RawSchemaValidator
 {
-    private const ENGINES = ['mysql', 'mariadb', 'sqlite', 'postgresql', 'clickhouse'];
+    private const ENGINES = [
+        'mysql',
+        'mariadb',
+        'sqlite',
+        'postgresql',
+        'clickhouse',
+        'sqlserver',
+        'oracle',
+        'firebird',
+        'db2',
+        'duckdb',
+        'libsql',
+        'd1',
+        'snowflake',
+        'bigquery',
+        'trino',
+        'hana',
+    ];
 
     /**
      * @param array $rawSchema

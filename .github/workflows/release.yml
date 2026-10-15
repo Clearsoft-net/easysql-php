@@ -46,11 +46,11 @@ jobs:
       - name: Static analysis
         run: make analyse
 
-      - name: Start MySQL (Docker Compose)
+      - name: Start test databases (Docker Compose)
         run: make db-up
 
-      - name: Run tests (including MySQL integration)
-        run: EASYSQL_TEST_MYSQL=1 EASYSQL_TEST_POSTGRES=1 make test
+      - name: Run tests (including MySQL, PostgreSQL and ClickHouse integration)
+        run: EASYSQL_TEST_MYSQL=1 EASYSQL_TEST_POSTGRES=1 EASYSQL_TEST_CLICKHOUSE=1 make test
 
       - name: Verify generated package was not hand-edited
         run: make check
@@ -87,7 +87,7 @@ jobs:
       - name: Validate composer manifests
         run: |
           composer validate --no-check-lock
-          for f in packages/client/composer.json packages/common/composer.json packages/laravel/composer.json packages/connectors/mysql/composer.json packages/connectors/clickhouse/composer.json packages/connectors/postgres/composer.json packages/connectors/sqlite/composer.json packages/schema-generation/composer.json; do
+          for f in packages/client/composer.json packages/common/composer.json packages/laravel/composer.json packages/connectors/composer.json packages/schema-generation/composer.json; do
             (cd "$(dirname "$f")" && composer validate --no-check-lock)
           done
 

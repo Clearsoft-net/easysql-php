@@ -30,3 +30,20 @@ services:
       retries: 20
     volumes:
       - ./tests/fixtures/postgres-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.8
+    container_name: easysql-clickhouse-test
+    environment:
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: ""
+      CLICKHOUSE_DB: easysql_test
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    ports:
+      - "8123:8123"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8123/ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+

@@ -1,0 +1,100 @@
+name: CI
+
+# Pull-request verification. Push to main/master is handled by release.yml
+# (which runs the same checks before semantic-release).
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.2", "8.3", "8.4"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer
+          extensions: pdo_mysql, pdo_pgsql, pdo_sqlite, curl
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php }}-composer-
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Lint
+        run: make lint
+
+      - name: Static analysis
+        run: make analyse
+
+      - name: Unit tests
+        run: make test
+
+  generated:
+    name: Generated package is reproducible
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+          extensions: curl
+
+      - name: Install dependencies
+        run: make install
+
+      # Regenerate packages/client from the contract and fail when the working
+      # tree differs: a hand edit to packages/client cannot survive
+      # regeneration, so any diff means generated code was modified by hand.
+      - name: Verify packages/client was not hand-edited
+        run: make check
+        env:
+          EASYSQL_API_URL: ${{ vars.EASYSQL_API_URL || 'https://api.easysql.net' }}
+
+  integration:
+    name: Connector integration (MySQL + PostgreSQL + ClickHouse)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+          extensions: pdo_mysql, pdo_pgsql, pdo_sqlite, curl
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Start test databases (Docker Compose)
+        run: make db-up
+
+      - name: Connector integration tests
+        run: EASYSQL_TEST_MYSQL=1 EASYSQL_TEST_POSTGRES=1 EASYSQL_TEST_CLICKHOUSE=1 make test

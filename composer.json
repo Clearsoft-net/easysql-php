@@ -35,10 +35,7 @@
   },
   "suggest": {
     "clearsoft/easysql-laravel": "Laravel service provider, manager and facade (^3.0)",
-    "clearsoft/easysql-connectors-mysql": "Local MySQL/MariaDB introspection and execution (^3.0)",
-    "clearsoft/easysql-connectors-postgres": "Local PostgreSQL introspection and execution (^3.0)",
-    "clearsoft/easysql-connectors-sqlite": "Local SQLite introspection and execution (^3.0)",
-    "clearsoft/easysql-connectors-clickhouse": "Local ClickHouse introspection and execution (^3.0)"
+    "clearsoft/easysql-connectors": "Local MySQL/MariaDB, PostgreSQL, SQLite and ClickHouse introspection and execution (^3.0)"
   },
   "require-dev": {
     "phpunit/phpunit": "^11.0",
@@ -46,10 +43,7 @@
     "illuminate/support": "^12.0",
     "illuminate/contracts": "^12.0",
     "clearsoft/easysql-laravel": "^3.0",
-    "clearsoft/easysql-connectors-mysql": "^3.0",
-    "clearsoft/easysql-connectors-postgres": "^3.0",
-    "clearsoft/easysql-connectors-sqlite": "^3.0",
-    "clearsoft/easysql-connectors-clickhouse": "^3.0",
+    "clearsoft/easysql-connectors": "^3.0",
     "phpstan/phpstan": "^2.0"
   },
   "repositories": [
@@ -66,10 +60,7 @@
     "psr-4": {
       "Clearsoft\\EasySQL\\Client\\Tests\\": "packages/client/tests/",
       "Clearsoft\\EasySql\\Laravel\\Tests\\": "packages/laravel/tests/",
-      "Clearsoft\\EasySQL\\Connectors\\MySQL\\Tests\\": "packages/connectors/mysql/tests/",
-      "Clearsoft\\EasySQL\\Connectors\\Postgres\\Tests\\": "packages/connectors/postgres/tests/",
-      "Clearsoft\\EasySQL\\Connectors\\SQLite\\Tests\\": "packages/connectors/sqlite/tests/",
-      "Clearsoft\\EasySQL\\Connectors\\ClickHouse\\Tests\\": "packages/connectors/clickhouse/tests/",
+      "Clearsoft\\EasySQL\\Connectors\\Tests\\": "packages/connectors/tests/",
       "Clearsoft\\EasySQL\\Common\\Tests\\": "packages/common/tests/",
       "Clearsoft\\EasySQL\\SchemaGeneration\\Tests\\": "packages/schema-generation/tests/"
     }
