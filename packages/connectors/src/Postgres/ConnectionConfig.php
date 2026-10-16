@@ -18,6 +18,11 @@ use InvalidArgumentException;
  * selects which catalog queries are safe (Redshift is PostgreSQL 8.0 based)
  * and `transport` selects how the server is reached: the wire protocol over
  * TCP (PDO), or Neon's HTTP SQL endpoint.
+ *
+ * The `tcp` transport reaches either a host/port pair or a local Unix socket:
+ * when `socket` is set it takes the place of `host` (the port is kept), and a
+ * `connectionString` still takes precedence over both — mirroring the
+ * TypeScript sibling package.
  */
 final class ConnectionConfig implements ConnectionConfigInterface
 {
@@ -39,6 +44,9 @@ final class ConnectionConfig implements ConnectionConfigInterface
      *   for the `http`/`websocket` transports.
      * @param string|null $endpoint Override for the Neon HTTP endpoint
      *   (defaults to `https://api.<host>/sql`, derived from the connection string).
+     * @param string|null $socket Local Unix socket directory/path (e.g.
+     *   `/var/run/postgresql`). Used by the `tcp` transport in place of `host`;
+     *   ignored when a `connectionString` is set.
      */
     public function __construct(
         public readonly string $host = '127.0.0.1',
@@ -82,12 +90,16 @@ final class ConnectionConfig implements ConnectionConfigInterface
 
     /**
      * Build a PDO DSN for this configuration.
+     *
+     * With a Unix socket the socket path replaces the host (libpq interprets a
+     * leading-slash host as the socket directory) and the port is kept;
+     * otherwise the conventional TCP DSN is emitted.
      */
     public function toDsn(): string
     {
         return sprintf(
             'pgsql:host=%s;port=%d;dbname=%s;sslmode=%s',
-            $this->host,
+            $this->socket ?? $this->host,
             $this->port,
             $this->database,
             $this->sslmode,

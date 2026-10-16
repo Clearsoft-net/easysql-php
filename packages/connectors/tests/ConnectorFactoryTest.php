@@ -57,6 +57,18 @@ class ConnectorFactoryTest extends TestCase
         $this->assertInstanceOf(SQLiteConnector::class, $connector);
     }
 
+    public function testBuildsMysqlFromAnOptionsArrayWithAUnixSocket(): void
+    {
+        $connector = ConnectorFactory::create(ConnectorEngine::MySQL, [
+            'socket' => '/var/run/mysqld/mysqld.sock',
+            'user' => 'wp',
+            'password' => 'secret',
+            'database' => 'wordpress',
+        ]);
+
+        $this->assertInstanceOf(MySQLConnector::class, $connector);
+    }
+
     public function testBuildsFromConnectionUrlStrings(): void
     {
         $this->assertInstanceOf(
