@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/Clearsoft-net/easysql-php/compare/v4.0.1...v4.1.0) (2026-10-16)
+
+
+### Features
+
+* **connectors:** support Unix socket in MySQL and PostgreSQL configs ([a9d8085](https://github.com/Clearsoft-net/easysql-php/commit/a9d80856b7072a687563324c679d6919dca558d3))
+
 ## [4.0.1](https://github.com/Clearsoft-net/easysql-php/compare/v4.0.0...v4.0.1) (2026-10-15)
 
 
