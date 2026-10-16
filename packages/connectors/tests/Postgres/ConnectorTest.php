@@ -23,6 +23,7 @@ class ConnectorTest extends TestCase
 
         $this->assertSame('127.0.0.1', $config->host);
         $this->assertSame(5432, $config->port);
+        $this->assertNull($config->socket);
         $this->assertSame('prefer', $config->sslmode);
         $this->assertSame(['public'], $config->schemas);
         $this->assertSame(10.0, $config->timeout);
@@ -51,6 +52,34 @@ class ConnectorTest extends TestCase
 
         $this->assertSame(
             'pgsql:host=db.internal;port=5433;dbname=shop;sslmode=require',
+            $config->toDsn(),
+        );
+    }
+
+    public function testDsnWithUnixSocket(): void
+    {
+        $config = new ConnectionConfig(
+            socket: '/var/run/postgresql',
+            database: 'shop',
+        );
+
+        $this->assertSame(
+            'pgsql:host=/var/run/postgresql;port=5432;dbname=shop;sslmode=prefer',
+            $config->toDsn(),
+        );
+    }
+
+    public function testSocketTakesPrecedenceOverHostAndKeepsThePort(): void
+    {
+        $config = new ConnectionConfig(
+            host: 'ignored-if-socket',
+            port: 5433,
+            socket: '/var/run/postgresql',
+            database: 'shop',
+        );
+
+        $this->assertSame(
+            'pgsql:host=/var/run/postgresql;port=5433;dbname=shop;sslmode=prefer',
             $config->toDsn(),
         );
     }
@@ -251,6 +280,31 @@ class ConnectorTest extends TestCase
             $result = $connector->execute('SELECT id, email FROM customers ORDER BY id');
             $this->assertSame(['id', 'email'], $result['columns']);
             $this->assertSame(2, $result['row_count']);
+        } finally {
+            $connector->close();
+        }
+    }
+
+    public function testIntegrationOverUnixSocket(): void
+    {
+        $socket = getenv('EASYSQL_TEST_POSTGRES_SOCKET');
+        if ($socket === false || $socket === '') {
+            $this->markTestSkipped('Set EASYSQL_TEST_POSTGRES_SOCKET with a local PostgreSQL socket to run this test.');
+        }
+
+        $connector = new Connector(new ConnectionConfig(
+            socket: $socket,
+            user: getenv('EASYSQL_TEST_POSTGRES_USER') ?: 'postgres',
+            password: getenv('EASYSQL_TEST_POSTGRES_PASSWORD') ?: 'postgres',
+            database: getenv('EASYSQL_TEST_POSTGRES_DATABASE') ?: 'easysql_test',
+            schemas: ['public'],
+        ));
+        $connector->connect();
+
+        try {
+            $result = $connector->execute('SELECT 1 AS one');
+            $this->assertSame(['one'], $result['columns']);
+            $this->assertSame(1, $result['row_count']);
         } finally {
             $connector->close();
         }

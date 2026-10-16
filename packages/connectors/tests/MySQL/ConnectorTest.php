@@ -20,6 +20,7 @@ class ConnectorTest extends TestCase
 
         $this->assertSame('127.0.0.1', $config->host);
         $this->assertSame(3306, $config->port);
+        $this->assertNull($config->socket);
         $this->assertSame('utf8mb4', $config->charset);
         $this->assertSame('mysql', $config->engine);
         $this->assertFalse($config->ssl);
@@ -40,6 +41,40 @@ class ConnectorTest extends TestCase
 
         $this->assertSame(
             'mysql:host=db.internal;port=3307;dbname=shop;charset=utf8mb4',
+            $config->toDsn(),
+        );
+    }
+
+    public function testDsnWithUnixSocket(): void
+    {
+        $config = new ConnectionConfig(
+            socket: '/var/run/mysqld/mysqld.sock',
+            database: 'wp',
+        );
+
+        $dsn = $config->toDsn();
+
+        $this->assertSame(
+            'mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=wp;charset=utf8mb4',
+            $dsn,
+        );
+        $this->assertStringNotContainsString('host=', $dsn);
+        $this->assertStringNotContainsString('port=', $dsn);
+    }
+
+    public function testSocketTakesPrecedenceOverHostAndPort(): void
+    {
+        $config = new ConnectionConfig(
+            host: 'ignored-if-socket',
+            port: 3307,
+            socket: '/var/run/mysqld/mysqld.sock',
+            user: 'wp',
+            password: 'secret',
+            database: 'wordpress',
+        );
+
+        $this->assertSame(
+            'mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=wordpress;charset=utf8mb4',
             $config->toDsn(),
         );
     }
@@ -151,6 +186,34 @@ class ConnectorTest extends TestCase
             $this->assertArrayHasKey('tables', $raw);
             $this->assertNotEmpty($raw['tables']);
 
+            $result = $connector->execute('SELECT 1 AS one');
+            $this->assertSame(['one'], $result['columns']);
+            $this->assertSame(1, $result['row_count']);
+        } finally {
+            $connector->close();
+        }
+    }
+
+    public function testIntegrationOverUnixSocket(): void
+    {
+        $socket = getenv('EASYSQL_TEST_MYSQL_SOCKET');
+        if ($socket === false || $socket === '') {
+            $this->markTestSkipped('Set EASYSQL_TEST_MYSQL_SOCKET with a local MySQL socket to run this test.');
+        }
+
+        $password = getenv('EASYSQL_TEST_MYSQL_PASSWORD') !== false
+            ? (string) getenv('EASYSQL_TEST_MYSQL_PASSWORD')
+            : '';
+
+        $connector = new Connector(new ConnectionConfig(
+            socket: $socket,
+            user: getenv('EASYSQL_TEST_MYSQL_USER') ?: 'root',
+            password: $password,
+            database: getenv('EASYSQL_TEST_MYSQL_DATABASE') ?: 'easysql_test',
+        ));
+        $connector->connect();
+
+        try {
             $result = $connector->execute('SELECT 1 AS one');
             $this->assertSame(['one'], $result['columns']);
             $this->assertSame(1, $result['row_count']);

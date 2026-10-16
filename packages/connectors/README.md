@@ -82,6 +82,24 @@ $connector = ConnectorFactory::create(ConnectorEngine::MySQL, 'mysql://app:secre
 $connector = ConnectorFactory::create(ConnectorEngine::SQLite, 'sqlite:///srv/myapp.db');
 ```
 
+A MySQL/MariaDB connection can also go over a local Unix socket instead of TCP —
+common on shared hosting (e.g. `DB_HOST=host:/path/mysql.sock`, as honoured by
+`wpdb`). Set `socket` and it takes precedence over `host`/`port`:
+
+```php
+$connector = ConnectorFactory::create(ConnectorEngine::MySQL, [
+    'host' => 'ignored-when-a-socket-is-set',
+    'socket' => '/var/run/mysqld/mysqld.sock',
+    'user' => 'wp',
+    'password' => 'secret',
+    'database' => 'wordpress',
+]);
+```
+
+Connection URLs express a TCP target only, so a Unix socket cannot be encoded in
+a `mysql://…` string: pass it through the `socket` option or the
+`MySQL\ConnectionConfig` constructor argument instead.
+
 Engine classes stay available directly from their sub-namespace when the engine
 is already known:
 
@@ -157,6 +175,20 @@ Providers: `postgres` (default), `neon`, `cockroachdb`, `redshift`. Transports:
 `tcp` (default, PDO) and `http` (Neon's HTTP SQL endpoint via cURL). The
 `websocket` transport is **not supported by the PHP SDK** (PHP has no
 PostgreSQL-over-WebSocket client); selecting it raises an actionable error.
+
+The `tcp` transport can also reach a local Unix socket: set `socket` (the libpq
+socket directory, e.g. `/var/run/postgresql`) and it takes the place of `host`
+while the port is kept. A `connectionString`, when supplied, still takes
+precedence over both. Connection URLs express a TCP target only.
+
+```php
+ConnectorFactory::create(ConnectorEngine::PostgreSQL, [
+    'socket' => '/var/run/postgresql',
+    'user' => 'postgres',
+    'password' => 'secret',
+    'database' => 'analytics',
+]);
+```
 
 ## Tests
 
